@@ -31,3 +31,12 @@ Set up a brand-new project repository for Assignment 02 (Hebrew PDF book in LaTe
 ```
 
 ---
+
+## Step 02 – Rename GitHub repository
+**Date/time:** 2026-11-19 13:57
+
+```text
+Rename the GitHub repository to smart-crosswalk-latex-book using the gh CLI (gh repo rename), make sure the local "origin" remote points to the new URL (check with git remote -v and fix it if needed), update the repository name anywhere it appears in README.md, then commit, push and show me the new URL.
+```
+
+---
