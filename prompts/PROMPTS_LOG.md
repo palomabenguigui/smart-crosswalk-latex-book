@@ -40,3 +40,12 @@ Rename the GitHub repository to smart-crosswalk-latex-book using the gh CLI (gh 
 ```
 
 ---
+
+## Step 03 – Open references folder
+**Date/time:** 2026-11-19 14:15
+
+```text
+open~/BIU/T02/references
+```
+
+---
