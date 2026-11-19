@@ -63,3 +63,27 @@ Step 02 – Reference materials. The folder references/ now contains copyrighted
 ```
 
 ---
+
+## Step 05 – Expert committee and PRD
+**Date/time:** 2026-11-19 14:22
+
+```text
+Step – Expert committee and PRD. Using everything you just read in references/ (especially the assignment brief and its 8-step workflow, and Parts A and B of the preparatory-report booklet), act as the leader of an expert committee.
+
+PROJECT VISION
+- Deliverable: a professional Hebrew PDF book of at least 25 pages (target 28–32), compiled with LuaLaTeX and a custom .cls, written as a "preparatory report" (דוח מכין) for a technology-management project: a SMART PEDESTRIAN CROSSING (countdown signal + sensing of pedestrians waiting at the curb + a "social control" awareness campaign), motivated by the findings of the flagship paper (Rosenbloom 2009) and its own recommendation of countdown lights.
+- The Rosenbloom paper is the flagship paper (מאמר הדגל). Use its data (Table 1, Table 2) with citation; never copy its text.
+- Our own visual identity (not model defaults): a traffic-light palette (red / amber / green on dark asphalt grey), chapter openers styled like road signs, colored "fancy" callout boxes, crosswalk-stripe decorative rules.
+
+COMMITTEE
+Assemble 5–6 experts (academic Hebrew editor, LaTeX/BiDi typesetter, data-visualization engineer, road-safety researcher, technology project manager, QA/red-team lead). Each states what a top-grade (100) version must meet; then merge into one document.
+
+OUTPUT — create in the project root:
+1. PRD.md — goal, audience, chapter structure with page allocation following the booklet (abstract, introduction, problem & research question, requirements, literature review + flagship paper, market/existing products, design alternatives + weighted decision matrix, system architecture, WBS/RACI/Gantt, risk analysis, summary, IEEE bibliography); mandatory elements (table of contents, list of figures/tables, abstract, ≥1 Python graph, ≥1 table, ≥1 formula such as the logistic regression model, ≥1 TikZ illustration, no copyrighted images); design system (colors, fonts, boxes, header/footer/banner); BiDi rules for Hebrew/English mixing; measurable acceptance criteria. Add a "Known data issues" section: in the paper's Table 2 some b coefficients are positive while e^b < 1, traffic volume b = 0.03 does not match e^b = 2.20, and the results text says both hypotheses failed while the discussion says H1 was supported — the book must discuss these critically.
+2. PLAN.md — the 8-step workflow of the brief; the agent team (Writer, Researcher/bibliography, Python-graphs agent, TikZ-illustrations agent, and the QA skills qa-super, qa-BiDi, qa-table, qa-code, qa-img, qa-typeset, qa-infra, qa-cls-version) with a Detector→Fixer red-team loop; the rule that no output is fixed by hand (every fix goes through a skill or the .cls) plus an incident-investigation procedure for every bug we find ourselves; folder structure; compile sequence (lualatex → biber → lualatex ×2).
+3. TODO.md — an ordered checklist of tasks matching PLAN.md.
+
+Show me a short summary of the committee's main decisions. Do not write any book content yet. Log this prompt, commit and push.
+```
+
+---
