@@ -3,7 +3,7 @@
 **Project:** Crossing at a Red Light – Smart Pedestrian Crossing: A Preparatory Report
 **Hebrew title:** חוצים באדום – מעבר חציה חכם: דוח מכין
 **Group:** `shirloma` · **Course:** Generative AI: LLMs, Agents and Multi-Agent Systems – Dr. Yoram Segal, Bar-Ilan University
-**Version:** 1.0 (2026-11-19) · **Status:** approved by the expert committee, no book content written yet
+**Version:** 1.1 (2026-11-19) · **Status:** **approved by the user** (incl. the INC-000 correction in §9) · v1.1 adds §12 Writing style, AC-19, AC-20 and the Researcher verification rule (§11) · no book content written yet
 
 Sources this PRD is built on (all in `references/`, kept locally): the Assignment 02 brief, the booklet *From Problem to PDF*
 (Part A: report content, Part B: production), the L04 multi-agent guide, and the flagship paper (Rosenbloom, 2009).
@@ -131,7 +131,7 @@ onwards merges these bars into a single specification. Where experts disagreed, 
 | **Tables (≥ 1)** | Booktabs style from the `.cls`, column 1 on the right | Tables 1 & 2 re-typeset ("adapted from [n]"), literature matrix, requirements, product comparison, decision matrix, RACI, risk register, abbreviations |
 | **Formulas (≥ 1)** | Numbered and referenced in the text | Logistic model logit(p) = β₀ + Σ βᵢxᵢ; OR = e^β; Wald = (b/SE)²; 95% CI = e^(b ± 1.96·SE); S_j = Σ wᵢcᵢⱼ; R = P × I |
 | **TikZ illustrations (≥ 1)** | Drawn in code, no external images | **T1** crosswalk scene with curb-sensing zones and countdown head; **T2** system architecture; **T3** WBS tree; **T4** social-control feedback loop; chapter-opener road signs; cover art |
-| Bibliography | IEEE, biber, two-way match between citations and list | ≥ 12 sources, ≥ 8 peer-reviewed, each DOI/URL verified |
+| Bibliography | IEEE, biber, two-way match between citations and list | ≥ 12 sources, ≥ 8 peer-reviewed, each DOI/URL **verified online** (§11, AC-22) |
 | **No copyrighted images** | Zero raster images from the internet or from the references | Only TikZ / Python output in `figures/` |
 
 ## 6. Design system (our own identity)
@@ -166,6 +166,7 @@ onwards merges these bars into a single specification. Where experts disagreed, 
 
 | Box | Colour | Purpose |
 |---|---|---|
+| `scenebox` | Asphalt fill, StripeWhite text, crosswalk-stripe edge, small pedestrian-signal icon | **Chapter-opening street scene** (max 4 lines, §12); placed directly under the chapter opener |
 | `findingbox` | SignalGreen | Key finding / recommendation |
 | `cautionbox` | SignalAmber (fill) + Asphalt text | Data issue, methodological caution |
 | `trapbox` | SignalRed | Pitfall / warning |
@@ -212,6 +213,10 @@ Based on booklet ch. 14 and Prompt B1. These apply everywhere: titles, captions,
 | AC-16 | Red team | 10 weakest points found in a fresh session; each resolved or answered in writing | QA/red-team lead |
 | AC-17 | Repository | `PRD.md`, `PLAN.md`, `TODO.md`, `README.md`, `.tex`, `.cls`, `.bib`, skills list, final PDF all committed | `qa-infra` |
 | AC-18 | Reproducibility | A clean clone builds `build/main.pdf` with the documented command sequence | `qa-infra` |
+| AC-19 | README screenshots | `README.md` embeds screenshots, all stored in `screenshots/`, of: (1) ≥ 3 book pages (cover, a chapter opener, a content page), (2) every Python graph, (3) every TikZ illustration, (4) the agent team in action; every image link resolves | `qa-infra` |
+| AC-20 | Parallel agents | Evidence that **≥ 3 agents ran in parallel**: Writer, Researcher, QA red team. Evidence = screenshots in `screenshots/` showing them running at the same time, plus each agent's prompt saved verbatim in `prompts/agents/`, and the run recorded in `prompts/PROMPTS_LOG.md` | `qa-infra` + Leader |
+| AC-21 | Chapter openers | Every chapter 1–10 opens with exactly one `scenebox` of ≤ 4 rendered lines, followed by formal third-person text (§12) | `qa-super` |
+| AC-22 | Verified sources | 100% of `.bib` entries carry a verification record (DOI/URL opened, date, metadata match) in `references/VERIFICATION.md`; 0 unverified entries | `qa-super` + Researcher |
 
 ## 9. Known data issues in the flagship paper (must be discussed critically)
 
@@ -280,3 +285,25 @@ regression. The coefficient is meaningless, and H2 cannot be tested from this mo
 - Copyrighted references stay local (`references/README.md`, `.gitignore`).
 - Toolchain: LuaLaTeX (LuaHBTeX) + biber, MiKTeX. The brief targets MiKTeX 25.x and the local machine has **MiKTeX 22.1**, so updating is a TODO item and a risk.
 - Every prompt is logged verbatim in `prompts/PROMPTS_LOG.md`.
+- **Source verification (Researcher rule):** every bibliography entry must be **verified online**. The DOI or URL is actually opened, and the title, authors, year, venue and pages are checked against the landing page. The result is recorded in `references/VERIFICATION.md`. **Any source that can't be verified is dropped, never invented or "reconstructed".** If dropping sources takes the count below AC-09, the Researcher searches again rather than lowering the bar.
+- **INC-000 is kept as a showcase:** the README presents it as a real red-team example (wrong claim in the brief → detected against the rendered page → corrected → detection rule added).
+
+## 12. Writing style (authorial voice)
+
+The Writer agent has one defined authorial voice with two registers, used in a fixed order in every chapter.
+
+**1. Street-scene opener (narrative register)**
+- Every chapter 1–10 opens with a short scene at a crosswalk, inside a `scenebox` (§6.3). It sits directly under the road-sign chapter opener.
+- At most **4 rendered lines**. Present tense, concrete, sensory: the curb, the red figure, the people around, the seconds ticking.
+- The scene illustrates the chapter's theme. Examples: a lone pedestrian on an empty street for the problem chapter, a crowded curb for social control, a countdown head for the architecture chapter.
+- Scenes are **illustrative composites**. They name no real people, contain no statistics and make no factual claims; facts belong in the body, with citations. No first person.
+- No dialogue longer than a few words. No humour at the expense of victims of road accidents.
+
+**2. Body (formal academic register)**
+- Straight after the box, the text switches to the **formal third-person register** required by the Hebrew editor (§3.1): fact-based, cited, no "we/I", no marketing language.
+- The first body paragraph links the scene to the chapter's question in one sentence, then proceeds formally.
+
+**Consistency rules**
+- One voice across the book. The scenes follow a light thread (the same crosswalk at different times of day), but each scene stands on its own.
+- Scenes don't count toward any chapter's content requirements; page allocation (§4) includes them.
+- Checked by AC-21. The Hebrew editor's skill rejects scenes over 4 lines, scenes with facts or numbers, and any narrative tone in the body.

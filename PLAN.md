@@ -1,7 +1,7 @@
 # PLAN – How the book is produced
 
 Companion to [`PRD.md`](PRD.md) (what to build) and [`TODO.md`](TODO.md) (ordered checklist).
-**Version:** 1.0 (2026-11-19) · **Target `.cls` version:** `smartcross` v1.0 (tracked by `qa-cls-version`)
+**Version:** 1.1 (2026-11-19) · **Target `.cls` version:** `smartcross` v1.0 (tracked by `qa-cls-version`) · v1.1 adds §10 Writing style, §11 Parallel-agent run, and online source verification
 
 ---
 
@@ -31,10 +31,10 @@ setup → skeleton by page map → sources → chapter writing → graphics and 
 | P3 | Sources and data: `.bib`, verified DOIs, data transcription of Tables 1–2, recomputation script | Researcher, Python agent | AC-09 (partial), AC-14 |
 | P4 | Design system in `.cls` v1.0: colours, fonts, banner/footer, chapter openers, boxes, rules, cover | TikZ agent, Leader | `qa-cls-version`, `qa-BiDi`, `qa-img` clean on a design-sample page |
 | P5 | Figures: Python graphs G1–G4, TikZ T1–T4 | Python agent, TikZ agent | AC-04, AC-05, `qa-img`, `qa-code` |
-| P6 | Writing: chapters 1–10 + front matter, in order | Writer (+ Researcher on call) | Each chapter passes the Detector → Fixer loop before the next starts |
-| P7 | Integration build + full QA | All QA skills via `qa-super` | AC-01 to AC-15 |
+| P6 | Writing: chapters 1–10 + front matter, in order; **Writer, Researcher and QA red team run in parallel** (§11) | Writer, Researcher, QA red team | Each chapter passes the Detector → Fixer loop before it is merged; AC-20, AC-21 |
+| P7 | Integration build + full QA | All QA skills via `qa-super` | AC-01 to AC-15, AC-21, AC-22 |
 | P8 | Red team (fresh session, ideally another model) | Red-team lead | AC-16 |
-| P9 | Release: README, screenshots, skills list, final PDF, tag `v1.0` | Leader | AC-17, AC-18 |
+| P9 | Release: README with screenshots (book pages, graphs, TikZ, agents in action) and INC-000 showcase, skills list, final PDF, tag `v1.0` | Leader | AC-17, AC-18, AC-19 |
 
 ## 3. The agent team
 
@@ -47,8 +47,8 @@ The **Leader (orchestrator)** is the main Claude Code session.
 
 | Agent | Responsibility | Inputs | Outputs | Must never |
 |---|---|---|---|---|
-| **Writer** | Hebrew chapter text, paraphrased and cited, using template commands only | PRD §4 row, Researcher notes, figure/table labels | `chapters/chNN-*.tex` | Copy source text; define formatting; hard-code colours |
-| **Researcher / bibliography** | Find and verify sources (DOI resolves, metadata correct), write `.bib`, write per-source notes, transcribe published data | `references/`, web | `references/refs.bib`, `references/notes/*.md`, `data/*.csv` | Cite an unverified source; invent metadata |
+| **Writer** | Hebrew chapter text in the defined authorial voice (§10): street-scene `scenebox` first, then formal third person; paraphrased and cited; template commands only | PRD §4 row and §12, Researcher notes, figure/table labels | `chapters/chNN-*.tex` | Copy source text; define formatting; hard-code colours; put facts or numbers in a scene |
+| **Researcher / bibliography** | Find sources and **verify each one online**: open the DOI/URL and check title, authors, year, venue and pages against the landing page; write `.bib`, per-source notes and verification records; transcribe published data | `references/`, web | `references/refs.bib`, `references/VERIFICATION.md`, `references/notes/*.md`, `data/*.csv` | Cite an unverified source; invent or "reconstruct" metadata; keep an entry it couldn't open. **Unverifiable ⇒ dropped** |
 | **Python-graphs agent** | Reproducible graphs from `data/*.csv`; recomputation of Table 2 checks | `data/`, design tokens | `scripts/*.py`, `figures/*.pdf` | Hand-edit a generated figure; use a colour outside the tokens |
 | **TikZ-illustrations agent** | Diagrams, chapter openers, cover art, crosswalk rules | PRD §6, architecture spec | `figures/tikz/*.tex`, `.cls` graphic macros | Embed raster images; draw outside an LTR environment |
 
@@ -127,10 +127,10 @@ the source page, and `data/*.csv` stores the page reference for each value.
 ├── data/                    # CSV transcriptions of published tables, with page references
 ├── scripts/                 # Python: graphs, recomputation, build helpers, requirements.txt
 ├── fonts/                   # bundled OFL fonts + licences
-├── references/              # README.md + refs.bib tracked; copyrighted PDFs/MD local only
+├── references/              # README.md, refs.bib, VERIFICATION.md tracked; copyrighted PDFs/MD local only
 ├── skills/                  # qa-* skills + production-agent skills (SKILL.md each)
-├── prompts/                 # PROMPTS_LOG.md (verbatim), agent role prompts
-├── screenshots/             # our own screenshots of the workflow and incidents
+├── prompts/                 # PROMPTS_LOG.md (verbatim); agents/ = each agent's prompt, verbatim
+├── screenshots/             # our own screenshots: book pages, graphs, TikZ, agents in action, incidents
 └── build/                   # build output; only build/main.pdf is tracked
 ```
 
@@ -152,3 +152,33 @@ The final artefact is `build/main.pdf` (tracked). Any non-zero exit code or log 
 - After each task: `git add` → commit with a clear message (`Step NN: …`) → `git push` (`CLAUDE.md`).
 - The prompt is logged first, before any work starts.
 - Copyrighted references are never staged (`.gitignore`). `qa-infra` checks this on every run.
+
+## 10. Writing style (authorial voice)
+
+Full specification: PRD §12. Operational rules for the Writer agent:
+
+1. **Order inside every chapter:** road-sign chapter opener (from the `.cls`) → `\begin{scenebox} … \end{scenebox}` → formal body.
+2. **Scene:** ≤ 4 rendered lines. Present tense, concrete crosswalk details, an illustrative composite. No facts, numbers, citations, real names or first person.
+3. **Bridge:** the first body sentence ties the scene to the chapter's question. From then on, formal third-person academic Hebrew only (PRD §3.1).
+4. **Thread:** the same imagined crosswalk at different moments (morning rush, empty midday, rain, evening), chosen to match each chapter's theme.
+5. **Detection:** `qa-super` counts the rendered lines of each `scenebox` and flags any digit, `\cite` or first-person form inside it. It also flags narrative or first-person forms in the body (AC-21).
+6. Any defect in the scene box's *appearance* is fixed in the `.cls` (`scenebox` definition), never in the chapter.
+
+## 11. Parallel-agent run (evidence for AC-20)
+
+At least one production round in P6 runs **three agents at the same time**, each in its own session or subagent:
+
+| Agent | Task in the parallel round | Prompt file |
+|---|---|---|
+| Writer | Draft the next chapter in `chapters/` | `prompts/agents/writer-chNN.md` |
+| Researcher | Verify online the sources that chapter needs; update `refs.bib` + `VERIFICATION.md` | `prompts/agents/researcher-chNN.md` |
+| QA red team | Run the detectors on the previously merged chapter and report findings (no fixes) | `prompts/agents/redteam-chNN.md` |
+
+Procedure:
+1. Save each agent's prompt **verbatim** in `prompts/agents/` before launch, and log the round in `PROMPTS_LOG.md`.
+2. If cross-session mode is used, run a ping/pong mesh check first (L04 guide §11.7) and screenshot the result.
+3. Launch all three. Take **screenshots while they run** showing the three running at the same time (terminal panes or the agent list with status), saved as `screenshots/parallel-<date>-*.png`.
+4. Save each agent's final report in `prompts/agents/*-report.md`. The Leader merges the results; the work goes through the normal Detector → Fixer loop.
+5. The README "Agent Team" section links the prompts, reports and screenshots (AC-19, AC-20).
+
+Agents in a parallel round work on **different files** (chapter / `.bib` / QA report), so they never edit the same file at once.

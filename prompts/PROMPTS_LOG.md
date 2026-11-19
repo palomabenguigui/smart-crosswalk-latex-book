@@ -87,3 +87,17 @@ Show me a short summary of the committee's main decisions. Do not write any book
 ```
 
 ---
+
+## Step 06 – PRD approval and amendments
+**Date/time:** 2026-11-19 14:33
+
+```text
+1. PRD approved, including the INC-000 correction (keep it: it will be shown in the README as a real red-team example). Add these changes:
+   a. A "Writing style" section in PRD.md and PLAN.md: the Writer agent has a defined authorial voice — each chapter opens with a brief real-life street scene at a crosswalk (max 4 lines, in a styled opener box), then switches to the formal third-person academic register required by the Hebrew editor.
+   b. AC-19: README.md shows screenshots of book pages, the Python graphs, the TikZ illustrations and the agent team in action (stored in screenshots/).
+   c. AC-20: evidence that at least 3 agents ran in parallel (Writer, Researcher, QA red team), with screenshots and their prompts in prompts/.
+   d. Researcher rule: every bibliography entry must be verified online (DOI or URL opened and checked); unverifiable sources are dropped, never invented.
+   Mark the PRD-approval item in TODO.md as done.
+```
+
+---

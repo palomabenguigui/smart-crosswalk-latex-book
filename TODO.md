@@ -7,7 +7,8 @@ Mirrors the phases in [`PLAN.md`](PLAN.md). Tick items only when their exit gate
 - [x] Rename repository to `smart-crosswalk-latex-book` (Step 02)
 - [x] Reference materials: ignore copyrighted files, `references/README.md` (Step 04)
 - [x] Expert committee → `PRD.md`, `PLAN.md`, `TODO.md` (Step 05)
-- [ ] User reviews and approves PRD (especially §9 data issues and §3.7 decisions)
+- [x] User reviews and approves PRD (incl. INC-000 correction) (Step 06)
+- [x] PRD/PLAN v1.1: Writing style, AC-19, AC-20, online source verification (Step 06)
 
 ## P1 – Infrastructure
 - [ ] Update MiKTeX (local 22.1 → current) and record versions in `README.md`
@@ -28,12 +29,14 @@ Mirrors the phases in [`PLAN.md`](PLAN.md). Tick items only when their exit gate
 - [ ] `skills/qa-img/SKILL.md` (incl. greyscale and colour-blind checks)
 - [ ] `skills/qa-code/SKILL.md`
 - [ ] `skills/qa-super/SKILL.md` (order, report format, n-gram copy check, AC table)
-- [ ] Production-agent skills: `writer`, `researcher`, `python-graphs`, `tikz-illustrations`
+- [ ] Production-agent skills: `writer` (authorial voice, PRD §12), `researcher` (online verification, drop-if-unverifiable), `python-graphs`, `tikz-illustrations`
+- [ ] Add the AC-21 scene checks (line count, no digits, citations or first person) and the AC-22 verification check to `qa-super`
 - [ ] Dry-run all skills on the skeleton; save a sample report
 
 ## P3 – Sources and data
 - [ ] `references/refs.bib` with the flagship paper (DOI 10.1016/j.trf.2009.05.002)
-- [ ] Find and verify ≥ 11 more sources (countdown-signal studies, pedestrian detection, social control / social learning, Israeli road-safety statistics, relevant standards); each DOI/URL resolved
+- [ ] Create `references/VERIFICATION.md` (entry key, DOI/URL, date opened, metadata match, verdict)
+- [ ] Find ≥ 11 more sources (countdown-signal studies, pedestrian detection, social control / social learning, Israeli road-safety statistics, relevant standards); **open each DOI/URL online and record the check**; drop any source that can't be verified
 - [ ] `references/notes/` – one paraphrased note per source (no copied sentences)
 - [ ] `data/rosenbloom2009_table1.csv`, `data/rosenbloom2009_table2.csv` with page refs, checked against the **rendered** page (INC-000)
 - [ ] `scripts/recompute_table2.py` – reproduces PRD §9 (D1–D5) numbers
@@ -43,7 +46,7 @@ Mirrors the phases in [`PLAN.md`](PLAN.md). Tick items only when their exit gate
 - [ ] Banner (header) and footer with crosswalk rule
 - [ ] Chapter openers: road-sign badge + 3-lamp progress indicator; warning-triangle variant for ch. 9
 - [ ] `\crosswalkrule`
-- [ ] Boxes: `findingbox`, `cautionbox`, `trapbox`, `definitionbox`, `projectbox`
+- [ ] Boxes: `scenebox` (chapter street scene), `findingbox`, `cautionbox`, `trapbox`, `definitionbox`, `projectbox`
 - [ ] BiDi commands: `\en{}`, number/range/percent units, Hebrew-in-math
 - [ ] Table style (column 1 on the right) and caption style
 - [ ] Cover page (double frame, TikZ art, bilingual title, no page number)
@@ -62,6 +65,8 @@ Mirrors the phases in [`PLAN.md`](PLAN.md). Tick items only when their exit gate
 - [ ] `qa-img` + `qa-code` clean
 
 ## P6 – Writing (one chapter per task, Detector → Fixer loop after each)
+Every chapter opens with a `scenebox` street scene (≤ 4 lines), then formal third person (PRD §12).
+- [ ] Parallel round (PLAN §11): save prompts in `prompts/agents/`, run Writer + Researcher + QA red team at the same time, take screenshots while they run, save their reports (AC-20)
 - [ ] Ch. 1 מבוא ורקע (2 pp)
 - [ ] Ch. 2 הגדרת הבעיה, שאלת המחקר והיעדים (2 pp)
 - [ ] Ch. 3 מפרט הדרישות (2 pp)
@@ -85,6 +90,8 @@ Mirrors the phases in [`PLAN.md`](PLAN.md). Tick items only when their exit gate
 - [ ] Resolve or answer each point in writing; rebuild; re-run `qa-super`
 
 ## P9 – Release
-- [ ] README: overview, agent team, structure, build, screenshots, skills list, credits, final status badge
+- [ ] Screenshots into `screenshots/`: ≥ 3 book pages (cover, chapter opener, content page), every Python graph, every TikZ illustration, agents in action (AC-19)
+- [ ] README: overview, agent team (with parallel-run evidence), structure, build, screenshots, skills list, credits, final status badge
+- [ ] README: INC-000 as a real red-team example (wrong claim → checked against the rendered page → corrected → new detection rule)
 - [ ] Final `build/main.pdf` committed; clean-clone build test (AC-18)
 - [ ] Tag `v1.0` and push
