@@ -1,0 +1,65 @@
+This is LuaHBTeX, Version 1.14.0 (MiKTeX 22.1)
+ restricted system commands enabled.
+(./scripts/font-test.tex
+LaTeX2e <2026-11-01>
+L3 programming layer <2026-09-09>
+
+("/Users/palomabenguigui/Library/Application Support/MiKTeX/texmfs/install/tex/
+latex/base/article.cls"
+Document Class: article 2026-06-04 v1.4n Standard LaTeX document class
+
+("/Users/palomabenguigui/Library/Application Support/MiKTeX/texmfs/install/tex/
+latex/base/size11.clo"))
+("/Users/palomabenguigui/Library/Application Support/MiKTeX/texmfs/install/tex/
+latex/geometry/geometry.sty"
+("/Users/palomabenguigui/Library/Application Support/MiKTeX/texmfs/install/tex/
+latex/graphics/keyval.sty")
+("/Users/palomabenguigui/Library/Application Support/MiKTeX/texmfs/install/tex/
+generic/iftex/ifvtex.sty"
+("/Users/palomabenguigui/Library/Application Support/MiKTeX/texmfs/install/tex/
+generic/iftex/iftex.sty"))
+("/Users/palomabenguigui/Library/Application Support/MiKTeX/texmfs/install/tex/
+latex/geometry/geometry.cfg"))
+("/Users/palomabenguigui/Library/Application Support/MiKTeX/texmfs/install/tex/
+generic/babel/babel.sty"
+("/Users/palomabenguigui/Library/Application Support/MiKTeX/texmfs/install/tex/
+generic/babel/luababel.def")
+("/Users/palomabenguigui/Library/Application Support/MiKTeX/texmfs/install/tex/
+generic/babel/luababel.def"
+======================================================================
+starting package maintenance...
+installation directory: "/Users/palomabenguigui/Library/Application Support/MiKTeX/texmfs/install"
+package repository: https://mirror.alastyr.com/tex-archive/systems/win32/miktex/tm/packages/
+package repository digest: 0a541b046d946e5688817ead880dcba2
+going to download 276167 bytes
+going to install 13 file(s) (1 package(s))
+downloading https://mirror.alastyr.com/tex-archive/systems/win32/miktex/tm/packages/luatexbase.tar.lzma...
+0.28 MB, 89.25 Mbit/s
+extracting files from luatexbase.tar.lzma...
+======================================================================
+
+("/Users/palomabenguigui/Library/Application Support/MiKTeX/texmfs/install/tex/
+luatex/luatexbase/luatexbase.sty"
+======================================================================
+starting package maintenance...
+installation directory: "/Users/palomabenguigui/Library/Application Support/MiKTeX/texmfs/install"
+package repository: https://mirror.alastyr.com/tex-archive/systems/win32/miktex/tm/packages/
+package repository digest: 0a541b046d946e5688817ead880dcba2
+going to download 155555 bytes
+going to install 5 file(s) (1 package(s))
+downloading https://mirror.alastyr.com/tex-archive/systems/win32/miktex/tm/packages/ctablestack.tar.lzma...
+0.16 MB, 255.53 Mbit/s
+extracting files from ctablestack.tar.lzma...
+======================================================================
+
+("/Users/palomabenguigui/Library/Application Support/MiKTeX/texmfs/install/tex/
+luatex/ctablestack/ctablestack.sty"))
+! Undefined control sequence.
+l.1620   \matheqdirmode
+                     \@ne
+ 381 words of node memory still in use:
+   2 hlist, 1 rule, 1 dir, 3 kern, 1 glyph, 3 attribute, 48 glue_spec, 3 attrib
+ute_list, 3 if_stack, 1 write nodes
+   avail lists: 2:10,3:2,4:1,5:1,7:2,9:3
+!  ==> Fatal error occurred, no output PDF file produced!
+Transcript written on font-test.log.

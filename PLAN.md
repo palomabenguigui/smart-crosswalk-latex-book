@@ -125,7 +125,8 @@ the source page, and `data/*.csv` stores the page reference for each value.
 ├── chapters/                # ch01-intro.tex … ch10-summary.tex, front-matter.tex
 ├── figures/                 # generated PDFs (Python) and tikz/*.tex sources
 ├── data/                    # CSV transcriptions of published tables, with page references
-├── scripts/                 # Python: graphs, recomputation, build helpers, requirements.txt
+├── requirements.txt         # Python deps for .venv (pip freeze)
+├── scripts/                 # Python: graphs, recomputation, build helpers, font-test.tex
 ├── fonts/                   # bundled OFL fonts + licences
 ├── references/              # README.md, refs.bib, VERIFICATION.md tracked; copyrighted PDFs/MD local only
 ├── skills/                  # qa-* skills + production-agent skills (SKILL.md each)

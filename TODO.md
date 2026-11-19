@@ -11,9 +11,13 @@ Mirrors the phases in [`PLAN.md`](PLAN.md). Tick items only when their exit gate
 - [x] PRD/PLAN v1.1: Writing style, AC-19, AC-20, online source verification (Step 06)
 
 ## P1 – Infrastructure
-- [ ] Update MiKTeX (local 22.1 → current) and record versions in `README.md`
-- [ ] Download Noto Serif Hebrew, Noto Sans Hebrew, Noto Serif/Sans, Noto Sans Mono into `fonts/` with OFL licence files
-- [ ] Python env: `scripts/requirements.txt` (matplotlib, numpy, pandas, python-bidi) + venv instructions
+- [x] `.gitignore`: `!references/VERIFICATION.md` exception; `references/VERIFICATION.md` created and tracked (Step 07)
+- [x] MiKTeX packages updated (`mpm --update`, 10 packages); 22.1 is the newest MiKTeX released for macOS (Step 07)
+- [ ] **BLOCKED:** MiKTeX 22.1 engine (LuaHBTeX 1.14) cannot compile current babel (`\matheqdirmode` undefined). Needs a newer engine (user decision, see Step 07)
+- [ ] Record toolchain versions in `README.md`
+- [x] Noto Serif Hebrew 2.004, Noto Sans Hebrew 3.001, Noto Serif 2.015, Noto Sans 2.015, Noto Sans Mono 2.014 in `fonts/` with OFL licence files (Step 07)
+- [ ] Font smoke test `scripts/font-test.tex` compiles (blocked by the engine issue above)
+- [x] Python env `.venv` + `requirements.txt` (matplotlib, numpy, python-bidi) (Step 07)
 - [ ] Add `data/`, `fonts/` folders and `INCIDENTS.md` (with INC-000)
 - [ ] `smartcross.cls` v0.1: babel Hebrew main + English, fontspec, geometry, biblatex `style=ieee`
 - [ ] `main.tex` skeleton: front matter + empty `\input` for chapters 1–10

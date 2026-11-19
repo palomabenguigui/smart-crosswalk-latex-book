@@ -101,3 +101,20 @@ Show me a short summary of the committee's main decisions. Do not write any book
 ```
 
 ---
+
+## Step 07 – P1 environment setup
+**Date/time:** 2026-11-19 14:40
+
+```text
+Go ahead with P1. Before starting:
+
+0. Fix .gitignore: references/VERIFICATION.md must be committed. Add the exception !references/VERIFICATION.md and verify with git status that it is tracked while the PDFs stay ignored.
+
+Then set up the environment on macOS:
+1. Update MiKTeX to the latest version and update all packages. If any step needs my action (admin password, MiKTeX Console GUI), stop and tell me exactly what to do.
+2. Create a Python virtual environment in .venv (add it to .gitignore), install matplotlib, numpy and python-bidi, and save requirements.txt.
+3. Download the OFL-licensed Noto Serif Hebrew, Noto Sans Hebrew, Noto Serif, Noto Sans and Noto Sans Mono fonts into fonts/, include their OFL license files, and verify that LuaLaTeX loads them with a minimal Hebrew+English test document compiled in build/ (do not commit the test PDF).
+4. Report what was installed with versions. Log this prompt, commit and push.
+```
+
+---

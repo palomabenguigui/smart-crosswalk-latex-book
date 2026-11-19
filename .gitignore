@@ -77,3 +77,4 @@ env/
 # ---------- Copyrighted reference material (kept locally only) ----------
 references/*.pdf
 references/preparation-report-book.md
+!references/VERIFICATION.md

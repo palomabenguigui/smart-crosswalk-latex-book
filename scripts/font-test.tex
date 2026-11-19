@@ -1,0 +1,32 @@
+% Font + BiDi smoke test (P1). Compile from the repository root:
+%   lualatex -output-directory=build scripts/font-test.tex
+% Loads the bundled OFL Noto fonts from fonts/ by path (no system fonts).
+\documentclass[11pt]{article}
+\usepackage[a5paper,margin=15mm]{geometry}
+\usepackage[english,bidi=basic]{babel}
+\babelprovide[import,main]{hebrew}
+
+\newcommand\fontopts[1]{Path=fonts/#1/, Extension=.otf}
+% Latin
+\babelfont{rm}[\fontopts{NotoSerif}, UprightFont=*-Regular, BoldFont=*-Bold,
+  ItalicFont=*-Italic, BoldItalicFont=*-BoldItalic]{NotoSerif}
+\babelfont{sf}[\fontopts{NotoSans}, UprightFont=*-Regular, BoldFont=*-Bold,
+  ItalicFont=*-Italic, BoldItalicFont=*-BoldItalic]{NotoSans}
+\babelfont{tt}[\fontopts{NotoSansMono}, UprightFont=*-Regular, BoldFont=*-Bold]{NotoSansMono}
+% Hebrew
+\babelfont[hebrew]{rm}[\fontopts{NotoSerifHebrew}, UprightFont=*-Regular, BoldFont=*-Bold]{NotoSerifHebrew}
+\babelfont[hebrew]{sf}[\fontopts{NotoSansHebrew}, UprightFont=*-Regular, BoldFont=*-Bold]{NotoSansHebrew}
+
+\begin{document}
+\section{בדיקת גופנים}
+זוהי פסקה בעברית בגופן \textbf{נוטו סריף עברי}, עם מילה באנגלית
+\foreignlanguage{english}{Smart Pedestrian Crossing} ומספרים: 13.5\%, 0.51--0.78, 2009.
+
+{\sffamily זוהי שורה בגופן נוטו סאנס עברי, \textbf{ובהדגשה}.}
+
+\begin{otherlanguage}{english}
+English paragraph in Noto Serif with \textit{italic}, \textbf{bold} and \textbf{\textit{bold italic}};
+{\sffamily Noto Sans with \textit{italic}}; \texttt{Noto Sans Mono: lualatex main.tex}.
+Math: $\mathrm{OR} = e^{b}$, $p < 0.001$.
+\end{otherlanguage}
+\end{document}
