@@ -39,7 +39,9 @@ _minted*/
 *.figlist
 *.makefile
 
-# Intermediate PDFs: ignore PDFs inside build/ except the final book
+# Build output: ignore everything in build/ except .gitkeep and the final book PDF
+build/*
+!build/.gitkeep
 build/*.pdf
 !build/*final*.pdf
 !build/book.pdf
