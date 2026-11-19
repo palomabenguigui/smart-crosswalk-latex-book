@@ -1,0 +1,75 @@
+# ---------- LaTeX intermediate files ----------
+*.aux
+*.log
+*.toc
+*.lof
+*.lot
+*.out
+*.bbl
+*.bcf
+*.blg
+*.run.xml
+*.synctex.gz
+*.synctex(busy)
+*.fdb_latexmk
+*.fls
+*.nav
+*.snm
+*.vrb
+*.idx
+*.ilg
+*.ind
+*.glo
+*.gls
+*.glg
+*.ist
+*.xdv
+*.dvi
+*.mtc*
+*.maf
+*.tdo
+*.auxlock
+*-blx.bib
+_minted*/
+*.pyg
+
+# TikZ externalization cache
+*.md5
+*.dpth
+*.figlist
+*.makefile
+
+# Intermediate PDFs: ignore PDFs inside build/ except the final book
+build/*.pdf
+!build/*final*.pdf
+!build/book.pdf
+!build/main.pdf
+
+# ---------- Python ----------
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+.ipynb_checkpoints/
+.pytest_cache/
+.mypy_cache/
+
+# ---------- macOS ----------
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# ---------- Editors ----------
+.vscode/
+.idea/
+*.swp
+*~
+
+# ---------- Secrets ----------
+.env
+.claude/settings.local.json
