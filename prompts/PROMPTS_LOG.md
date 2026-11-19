@@ -49,3 +49,17 @@ open~/BIU/T02/references
 ```
 
 ---
+
+## Step 04 – Reference materials
+**Date/time:** 2026-11-19 14:18
+
+```text
+Step 02 – Reference materials. The folder references/ now contains copyrighted PDFs (the Elsevier paper and the course booklets). The repository is public, so:
+
+1. Add a rule to .gitignore so that all PDF files inside references/ are never committed (references/*.pdf). Verify with git status that none of them are staged; if any was already committed, remove it from the index with git rm --cached (keep the local file).
+2. Create references/README.md listing each reference file by title, author, year and purpose in this project (e.g., "flagship paper", "assignment definition", "report-writing guide", "multi-agent guide"), with a note that the files are kept locally for copyright reasons. For the paper include its full citation and DOI: 10.1016/j.trf.2009.05.002.
+3. Read every file in references/ and give me a short summary (5 lines max per file) so I can confirm you can access them.
+4. Log this prompt, commit and push.
+```
+
+---

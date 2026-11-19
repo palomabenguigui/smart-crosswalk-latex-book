@@ -73,3 +73,7 @@ env/
 # ---------- Secrets ----------
 .env
 .claude/settings.local.json
+
+# ---------- Copyrighted reference material (kept locally only) ----------
+references/*.pdf
+references/preparation-report-book.md
