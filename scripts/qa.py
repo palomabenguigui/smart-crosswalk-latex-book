@@ -169,13 +169,15 @@ def check_bidi(a):
     _, pages = pdf_pages(a.pdf)
     pdf_bidi_scan(pages, a.pdf)
 
-def pdf_bidi_scan(pages, name):
-    """PDF-level BiDi regressions on extracted page text (pypdf extracts in VISUAL order)."""
+def pdf_bidi_scan(pages, name, order='visual'):
+    """PDF-level BiDi regressions on extracted page text.
+    order='visual'  – LuaTeX PDFs: correct Hebrew extracts reversed, so a final letter (ךםןףץ) can only come FIRST.
+    order='logical' – matplotlib PDFs: correct Hebrew extracts in reading order, so a final letter can only come LAST."""
     for n, t in enumerate(pages, 1):
         for w in re.findall(r'[' + HEB + r']{2,}', t):
-            # correct RTL rendering -> visual order -> a final letter (ךםןףץ) can only be the FIRST character
-            if w[-1] in FINALS and w[0] not in FINALS:
-                report('qa-BiDi', 'blocker', n, name, w, 'reversed Hebrew (DS-01)')
+            bad = (w[-1] in FINALS and w[0] not in FINALS) if order == 'visual' else (w[0] in FINALS and w[-1] not in FINALS)
+            if bad:
+                report('qa-BiDi', 'blocker', n, name, w, 'reversed Hebrew (DS-01 / INC-002)')
         for m in re.finditer(r'\]\s*\d+(?:\s*,\s*\d+)*\s*\[', t):
             report('qa-BiDi', 'blocker', n, name, m.group(0), 'mirrored citation brackets (DS-04)')
         for m in re.finditer(r'[A-Za-z]{2,}-{2,}', t):
@@ -213,6 +215,8 @@ def check_img(a):
     for p in Path('figures').glob('*.pdf'):
         if p.stem not in scripts:
             report('qa-img', 'major', '-', str(p), 'figure PDF with no generating script', 'AC-04 reproducibility')
+        _, pages = pdf_pages(str(p))
+        pdf_bidi_scan(pages, str(p), order='logical')   # matplotlib output (INC-002 detection gap)
     for f in chapter_files():
         s = strip_comments(read(f))
         for m in re.finditer(r'\\(includegraphics(\[[^\]]*\])?|authorphoto(\[[^\]]*\])?)\{([^}]+)\}', s):

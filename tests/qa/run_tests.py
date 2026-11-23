@@ -26,6 +26,11 @@ for r in ['DS-01', 'DS-04', 'DS-11']: expect(f'synthetic PDF text reports {r}', 
 qa.FINDINGS.clear(); qa.pdf_bidi_scan(['םכח רבעמ', 'see [1] here', 'countdown signal-ו'], 'synthetic-good')
 expect('synthetic correct text is clean', not qa.FINDINGS)
 
+qa.FINDINGS.clear(); qa.pdf_bidi_scan(['רועיש םיצוחה םודאב'], 'mpl-bad', order='logical')
+expect('matplotlib-order reversed Hebrew reported (INC-002)', any('INC-002' in f[5] for f in qa.FINDINGS))
+qa.FINDINGS.clear(); qa.pdf_bidi_scan(['שיעור החוצים באדום'], 'mpl-good', order='logical')
+expect('matplotlib-order correct Hebrew is clean', not qa.FINDINGS)
+
 # 3. the real final sample must be clean
 r = subprocess.run([PY, 'scripts/qa.py', 'super', '--pdf', 'build/style-final.pdf'], cwd=ROOT, capture_output=True, text=True)
 expect('final sample: 0 findings', r.returncode == 0 and '0 blocker, 0 major, 0 minor' in r.stdout)

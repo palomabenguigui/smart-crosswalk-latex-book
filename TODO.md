@@ -44,26 +44,27 @@ Mirrors the phases in [`PLAN.md`](PLAN.md). Tick items only when their exit gate
 ## P3 – Sources and data
 - [x] `references/refs.bib` with the flagship paper (DOI 10.1016/j.trf.2009.05.002), verified online (Step 09)
 - [ ] Create `references/VERIFICATION.md` (entry key, DOI/URL, date opened, metadata match, verdict)
-- [ ] Find ≥ 11 more sources (countdown-signal studies, pedestrian detection, social control / social learning, Israeli road-safety statistics, relevant standards); **open each DOI/URL online and record the check**; drop any source that can't be verified
-- [ ] `references/notes/` – one paraphrased note per source (no copied sentences)
-- [ ] `data/rosenbloom2009_table1.csv`, `data/rosenbloom2009_table2.csv` with page refs, checked against the **rendered** page (INC-000)
-- [ ] `scripts/recompute_table2.py` – reproduces PRD §9 (D1–D5) numbers
+- [ ] **→ Researcher agent, parallel round 1 (PLAN §11):** find ≥ 11 more sources (countdown-signal studies, pedestrian detection, social control / social learning, Israeli road-safety statistics, relevant standards); **open each DOI/URL online and record the check**; drop any source that can't be verified
+- [ ] **→ Researcher agent:** `references/notes/` – one paraphrased note per source (no copied sentences)
+- [x] `data/rosenbloom2009_table1.csv`, `data/rosenbloom2009_table2.csv` with page refs, checked against the **rendered** page (INC-000) (Step 13)
+- [x] `scripts/recompute_table2.py` → `data/recomputed.json` – reproduces PRD §9 (D1–D5): e^b 0.71/0.67 vs 0.63; traffic row implies b≈0.79, p≈0.014; χ² 17.17 ✓; female 61.76% vs 60.8% (Step 13)
 
-## P4 – Design system (`.cls` v1.0)
-- [ ] Colour tokens (PRD §6.1) and font setup (§6.2)
-- [ ] Banner (header) and footer with crosswalk rule
-- [ ] Chapter openers: road-sign badge + 3-lamp progress indicator; warning-triangle variant for ch. 9
-- [ ] `\crosswalkrule`
-- [ ] Boxes: `scenebox` (chapter street scene), `findingbox`, `cautionbox`, `trapbox`, `definitionbox`, `projectbox`
-- [ ] BiDi commands: `\en{}`, number/range/percent units, Hebrew-in-math
-- [ ] Table style (column 1 on the right) and caption style
-- [ ] Cover page (double frame, TikZ art, bilingual title, no page number)
-- [ ] Design-sample page passes `qa-cls-version`, `qa-BiDi`, `qa-img`; bump to v1.0
+## P4 – Design system (`.cls` v1.0) ✅ DONE (Steps 09–13)
+- [x] Colour tokens (PRD §6.1) and font setup (§6.2)
+- [x] Banner (header) and footer with crosswalk rule
+- [x] Chapter openers: road-sign badge + 3-lamp progress indicator; warning-triangle variant for ch. 9
+- [x] `\crosswalkrule`
+- [x] Boxes: `scenebox` (chapter street scene), `findingbox`, `cautionbox`, `trapbox`, `definitionbox`, `projectbox`
+- [x] BiDi commands: `\en{}`, number/range/percent units, Hebrew-in-math
+- [x] Table style (column 1 on the right) and caption style
+- [x] Cover page (double frame, TikZ art, bilingual title, no page number)
+- [x] Design-sample page passes `qa-cls-version`, `qa-BiDi`, `qa-img`; bump to v1.0
 
 ## P5 – Figures
-- [ ] G1 red-light crossing rate by gender (Table 1)
-- [ ] G2 odds-ratio forest plot: reported vs recomputed (Table 2)
-- [ ] G3 relative odds vs number of people waiting (reported vs recomputed)
+- [x] `scripts/palette.py`, `figstyle.py`, `make_figures.py` (deterministic PDFs) (Step 13)
+- [x] G1 red-light crossing rate by gender (Table 1) → `figures/g1-crossing-by-gender.pdf`
+- [x] G2 odds-ratio forest plot: reported vs recomputed (Table 2) → `figures/g2-odds-ratios.pdf`
+- [x] G3 relative odds vs number of people waiting (reported vs recomputed) → `figures/g3-relative-odds.pdf`
 - [ ] G4 risk heat-map (after the ch. 9 risk register exists)
 - [ ] T1 crosswalk scene with sensing zones + countdown head
 - [ ] T2 system architecture

@@ -21,6 +21,13 @@ and the **detection gap** closed so it can't recur.
 - **Fix:** luaotfload fallback chains (`schebrm`, `schebrmbf`, `schebsf`, `schebsfbf`) from the Hebrew fonts to Noto Serif / Noto Sans, defined in `smartcross.cls`; `\setmathrm` set to Noto Serif.
 - **Detection gap closed:** `scripts/build.sh` counts `Missing character` lines and `qa-typeset` must fail on any non-zero count (AC-03).
 
+## INC-002 – Hebrew reversed in every Python graph
+- **Date / found by:** 2026-11-24, Leader, visual inspection of the rendered figures G1–G3 (P5, Step 13)
+- **Symptom:** all Hebrew labels in `figures/g1…g3.pdf` read backwards ("מודאב םיצוחה רועיש" for "שיעור החוצים באדום").
+- **Root cause:** the `python-graphs` skill prescribed `python-bidi`'s `get_display()` (the classic workaround), but matplotlib 3.11 already applies the bidi algorithm itself → the text was reversed twice. Also, without an RTL base direction, numbers sat on the wrong side, and in multi-line labels the RTL mark only affects the first line.
+- **Fix:** `scripts/figstyle.py` `he()` returns logical-order text with a leading RLM (U+200F); one line per text object; G1 counts moved into the bars.
+- **Detection gap closed:** `qa.py img` now runs the BiDi scan on every `figures/*.pdf` in **logical** extraction order (matplotlib PDFs extract in reading order, LuaTeX PDFs in visual order); it flagged 23 reversed words on the bad figures and 0 after the fix. Two regression tests added to `tests/qa/run_tests.py`; the `python-graphs` skill now forbids `get_display()`.
+
 ---
 
 ## Style-sample findings (Step 09) – found by page-render inspection, all fixed in `smartcross.cls`
