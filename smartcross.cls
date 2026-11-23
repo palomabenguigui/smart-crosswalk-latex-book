@@ -113,7 +113,11 @@
 \DeclareRobustCommand\hebmath[1]{\text{\foreignlanguage{hebrew}{#1}}} % Hebrew inside math
 %% English label: letter-spaced capitals in the sans (typographic hierarchy for English tags)
 \DeclareRobustCommand\enlabel[1]{\en{\sffamily\addfontfeatures{LetterSpace=14}\MakeUppercase{#1}}}
-\newenvironment{ltrblock}{\par\pardir TLT\textdir TLT}{\par}        % diagrams, code (LTR frame)
+%% ltrblock: a diagram/picture built in an explicit LTR box, centred on the line. Setting \pardir alone is not
+%% enough – babel resets the paragraph direction from the language, and the picture is mirrored (DS-20).
+\newsavebox\sc@ltrbox
+\newenvironment{ltrblock}{\par\noindent\begin{lrbox}{\sc@ltrbox}\textdir TLT}%
+  {\end{lrbox}\hbox dir TLT to\linewidth{\hss\usebox\sc@ltrbox\hss}\par}
 \newcommand\sc@ltr[1]{\hbox dir TLT{#1}}                           % internal: LTR picture box
 \newcommand\sc@ltrcenter[1]{\hbox dir TLT to\linewidth{\hss#1\hss}}  % internal: centred LTR picture (DS-08)
 %% TikZ draws in LTR coordinates; Hebrew node text must be set RTL explicitly (DS-01).

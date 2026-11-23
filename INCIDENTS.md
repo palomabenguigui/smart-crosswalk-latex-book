@@ -62,6 +62,9 @@ They're recorded because each one becomes a regression check in `qa-BiDi` / `qa-
 | DS-18 | Cover: sensing zone clipped at the page top; pedestrians too small to read | Fan angles reached above the sidewalk | Fan turned along the sidewalk (154°–186°); pedestrians ×1.45 |
 | DS-19 | B: closing crosswalk rule alone on an otherwise empty last page | Ornament placed after a full page | `\crosswalkrule` is dropped at a page top or when < 20 pt remain |
 
+| DS-20 | T1 TikZ diagram mirrored and shifted off the page inside `ltrblock` | `\pardir TLT` alone is overridden: babel resets the paragraph direction from the language | `ltrblock` now builds its content in an explicit `\hbox dir TLT` (lrbox), centred |
+| DS-21 | `qa-BiDi` flagged the Hebrew of embedded graphs in the book PDF (false positive) | matplotlib text keeps logical extraction order inside the LuaTeX PDF | The book scan skips words from `figures/*.pdf`; `qa-img` scans those in logical mode |
+
 Build-time errors met while writing v0.2 (not visual defects): `\pdfstrcmp` doesn't exist in LuaTeX; `\@seccntformat` is
 expanded inside `\protected@edef`; `\@fptop`/`\@fpsep`/`\@fpbot` are skip registers in LaTeX 2025+ (use `\setlength`);
 xcolor can't append `!70!black` to an expression that is already a mix.

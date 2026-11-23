@@ -65,12 +65,12 @@ Mirrors the phases in [`PLAN.md`](PLAN.md). Tick items only when their exit gate
 - [x] G1 red-light crossing rate by gender (Table 1) → `figures/g1-crossing-by-gender.pdf`
 - [x] G2 odds-ratio forest plot: reported vs recomputed (Table 2) → `figures/g2-odds-ratios.pdf`
 - [x] G3 relative odds vs number of people waiting (reported vs recomputed) → `figures/g3-relative-odds.pdf`
-- [ ] G4 risk heat-map (after the ch. 9 risk register exists)
-- [ ] T1 crosswalk scene with sensing zones + countdown head
-- [ ] T2 system architecture
-- [ ] T3 WBS tree
-- [ ] T4 social-control feedback loop
-- [ ] Positioning graph for ch. 5 (sourced numbers or explicitly qualitative)
+- [ ] G4 risk heat-map → **after** the ch. 9 risk register exists (writing round)
+- [x] T1 crosswalk plan view: waiting zone, sensing zone, countdown heads, awareness display, controller → `figures/tikz/t1-crosswalk-zones.tex`; all figures checked in `samples/figures-test.tex` (clean log, 0 BiDi findings)
+- [ ] T2 system architecture → after ch. 6 picks the alternative (writing round)
+- [ ] T3 WBS tree → with ch. 8 (writing round)
+- [ ] T4 social-control feedback loop → with ch. 4 theory section (writing round)
+- [ ] Positioning graph for ch. 5 → after the Researcher's market sources (writing round)
 - [ ] `qa-img` + `qa-code` clean
 
 ## P6 – Writing (one chapter per task, Detector → Fixer loop after each)

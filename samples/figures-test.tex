@@ -1,0 +1,22 @@
+% samples/figures-test.tex – renders every finished figure in the book's typography (P5 check).
+\documentclass{smartcross}
+\input{samples/meta}
+\begin{document}
+\MainMatter
+\ChapterMission{בדיקת איורים: כל איור מוצג בגודל ובגופן של הספר}
+\chapter{בדיקת איורים}
+\begin{scenebox}
+דף בדיקה פנימי לאיורים בלבד.
+\end{scenebox}
+האיורים \ref{fig:t1}, \ref{fig:g1}, \ref{fig:g2} ו-\ref{fig:g3} מוצגים כאן לבדיקה בלבד.
+\begin{figure}[ht]\centering
+  \begin{ltrblock}\centering\input{figures/tikz/t1-crosswalk-zones}\end{ltrblock}
+  \caption{מעבר החציה החכם במבט על: אזור ההמתנה, אזור החישה, ראשי הרמזור עם ספירה לאחור, שלט המודעות והבקר}\label{fig:t1}
+\end{figure}
+\begin{figure}[ht]\centering\includegraphics[width=\linewidth]{figures/g1-crossing-by-gender.pdf}
+  \caption{שיעור החצייה באדום בקרב המגיעים במופע האדום, לפי מגדר (עובד מתוך \cite{rosenbloom2009})}\label{fig:g1}\end{figure}
+\begin{figure}[ht]\centering\includegraphics[width=\linewidth]{figures/g2-odds-ratios.pdf}
+  \caption{יחסי הסיכויים בטבלה 2 של המקור: כפי שפורסמו ולאחר חישוב מחדש (עובד מתוך \cite{rosenbloom2009})}\label{fig:g2}\end{figure}
+\begin{figure}[ht]\centering\includegraphics[width=\linewidth]{figures/g3-relative-odds.pdf}
+  \caption{סיכויי החצייה היחסיים לפי מספר הממתינים (חושב מתוך \cite{rosenbloom2009})}\label{fig:g3}\end{figure}
+\end{document}

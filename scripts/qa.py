@@ -167,14 +167,20 @@ def check_bidi(a):
         for m in re.finditer(r'(?<![}\]a-zA-Z@*])\[\s*\d+\s*\]', raw):   # not an optional argument
             report('qa-BiDi', 'major', '-', f'{f}:{lineno(raw, m.start())}', m.group(0), 'PRD §7 rule 13: typed citation brackets')
     _, pages = pdf_pages(a.pdf)
-    pdf_bidi_scan(pages, a.pdf)
+    # text of embedded matplotlib figures extracts in LOGICAL order: skip it here (qa-img scans it in logical mode)
+    fig_words = set()
+    for fp in Path('figures').glob('*.pdf'):
+        _, fpages = pdf_pages(str(fp))
+        for t in fpages: fig_words |= set(re.findall(r'[' + HEB + r']{2,}', t))
+    pdf_bidi_scan(pages, a.pdf, skip=fig_words)
 
-def pdf_bidi_scan(pages, name, order='visual'):
+def pdf_bidi_scan(pages, name, order='visual', skip=frozenset()):
     """PDF-level BiDi regressions on extracted page text.
     order='visual'  – LuaTeX PDFs: correct Hebrew extracts reversed, so a final letter (ךםןףץ) can only come FIRST.
     order='logical' – matplotlib PDFs: correct Hebrew extracts in reading order, so a final letter can only come LAST."""
     for n, t in enumerate(pages, 1):
         for w in re.findall(r'[' + HEB + r']{2,}', t):
+            if w in skip: continue
             bad = (w[-1] in FINALS and w[0] not in FINALS) if order == 'visual' else (w[0] in FINALS and w[-1] not in FINALS)
             if bad:
                 report('qa-BiDi', 'blocker', n, name, w, 'reversed Hebrew (DS-01 / INC-002)')
