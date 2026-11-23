@@ -20,12 +20,15 @@ Mirrors the phases in [`PLAN.md`](PLAN.md). Tick items only when their exit gate
 - [x] Hebrew-font **fallback** (Noto Hebrew has no digits, Latin or punctuation) + `\setmathrm` → pattern to copy into `smartcross.cls` (Step 08)
 - [x] Python env `.venv` + `requirements.txt` (matplotlib, numpy, python-bidi) (Step 07)
 
-## P1b – Project skeleton (next)
-- [ ] Add `data/` folder and `INCIDENTS.md` (with INC-000 and INC-001: missing glyphs in the Hebrew fonts, caught by the smoke test)
-- [ ] `smartcross.cls` v0.1: babel Hebrew main + English, bundled fonts **with fallbacks** (from `scripts/font-test.tex`), geometry, biblatex `style=ieee`
-- [ ] `main.tex` skeleton: front matter + empty `\input` for chapters 1–10
-- [ ] `scripts/build.sh` implementing PLAN §8 (puts `/Library/TeX/texbin` first on `PATH`, checks TeX Live 2026); first successful build of the skeleton
-- [ ] Mirror `skills/` into `.claude/skills/` (symlink) so Claude Code can load them
+## P1b – Project skeleton (Step 09)
+- [x] `data/` folder (+ README with transcription rules) and `INCIDENTS.md` (INC-000, INC-001, style-sample findings DS-01…DS-10)
+- [x] `smartcross.cls` v0.1: full PRD §6 design system (tokens, fonts + fallbacks, banner, footer, road-sign openers + 3-lamp indicator, crosswalk rules, 6 boxes, booktabs, BiDi commands, cover, IEEE bibliography), engine guard
+- [x] `main.tex` skeleton: cover, TOC, chapter `\input`s (commented), references
+- [x] `scripts/build.sh` implementing PLAN §8 + log summary; `scripts/render_pages.js` (PDF → PNG)
+- [x] `.claude/skills` → `../skills` symlink
+- [x] `references/refs.bib` with the flagship paper, **verified online** (Crossref via doi.org) and logged in `VERIFICATION.md`
+- [x] Style sample `chapters/00-style-sample.tex` built clean (0 errors / warnings / missing chars / over- and underfull boxes); 6 pages rendered to `screenshots/style-sample/`; 10 defects found and fixed in the `.cls`
+- [ ] **User approves the design** (style sample) → then delete `chapters/00-style-sample.tex` and bump `.cls` to v1.0 after P4
 
 ## P2 – QA skills (before any content)
 - [ ] `skills/qa-infra/SKILL.md`
@@ -41,7 +44,7 @@ Mirrors the phases in [`PLAN.md`](PLAN.md). Tick items only when their exit gate
 - [ ] Dry-run all skills on the skeleton; save a sample report
 
 ## P3 – Sources and data
-- [ ] `references/refs.bib` with the flagship paper (DOI 10.1016/j.trf.2009.05.002)
+- [x] `references/refs.bib` with the flagship paper (DOI 10.1016/j.trf.2009.05.002), verified online (Step 09)
 - [ ] Create `references/VERIFICATION.md` (entry key, DOI/URL, date opened, metadata match, verdict)
 - [ ] Find ≥ 11 more sources (countdown-signal studies, pedestrian detection, social control / social learning, Israeli road-safety statistics, relevant standards); **open each DOI/URL online and record the check**; drop any source that can't be verified
 - [ ] `references/notes/` – one paraphrased note per source (no copied sentences)

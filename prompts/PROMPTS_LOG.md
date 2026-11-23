@@ -132,3 +132,20 @@ MacTeX is installed (LuaHBTeX 1.24.0, TeX Live 2026, biber 2.21) in /Library/TeX
 ```
 
 ---
+
+## Step 09 – P1b project skeleton and style sample
+**Date/time:** 2026-11-23 22:47
+
+```text
+Go ahead with P1b (project skeleton), with this addition:
+
+1. Build smartcross.cls v0.1 implementing the full design system of PRD §6 (colour tokens, Noto fonts loaded by path, banner header, footer, road-sign chapter openers with the 3-lamp traffic-light progress indicator, crosswalk-stripe rules, the boxes findingbox / cautionbox / trapbox / definitionbox / projectbox / scenebox, booktabs tables, BiDi template commands \en, \num, \range, etc.), plus main.tex, build.sh, data/, INCIDENTS.md (INC-000, INC-001) and the skills mirror.
+
+2. Create a temporary STYLE SAMPLE (chapters/00-style-sample.tex, Hebrew placeholder text) that shows on 4–6 pages: the cover, the table of contents, one chapter opener (red lamp) and one with the amber lamp, every box type, a sample table, a numbered formula, mixed Hebrew/English sentences with numbers and percentages, and the header/footer.
+
+3. Build it, render the pages to PNG in screenshots/style-sample/, inspect them yourself for BiDi and layout defects, fix through the .cls only, then show me the result and stop so I can approve the design before any real content is written.
+
+Log this prompt, commit and push.
+```
+
+---

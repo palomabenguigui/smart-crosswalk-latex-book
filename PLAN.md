@@ -123,16 +123,18 @@ the source page, and `data/*.csv` stores the page reference for each value.
 ├── README.md  PRD.md  PLAN.md  TODO.md  INCIDENTS.md
 ├── main.tex                 # master file: front matter + \input of chapters
 ├── smartcross.cls           # custom class: ALL formatting lives here (versioned)
+├── hebrew.lbx               # biblatex Hebrew module → English strings (bibliography is English/IEEE)
 ├── chapters/                # ch01-intro.tex … ch10-summary.tex, front-matter.tex
 ├── figures/                 # generated PDFs (Python) and tikz/*.tex sources
 ├── data/                    # CSV transcriptions of published tables, with page references
 ├── requirements.txt         # Python deps for .venv (pip freeze)
-├── scripts/                 # Python: graphs, recomputation, build helpers, font-test.tex
+├── scripts/                 # build.sh, render_pages.js (PDF→PNG via macOS PDFKit), font-test.tex, Python figure scripts
 ├── fonts/                   # bundled OFL fonts + licences
 ├── references/              # README.md, refs.bib, VERIFICATION.md tracked; copyrighted PDFs/MD local only
 ├── skills/                  # qa-* skills + production-agent skills (SKILL.md each)
 ├── prompts/                 # PROMPTS_LOG.md (verbatim); agents/ = each agent's prompt, verbatim
-├── screenshots/             # our own screenshots: book pages, graphs, TikZ, agents in action, incidents
+├── screenshots/             # our own screenshots: style-sample/, book pages, graphs, TikZ, agents in action, incidents
+├── .claude/skills -> ../skills   # symlink so Claude Code loads the project skills
 └── build/                   # build output; only build/main.pdf is tracked
 ```
 

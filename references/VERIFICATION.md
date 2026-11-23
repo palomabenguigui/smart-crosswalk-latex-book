@@ -6,3 +6,4 @@ The Researcher opens the DOI or URL and checks title, authors, year, venue and p
 
 | `.bib` key | DOI / URL opened | Date opened | Title | Authors | Year | Venue | Pages | Verdict | Notes |
 |---|---|---|---|---|---|---|---|---|---|
+| `rosenbloom2009` | https://doi.org/10.1016/j.trf.2009.05.002 (Crossref metadata via doi.org) | 2026-11-23 | ✓ match | ✓ Rosenbloom, Tova | ✓ 2009 (Sept.) | ✓ Transportation Research Part F 12(5) | ✓ 389–394 | **verified** | Issue no. 5 confirmed online (it was added from memory in Step 04) |

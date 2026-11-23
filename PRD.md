@@ -190,6 +190,8 @@ Based on booklet ch. 14 and Prompt B1. These apply everywhere: titles, captions,
 9. Citations (`\cite`) and cross-references (`\ref`) render with correct order, for example "[3]" and "איור 4.2", never "2.4".
 10. Only template commands are used; agents never invent new formatting commands in chapter files.
 11. Any BiDi defect that repeats across the document is fixed in the `.cls`. Only a one-off defect is fixed in its sentence (booklet §14.6).
+12. A Hebrew prefix letter (ו, ה, ב, ל, מ, ש, כ) before a number or an English word is joined with a **maqaf**: `ו-\num{1,392}`, `ב-\en{LuaLaTeX}` (found in the Step 09 style sample).
+13. Citations are always `\cite{…}`. The `.cls` sets them as one LTR English unit, so brackets never mirror. Never type brackets around a citation by hand.
 
 ## 8. Measurable acceptance criteria
 
