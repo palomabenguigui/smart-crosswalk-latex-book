@@ -1,0 +1,10 @@
+# source: rosenbloom2009 (Transportation Research Part F 12(5)), Table 1, journal p. 391 (PDF page 3)
+# checked against the RENDERED page image on 2026-11-19 (Step 05) and 2026-11-24 (Step 13) – INC-000 rule
+# counts of observed pedestrians by light on arrival / light on crossing; printed percentages kept as printed
+group,category,green_green,red_green,red_red,total,printed_pct_green_green,printed_pct_red_green,printed_pct_red_red,printed_pct_total
+all,all,829,487,76,1392,59.6,35.0,5.5,100
+gender,female,512,302,28,842,60.8,62.0,36.8,60.5
+gender,male,317,185,48,550,38.2,38.0,63.2,39.5
+age,20-40,780,462,72,1314,94.1,94.9,94.7,94.4
+age,40-60,37,22,4,63,4.5,4.5,5.3,4.5
+age,60+,12,3,0,15,1.4,0.6,,1.1

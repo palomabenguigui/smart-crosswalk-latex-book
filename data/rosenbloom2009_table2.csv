@@ -1,0 +1,9 @@
+# source: rosenbloom2009, Table 2 (logistic regression), journal p. 391 (PDF page 3)
+# checked against the RENDERED page image (minus signs present: text extraction drops them – INC-000)
+# values exactly as printed; empty = not printed
+predictor_key,predictor,b,se_b,wald,exp_b,ci_low,ci_high,significant_printed
+gender,Gender (male),1.31,0.32,17.20,3.71,2.00,6.88,p<0.001
+waiting,No. of people waiting upon arrival,-0.47,0.11,18.63,0.71,0.51,0.78,p<0.001
+joining,No. of people joining after arrival,-0.46,0.13,12.00,0.67,0.48,0.82,p<0.001
+traffic,Traffic volume on red-light phase,-0.03,0.03,6.06,2.20,1.17,4.11,
+crossing,Pedestrian crossing during red-light phase,-24.24,8184.53,0.0,,,,

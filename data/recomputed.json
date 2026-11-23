@@ -1,0 +1,136 @@
+{
+  "source": "rosenbloom2009",
+  "table2": {
+    "gender": {
+      "b": 1.31,
+      "se": 0.32,
+      "exp_b_printed": "3.71",
+      "exp_b_recomputed": 3.71,
+      "ci_recomputed": [
+        1.98,
+        6.94
+      ],
+      "wald_recomputed": 16.76,
+      "wald_printed": 17.2,
+      "b_implied_by_ci": 1.31,
+      "se_implied_by_ci": 0.32,
+      "exp_b_implied_by_ci": 3.71,
+      "p_from_printed_wald": 0.0
+    },
+    "waiting": {
+      "b": -0.47,
+      "se": 0.11,
+      "exp_b_printed": "0.71",
+      "exp_b_recomputed": 0.63,
+      "ci_recomputed": [
+        0.5,
+        0.78
+      ],
+      "wald_recomputed": 18.26,
+      "wald_printed": 18.63,
+      "b_implied_by_ci": -0.46,
+      "se_implied_by_ci": 0.11,
+      "exp_b_implied_by_ci": 0.63,
+      "p_from_printed_wald": 0.0
+    },
+    "joining": {
+      "b": -0.46,
+      "se": 0.13,
+      "exp_b_printed": "0.67",
+      "exp_b_recomputed": 0.63,
+      "ci_recomputed": [
+        0.49,
+        0.81
+      ],
+      "wald_recomputed": 12.52,
+      "wald_printed": 12.0,
+      "b_implied_by_ci": -0.47,
+      "se_implied_by_ci": 0.14,
+      "exp_b_implied_by_ci": 0.63,
+      "p_from_printed_wald": 0.0005
+    },
+    "traffic": {
+      "b": -0.03,
+      "se": 0.03,
+      "exp_b_printed": "2.20",
+      "exp_b_recomputed": 0.97,
+      "ci_recomputed": [
+        0.92,
+        1.03
+      ],
+      "wald_recomputed": 1.0,
+      "wald_printed": 6.06,
+      "b_implied_by_ci": 0.79,
+      "se_implied_by_ci": 0.32,
+      "exp_b_implied_by_ci": 2.19,
+      "p_from_printed_wald": 0.0138
+    },
+    "crossing": {
+      "b": -24.24,
+      "se": 8184.53,
+      "exp_b_printed": null,
+      "exp_b_recomputed": null,
+      "ci_recomputed": null,
+      "wald_recomputed": 0.0,
+      "wald_printed": 0.0,
+      "p_from_printed_wald": null
+    }
+  },
+  "table1": {
+    "observations": 1392,
+    "arrived_red": 563,
+    "arrived_red_pct": 40.45,
+    "crossed_red": 76,
+    "crossed_red_pct_of_all": 5.46,
+    "crossed_red_pct_of_red_arrivals": 13.5,
+    "by_gender_red_arrivals": {
+      "female": {
+        "arrived_red": 330,
+        "crossed_red": 28,
+        "rate_pct": 8.48
+      },
+      "male": {
+        "arrived_red": 233,
+        "crossed_red": 48,
+        "rate_pct": 20.6
+      }
+    },
+    "chi2_gender_recomputed": 17.17,
+    "female_pct_green_green_recomputed": 61.76,
+    "age_20_40_pct_recomputed": 94.4
+  },
+  "issues": {
+    "D1_exp_b_mismatch": {
+      "waiting": [
+        "0.71",
+        0.63
+      ],
+      "joining": [
+        "0.67",
+        0.63
+      ]
+    },
+    "D2_traffic_row": {
+      "b_se_give": [
+        0.97,
+        1.0
+      ],
+      "ci_and_exp_b_imply_b": 0.79,
+      "ci_and_exp_b_imply_se": 0.32,
+      "p_from_printed_wald": 0.0138
+    },
+    "D4_separation": {
+      "b": -24.24,
+      "se": 8184.53
+    },
+    "D5_female_pct": [
+      60.8,
+      61.76
+    ],
+    "chi2_gender_check": [
+      17.17,
+      17.17
+    ]
+  },
+  "quoted_in_book": {}
+}
