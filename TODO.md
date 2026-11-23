@@ -28,7 +28,9 @@ Mirrors the phases in [`PLAN.md`](PLAN.md). Tick items only when their exit gate
 - [x] `.claude/skills` → `../skills` symlink
 - [x] `references/refs.bib` with the flagship paper, **verified online** (Crossref via doi.org) and logged in `VERIFICATION.md`
 - [x] Style sample `chapters/00-style-sample.tex` built clean (0 errors / warnings / missing chars / over- and underfull boxes); 6 pages rendered to `screenshots/style-sample/`; 10 defects found and fixed in the `.cls`
-- [ ] **User approves the design** (style sample) → then delete `chapters/00-style-sample.tex` and bump `.cls` to v1.0 after P4
+- [x] Step 10: premium redesign → `smartcross.cls` v0.2 with two directions (A editorial / B engineering), samples `samples/style-A.tex` (6 pp) and `samples/style-B.tex` (5 pp), clean logs, 9 more defects fixed (DS-11…DS-19); renders in `screenshots/style-sample-A/` and `-B/`
+- [ ] **User chooses direction A or B** → remove the other branch from the `.cls`, delete `chapters/00-style-sample.tex` and `samples/`, bump to v1.0 after P4
+- [ ] Take our own crosswalk photo → `figures/photo-crosswalk.jpg` (no identifiable faces), credited "צילום: המחברים"
 
 ## P2 – QA skills (before any content)
 - [ ] `skills/qa-infra/SKILL.md`

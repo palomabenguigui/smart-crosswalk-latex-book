@@ -132,7 +132,8 @@ onwards merges these bars into a single specification. Where experts disagreed, 
 | **Formulas (≥ 1)** | Numbered and referenced in the text | Logistic model logit(p) = β₀ + Σ βᵢxᵢ; OR = e^β; Wald = (b/SE)²; 95% CI = e^(b ± 1.96·SE); S_j = Σ wᵢcᵢⱼ; R = P × I |
 | **TikZ illustrations (≥ 1)** | Drawn in code, no external images | **T1** crosswalk scene with curb-sensing zones and countdown head; **T2** system architecture; **T3** WBS tree; **T4** social-control feedback loop; chapter-opener road signs; cover art |
 | Bibliography | IEEE, biber, two-way match between citations and list | ≥ 12 sources, ≥ 8 peer-reviewed, each DOI/URL **verified online** (§11, AC-22) |
-| **No copyrighted images** | Zero raster images from the internet or from the references | Only TikZ / Python output in `figures/` |
+| **No copyrighted images** | Zero images from the internet or from the references | Only TikZ / Python output in `figures/`, plus **our own photographs** (see next row) |
+| **Authors' own photograph** (allowed source) | A photo taken by the group itself (e.g. `figures/photo-crosswalk.jpg`), placed with `\authorphoto`, caption credits **"צילום: המחברים"** (Photo: the authors); no people identifiable without consent; no internet or stock photos | `\authorphoto[height]{file}{caption}{label}`; a placeholder frame is drawn until the file exists |
 
 ## 6. Design system (our own identity)
 
@@ -175,6 +176,24 @@ onwards merges these bars into a single specification. Where experts disagreed, 
 
 - **Cover:** a double frame, TikZ crosswalk-and-signal art, bilingual title, subtitle "דוח מכין", authors, affiliation, date and © line. No page number, and no keywords on the cover.
 
+### 6.4 Premium components (v0.2, Step 10)
+
+| Component | Command | Notes |
+|---|---|---|
+| Full-bleed cover | `\makecover` | TikZ aerial view of the crosswalk: zebra, curbs, stop lines, a stopped car, countdown signal heads, a waiting group and a lone pedestrian with shadows, the curb-sensing zone; title block on a solid asphalt band; "דוח מכין" as a road-sign plate |
+| Chapter opener | `\ChapterMission{…}` `\ChapterIcon{…}` `\chapter{…}` | Full-bleed asphalt band, very large two-digit chapter number, 3-lamp signal (phase lit), English letter-spaced label, mission line |
+| Thumb tabs | automatic | Outer (left) page edge, colour and height by phase: red ch. 1–3, amber 4–7, green 8–10 |
+| Key-figure tiles | `\begin{statrow}[n] \stattile[colour]{number}{label} … \end{statrow}` | Big number + short label |
+| Pull quote | `\begin{pullquote}[attribution] … \end{pullquote}` | Only our own sentences (never a quotation from a source) |
+| Margin note | `\sidenote{…}` | Outer (left) margin, ragged, never hyphenated |
+| Pictograms | `\picto[colour]{pedestrian\|signal\|sensor\|warning\|info\|camera}` | Used in box titles, chapter openers, tiles |
+| English labels | `\enlabel{…}` | Letter-spaced capitals for English tags |
+| Author photo | `\authorphoto[height]{file}{caption}{label}` | See §5 |
+
+**Design directions (to be chosen by the user):** `\documentclass[A]{smartcross}` = bold editorial (serif body, wide
+outer margin, dark tiles, filled box titles); `[B]` = clean engineering report (sans body, document-control block on the
+cover, hairlines, white tiles, side-bar boxes). Samples: `samples/style-A.tex`, `samples/style-B.tex`.
+
 ## 7. BiDi rules (Hebrew / English mixing)
 
 Based on booklet ch. 14 and Prompt B1. These apply everywhere: titles, captions, tables, header, footer and cover.
@@ -208,7 +227,7 @@ Based on booklet ch. 14 and Prompt B1. These apply everywhere: titles, captions,
 | AC-09 | Bibliography | ≥ 12 entries, ≥ 8 peer-reviewed, 100% cited ↔ listed, 100% DOI/URL verified | Researcher + `qa-super` |
 | AC-10 | BiDi | 0 reversed words, numbers or section numbers in a full-PDF audit (Prompt B2) | `qa-BiDi` |
 | AC-11 | Copied text | 0 sentences of ≥ 8 consecutive words matching the source papers | `qa-super` (n-gram check) |
-| AC-12 | External images | 0 raster images not produced by our scripts | `qa-img`, `qa-infra` |
+| AC-12 | External images | 0 raster images other than our scripts' output and the authors' own credited photographs (`\authorphoto`) | `qa-img`, `qa-infra` |
 | AC-13 | `.cls` | Version string matches `PLAN.md`; no formatting commands defined in chapter files | `qa-cls-version` |
 | AC-14 | Data traceability | Every number taken from the flagship paper matches the source; every recomputed number is reproduced by a script | `qa-code` + Researcher |
 | AC-15 | Data issues | All issues in §9 are discussed critically in ch. 4, in a `cautionbox` | `qa-super` |
@@ -278,7 +297,7 @@ regression. The coefficient is meaningless, and H2 cannot be tested from this mo
 
 - Implementing, piloting or field-testing the system. This is a *preparatory* report.
 - Collecting new field data. The book uses only published, cited data.
-- Any image not produced by our own TikZ or Python code.
+- Any image not produced by our own TikZ or Python code, **except** photographs taken by the group itself, placed with `\authorphoto` and credited "צילום: המחברים" (allowed image source, Step 10). Internet, stock and reference-paper images remain out of scope.
 
 ## 11. Constraints
 

@@ -149,3 +149,22 @@ Log this prompt, commit and push.
 ```
 
 ---
+
+## Step 10 – Premium redesign: two design directions (A editorial, B engineering)
+**Date/time:** 2026-11-23 23:17
+
+```text
+The style sample is functional but looks generic. Redesign smartcross.cls so the book looks like a premium, professionally designed report (think high-end municipal / engineering consultancy report or an editorial annual report), clearly the result of deliberate design work. Keep the PRD identity (asphalt + signal red/amber/green, road-sign language, crosswalk stripes) but raise the craft level:
+
+- COVER: full-bleed design; a large TikZ aerial (top-down) view of a crosswalk with zebra stripes, curb, a countdown signal head and stylised pedestrian silhouettes casting shadows; title block on a solid asphalt band; small "דוח מכין" label styled like a road-sign plate.
+- CHAPTER OPENERS: full-width asphalt band with a very large chapter number, the 3-lamp traffic-light indicator, a one-line chapter "mission" subtitle, and the scenebox below.
+- THUMB TABS: coloured tabs on the outer page edge per phase (red ch.1–3, amber ch.4–7, green ch.8–10) so the book's structure is visible from the side.
+- KEY-FIGURE TILES: a "stat tile" component (big number + short label) for headline data such as 13.5% or 1,392 pedestrians.
+- PULL QUOTES and MARGIN NOTES components, a refined typographic hierarchy (sizes, weights, spacing, small caps/letter-spacing for English labels), and a consistent grid.
+- PICTOGRAMS: a small set of TikZ icons (pedestrian, signal head, sensor, warning triangle) reused in boxes and headings.
+- PHOTO: add an "authorphoto" figure style for our own photograph (figures/photo-crosswalk.jpg, taken by us — no internet images) with a caption that credits "Photo: the authors"; add this to PRD §5 and §10 as an allowed image source.
+
+Produce TWO distinct design directions as separate style samples (A: bold editorial, B: clean engineering-report), each 5–6 pages showing cover, TOC, two chapter openers, all boxes, a stat tile, a table, a formula and a placeholder photo frame. Render both to PNG in screenshots/style-sample-A/ and -B/, self-inspect for BiDi/layout defects, fix only via the .cls, then stop and show me both so I can choose. Log this prompt, commit and push.
+```
+
+---

@@ -2,11 +2,14 @@
 %% Group shirloma · Generative AI course (Dr. Yoram Segal, Bar-Ilan University)
 %%
 %% ALL formatting lives here (PLAN §5). Chapter files contain content + template commands only.
+%% Two design directions share every component; only styling differs:
+%%   \documentclass[A]{smartcross}   A = bold editorial (default)
+%%   \documentclass[B]{smartcross}   B = clean engineering report
 %% Tested toolchain: TeX Live 2026 (LuaHBTeX 1.24.0, babel v26.4, biber 2.21).
 %% Compile from the REPOSITORY ROOT (fonts are loaded by relative path from fonts/).
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{smartcross}[2026/11/23 v0.1 Smart Crosswalk report class (shirloma)]
-\def\SmartCrossVersion{0.1}
+\ProvidesClass{smartcross}[2026/11/23 v0.2 Smart Crosswalk report class (shirloma)]
+\def\SmartCrossVersion{0.2}
 
 %% ---------------------------------------------------------------- engine guard (qa-cls-version)
 \ifdefined\directlua\else
@@ -17,14 +20,26 @@
     {Use TeX Live 2026 (/Library/TeX/texbin). MiKTeX 22.1 for macOS is not supported (README).}
 \fi
 
+%% ---------------------------------------------------------------- design direction
+\newif\ifsc@A \sc@Atrue
+\DeclareOption{A}{\sc@Atrue}
+\DeclareOption{B}{\sc@Afalse}
+\ProcessOptions\relax
 \LoadClass[11pt,a4paper,oneside]{report}
 
-%% ---------------------------------------------------------------- page geometry
-\RequirePackage[a4paper,top=31mm,bottom=28mm,left=24mm,right=24mm,
-  headheight=9mm,headsep=8mm,footskip=14mm]{geometry}
+%% ---------------------------------------------------------------- page grid
+%% RTL book: the text starts at the RIGHT margin; the LEFT (end/outer) margin carries margin notes
+%% and the thumb tabs at the page edge.
+\ifsc@A
+  \RequirePackage[a4paper,top=27mm,bottom=27mm,right=22mm,left=50mm,
+    marginparwidth=31mm,marginparsep=7mm,headheight=8mm,headsep=9mm,footskip=13mm]{geometry}
+\else
+  \RequirePackage[a4paper,top=30mm,bottom=27mm,right=25mm,left=42mm,
+    marginparwidth=23mm,marginparsep=6mm,headheight=8mm,headsep=9mm,footskip=13mm]{geometry}
+\fi
 
 %% ---------------------------------------------------------------- languages / BiDi
-\RequirePackage[english,bidi=basic,layout=tabular]{babel}% NOT layout=counters: it reverses 4.1 -> 1.4 under bidi=basic
+\RequirePackage[english,bidi=basic,layout=tabular]{babel}% NOT layout=counters: it reverses 4.1 -> 1.4 (DS-03)
 \babelprovide[import,main]{hebrew}
 \@ifpackagelater{babel}{2026/03/01}{}{%
   \ClassWarningNoLine{smartcross}{babel older than v26.4: tested toolchain is TeX Live 2026}}
@@ -55,23 +70,29 @@
 \setmathrm{NotoSerif}[\sc@fontpath{NotoSerif}, UprightFont=*-Regular, BoldFont=*-Bold,
   ItalicFont=*-Italic]
 
-\linespread{1.15}
+%% body text: A = serif (editorial), B = sans (engineering)
+\ifsc@A\else\renewcommand\familydefault{\sfdefault}\fi
+\linespread{\ifsc@A 1.18\else 1.15\fi}
 \setlength\parindent{0pt}
-\setlength\parskip{5pt plus 2pt minus 1pt}
+\setlength\parskip{5.5pt plus 2pt minus 1pt}
 \emergencystretch=1.5em
+\clubpenalty=10000 \widowpenalty=10000
 
 %% ---------------------------------------------------------------- colour tokens (PRD §6.1)
 \RequirePackage[table]{xcolor}
 \definecolor{Asphalt}{HTML}{2E3338}
+\definecolor{AsphaltDeep}{HTML}{1E2226}
 \definecolor{AsphaltLight}{HTML}{5A6068}
 \definecolor{SignalRed}{HTML}{C8102E}
 \definecolor{SignalAmber}{HTML}{F2A900}
 \definecolor{SignalGreen}{HTML}{00843D}
 \definecolor{StripeWhite}{HTML}{F4F4F2}
 \definecolor{Paper}{HTML}{FFFFFF}
-\colorlet{LampRedOff}{SignalRed!22!black}
-\colorlet{LampAmberOff}{SignalAmber!22!black}
-\colorlet{LampGreenOff}{SignalGreen!22!black}
+\definecolor{Concrete}{HTML}{CFD2D5}
+\definecolor{ConcreteJoint}{HTML}{BCC0C4}
+\definecolor{Curb}{HTML}{9298A0}
+\definecolor{Road}{HTML}{353A40}
+\definecolor{Hairline}{HTML}{C9CDD2}
 \colorlet{HousingBlack}{black!88}
 \pagecolor{Paper}
 
@@ -85,33 +106,33 @@
 \RequirePackage{enumitem}
 \setlist{itemsep=2pt,topsep=4pt}
 \RequirePackage{caption}
-\DeclareCaptionFont{scasphalt}{\color{Asphalt}}
-\captionsetup{font={small,sf},labelfont={bf,scasphalt},labelsep=colon,skip=6pt}
-\captionsetup[table]{position=top}
 \RequirePackage{csquotes}
-\DeclareQuoteStyle{hebrew}{\textquotedblright}{\textquotedblright}{\textquoteright}{\textquoteright}% Hebrew: ”…” 
-\RequirePackage[backend=biber,style=ieee,language=english,autolang=none]{biblatex}% language handled by the .cls (\cite wrapper, \printreferences); autolang=other leaks \babel@toc{english} into the TOC
+\DeclareQuoteStyle{hebrew}{\textquotedblright}{\textquotedblright}{\textquoteright}{\textquoteright}% Hebrew: ”…”
+\RequirePackage[backend=biber,style=ieee,language=english,autolang=none]{biblatex}% language handled by the .cls (DS-05)
 \RequirePackage[hidelinks,bookmarksnumbered,pdfencoding=auto]{hyperref}
 
 %% ---------------------------------------------------------------- BiDi template commands (PRD §7)
 %% Only these commands may be used for direction control in chapter files.
-\DeclareRobustCommand\en[1]{\foreignlanguage{english}{#1}}      % English word/phrase, one unit
-\DeclareRobustCommand\num[1]{\leavevmode\hbox dir TLT{#1}}         % number/version/date, one LTR unit
+\DeclareRobustCommand\en[1]{\foreignlanguage{english}{\lefthyphenmin=62\righthyphenmin=62 #1}}% English word/phrase, one unit; never hyphenated (DS-11)
+\DeclareRobustCommand\num[1]{\leavevmode\hbox dir TLT{#1}}         % number/version/date, one LTR unit (DS-07)
 \DeclareRobustCommand\pct[1]{\num{#1\%}}                           % percentage: \pct{13.5}
 \DeclareRobustCommand\range[2]{\num{#1\textendash#2}}              % range: \range{0.51}{0.78}
 \DeclareRobustCommand\unit[2]{\num{#1\,#2}}                        % value + unit: \unit{30}{s}
 \DeclareRobustCommand\hebmath[1]{\text{\foreignlanguage{hebrew}{#1}}} % Hebrew inside math
+%% English label: letter-spaced capitals in the sans (typographic hierarchy for English tags)
+\DeclareRobustCommand\enlabel[1]{\en{\sffamily\addfontfeatures{LetterSpace=14}\MakeUppercase{#1}}}
 \newenvironment{ltrblock}{\par\pardir TLT\textdir TLT}{\par}        % diagrams, code (LTR frame)
 \newcommand\sc@ltr[1]{\hbox dir TLT{#1}}                           % internal: LTR picture box
-\newcommand\sc@ltrcenter[1]{\hbox dir TLT to\linewidth{\hss#1\hss}}  % internal: centred LTR picture
-%% TikZ draws in LTR coordinates; Hebrew node text must be set RTL explicitly (style 'rtl').
+\newcommand\sc@ltrcenter[1]{\hbox dir TLT to\linewidth{\hss#1\hss}}  % internal: centred LTR picture (DS-08)
+%% TikZ draws in LTR coordinates; Hebrew node text must be set RTL explicitly (DS-01).
 \tikzset{rtl/.style={execute at begin node={\pardir TRT\textdir TRT}}}
 
 %% ---------------------------------------------------------------- document metadata
 \newcommand\sc@title{}\newcommand\sc@subtitle{}\newcommand\sc@entitle{}
 \newcommand\sc@authors{}\newcommand\sc@course{}\newcommand\sc@lecturer{}
 \newcommand\sc@institution{}\newcommand\sc@docdate{}\newcommand\sc@group{shirloma}
-\newcommand\sc@footertitle{}
+\newcommand\sc@footertitle{}\newcommand\sc@docnumber{SCX-PR-001}\newcommand\sc@revision{0.1}
+\newcommand\sc@status{טיוטה}
 \newcommand\Title[1]{\renewcommand\sc@title{#1}}
 \newcommand\Subtitle[1]{\renewcommand\sc@subtitle{#1}}
 \newcommand\EnglishTitle[1]{\renewcommand\sc@entitle{#1}}
@@ -122,9 +143,81 @@
 \newcommand\DocDate[1]{\renewcommand\sc@docdate{#1}}
 \newcommand\GroupCode[1]{\renewcommand\sc@group{#1}}
 \newcommand\FooterTitle[1]{\renewcommand\sc@footertitle{#1}}
+\newcommand\DocNumber[1]{\renewcommand\sc@docnumber{#1}}
+\newcommand\DocRevision[1]{\renewcommand\sc@revision{#1}}
+\newcommand\DocStatus[1]{\renewcommand\sc@status{#1}}
 
-%% ---------------------------------------------------------------- crosswalk-stripe rule (PRD §6.3)
-%% \crosswalkrule[height]  – asphalt bar with white zebra stripes across the line width
+%% ================================================================ PICTOGRAMS
+%% \picto[colour]{pedestrian|signal|sensor|warning|info|camera}  – 1em high, inline, LTR-safe.
+\newcommand\picto[2][Asphalt]{\leavevmode\hbox dir TLT{\tikz[x=0.1em,y=0.1em,baseline=-1.2]{%
+  \csname sc@picto@#2\endcsname{#1}}}}
+\newcommand\sc@picto@pedestrian[1]{%
+  \fill[#1] (5,9.1) circle (1.3);
+  \fill[#1,rounded corners=0.5] (3.6,3.9) rectangle (6.4,7.5);
+  \draw[#1,line width=0.1em,line cap=round] (3.7,7.0)--(2.9,4.3) (6.3,7.0)--(7.1,4.3)
+    (4.35,4.0)--(4.15,0.4) (5.65,4.0)--(5.85,0.4);}
+\newcommand\sc@picto@signal[1]{%
+  \fill[#1,even odd rule,rounded corners=0.9] (2.4,-0.2) rectangle (7.6,10.4)
+    (5,8.3) circle (1.25) (5,5.1) circle (1.25) (5,1.9) circle (1.25);}
+\newcommand\sc@picto@sensor[1]{%
+  \fill[#1] (4.1,0) rectangle (5.9,5.0);
+  \fill[#1] (5,5.7) circle (1.15);
+  \draw[#1,line width=0.085em,line cap=round] (2.4,7.3) arc[start angle=150,end angle=30,radius=3];
+  \draw[#1,line width=0.085em,line cap=round] (1.0,8.1) arc[start angle=150,end angle=30,radius=4.6];}
+\newcommand\sc@picto@warning[1]{%
+  \fill[#1,even odd rule,rounded corners=0.7] (5,10.2)--(10.4,0.4)--(-0.4,0.4)--cycle
+    (4.45,3.7) rectangle (5.55,7.3) (5,2.35) circle (0.68);}
+\newcommand\sc@picto@info[1]{%
+  \fill[#1,even odd rule] (5,5) circle (5) (4.4,1.6) rectangle (5.6,5.9) (5,7.6) circle (0.8);}
+\newcommand\sc@picto@camera[1]{%
+  \fill[#1,even odd rule,rounded corners=0.8] (0.3,1.2) rectangle (9.7,7.9) (5,4.5) circle (2.3);
+  \fill[#1] (3.2,7.6) rectangle (6.8,9.0);
+  \fill[#1] (5,4.5) circle (1.3);}
+
+%% ================================================================ PHASES (traffic-light logic)
+%% ch. 1–3 red (the problem) · 4–7 amber (analysis & design) · 8+ green (ready to implement)
+\newcommand\sc@phaseof[1]{\ifnum#1<4 red\else\ifnum#1<8 amber\else green\fi\fi}
+\newcommand\sc@phasecolorof[1]{\ifnum#1<4 SignalRed\else\ifnum#1<8 SignalAmber\else SignalGreen\fi\fi}
+\gdef\sc@phase{none}% none | red | amber | green  (current page's phase, for tabs)
+\let\sc@lampoverride\@empty
+\newcommand\SetLamp[1]{\gdef\sc@lampoverride{#1}}        % one-off override for the next chapter
+\gdef\sc@signshape{square}
+\newcommand\SetSign[1]{\gdef\sc@signshape{#1}}           % reserved: square | triangle
+\newcommand\sc@computelamp{%
+  \ifx\sc@lampoverride\@empty \xdef\sc@phase{\sc@phaseof{\c@chapter}}%
+  \else\xdef\sc@phase{\sc@lampoverride}\fi
+  \global\let\sc@lampoverride\@empty}
+\def\sc@ph@red{red}\def\sc@ph@amber{amber}\def\sc@ph@green{green}
+\newcommand\sc@phasecolor{\ifx\sc@phase\sc@ph@red SignalRed\else\ifx\sc@phase\sc@ph@amber SignalAmber\else
+  \ifx\sc@phase\sc@ph@green SignalGreen\else AsphaltLight\fi\fi\fi}
+\newcommand\sc@phasename{\ifx\sc@phase\sc@ph@red שלב הבעיה\else\ifx\sc@phase\sc@ph@amber שלב הניתוח והתכן\else
+  \ifx\sc@phase\sc@ph@green שלב המימוש\fi\fi\fi}
+\newcommand\sc@phaseen{\ifx\sc@phase\sc@ph@red The problem\else\ifx\sc@phase\sc@ph@amber Analysis \& design\else
+  \ifx\sc@phase\sc@ph@green Implementation\fi\fi\fi}
+
+%% 3-lamp signal head. \sc@lamps{phase}{v|h}{lamp radius mm}
+\newcommand\sc@lamps[3]{%
+  \begin{tikzpicture}[x=1mm,y=1mm]
+    \edef\sc@lp{#1}\def\sc@r{#3}%
+    \def\sc@onelamp##1##2##3{\edef\sc@t{##1}%
+      \ifx\sc@t\sc@lp \fill[##3,opacity=0.30] (##2) circle ({\sc@r*1.38});
+        \fill[##3] (##2) circle (\sc@r); \fill[white,opacity=0.35] ($(##2)+({-0.3*\sc@r},{0.35*\sc@r})$) circle ({\sc@r*0.28});
+      \else \fill[##3!20!black] (##2) circle (\sc@r);\fi}%
+    \if v#2
+      \fill[HousingBlack,rounded corners=2.2mm] (0,0) rectangle ({\sc@r*3.2},{\sc@r*9.4});
+      \draw[white!40!HousingBlack,line width=0.5pt,rounded corners=2.2mm] (0,0) rectangle ({\sc@r*3.2},{\sc@r*9.4});
+      \sc@onelamp{red}{{\sc@r*1.6},{\sc@r*7.7}}{SignalRed}
+      \sc@onelamp{amber}{{\sc@r*1.6},{\sc@r*4.7}}{SignalAmber}
+      \sc@onelamp{green}{{\sc@r*1.6},{\sc@r*1.7}}{SignalGreen}
+    \else
+      \fill[HousingBlack,rounded corners=2.2mm] (0,0) rectangle ({\sc@r*9.4},{\sc@r*3.2});
+      \sc@onelamp{red}{{\sc@r*1.7},{\sc@r*1.6}}{SignalRed}
+      \sc@onelamp{amber}{{\sc@r*4.7},{\sc@r*1.6}}{SignalAmber}
+      \sc@onelamp{green}{{\sc@r*7.7},{\sc@r*1.6}}{SignalGreen}
+    \fi
+  \end{tikzpicture}}
+
+%% ================================================================ CROSSWALK RULE
 \newcommand\sc@zebra[2]{% #1 width (dimen), #2 height (dimen)
   \begin{tikzpicture}[x=1pt,y=1pt]
     \pgfmathsetmacro\sc@w{#1}\pgfmathsetmacro\sc@h{#2}
@@ -133,158 +226,238 @@
     \foreach \i in {0,...,\sc@n}{
       \fill[StripeWhite] ({1.5+\i*\sc@h*2.4},{\sc@h*0.2}) rectangle ++({\sc@h*1.2},{\sc@h*0.6});}
   \end{tikzpicture}}
-\newcommand\crosswalkrule[1][2.6mm]{%
-  \par\vspace{4pt}\noindent\sc@ltr{\sc@zebra{\linewidth}{#1}}\par\vspace{4pt}}
+%% the rule closes a section: it is dropped when it would land alone at a page top or does not
+%% fit on the current page (DS-19) – an ornament never creates a page of its own.
+\newcommand\crosswalkrule[1][2.4mm]{\par
+  \ifdim\pagegoal=\maxdimen\else\ifdim\dimexpr\pagegoal-\pagetotal\relax<20pt\else\sc@crosswalkrule{#1}\fi\fi}
+\newcommand\sc@crosswalkrule[1]{%
+  \nobreak\vspace{6pt}\nobreak\noindent\sc@ltr{\ifsc@A\sc@zebra{\linewidth}{#1}\else
+    \begin{tikzpicture}\fill[Hairline] (0,0) rectangle (\linewidth,0.4pt);
+      \foreach \i in {0,...,5}{\fill[Asphalt] ({\linewidth-\i*3.2mm-2.2mm},-0.7mm) rectangle ++(1.6mm,1.8mm);}
+    \end{tikzpicture}\fi}\par\vspace{6pt}}
 
-%% ---------------------------------------------------------------- traffic-light pieces
-%% \sc@trafficlight{red|amber|green|off} – vertical 3-lamp signal head
-\newcommand\sc@trafficlight[1]{%
-  \begin{tikzpicture}
-    \edef\sc@ph{#1}
-    \fill[HousingBlack,rounded corners=2.2mm] (0,0) rectangle (10mm,27mm);
-    \draw[StripeWhite,line width=0.6pt,rounded corners=2.2mm] (0,0) rectangle (10mm,27mm);
-    \def\sc@lamp##1##2##3{% name, y, colour
-      \edef\sc@test{##1}%
-      \ifx\sc@test\sc@ph
-        \fill[##3,opacity=0.35] (5mm,##2) circle (4.1mm);
-        \fill[##3] (5mm,##2) circle (3.1mm);
-      \else
-        \fill[##3!22!black] (5mm,##2) circle (3.1mm);
-      \fi}
-    \sc@lamp{red}{21mm}{SignalRed}
-    \sc@lamp{amber}{13.5mm}{SignalAmber}
-    \sc@lamp{green}{6mm}{SignalGreen}
-  \end{tikzpicture}}
-%% small lamp icon used in box titles
-\newcommand\sc@lampicon[1]{\tikz[baseline=-0.6ex]{\fill[#1] (0,0) circle (1.25mm);
-  \draw[StripeWhite,line width=0.5pt] (0,0) circle (1.25mm);}}
-%% pedestrian "red man" icon used in the scene box
-\newcommand\sc@pedestrianicon{%
-  \begin{tikzpicture}[x=1mm,y=1mm]
-    \fill[HousingBlack,rounded corners=1.2mm] (0,0) rectangle (9,11);
-    \fill[SignalRed] (4.5,8.6) circle (0.95);
-    \fill[SignalRed,rounded corners=0.5mm] (3.2,4.2) rectangle (5.8,7.4);
-    \draw[SignalRed,line width=1.1pt,line cap=round] (3.3,7.0) -- (2.6,4.6) (5.7,7.0) -- (6.4,4.6)
-      (3.9,4.4) -- (3.8,1.6) (5.1,4.4) -- (5.2,1.6);
-  \end{tikzpicture}}
-
-%% ---------------------------------------------------------------- chapter phase (lamp) and sign
-%% ch. 1–3 red (the problem) · 4–7 amber (analysis & design) · 8+ green (ready to implement)
-\let\sc@lampoverride\@empty
-\newcommand\SetLamp[1]{\gdef\sc@lampoverride{#1}}        % one-off override for the next chapter
-\gdef\sc@signshape{square}
-\newcommand\SetSign[1]{\gdef\sc@signshape{#1}}           % square (default) | triangle (warning)
-\newcommand\sc@computelamp{%
-  \ifx\sc@lampoverride\@empty
-    \ifnum\c@chapter<4 \def\sc@lampnow{red}\else
-      \ifnum\c@chapter<8 \def\sc@lampnow{amber}\else\def\sc@lampnow{green}\fi\fi
-  \else\let\sc@lampnow\sc@lampoverride\fi
-  \global\let\sc@lampoverride\@empty}
-
-%% ---------------------------------------------------------------- chapter opener (road sign band)
-\newlength\sc@bandh \setlength\sc@bandh{34mm}
-\newcommand\sc@badge[1]{% #1 = number
-  \def\sc@tri{triangle}%
-  \ifx\sc@signshape\sc@tri
-    \node[regular polygon,regular polygon sides=3,minimum size=27mm,fill=StripeWhite,
-      draw=SignalRed,line width=2.4pt,rounded corners=1.5mm] (badge) at (\textwidth-15mm,15.5mm) {};
-    \node[text=Asphalt,font=\sffamily\bfseries\fontsize{24}{24}\selectfont] at (\textwidth-15mm,12.5mm) {#1};
-  \else
-    \fill[Asphalt] (\textwidth-27mm,5mm) rectangle (\textwidth-3mm,29mm);
-    \draw[StripeWhite,line width=1.6pt,rounded corners=2.5mm] (\textwidth-26mm,6mm) rectangle (\textwidth-4mm,28mm);
-    \node[rtl,text=StripeWhite,font=\sffamily\small] at (\textwidth-15mm,23.5mm) {פרק};
-    \node[text=StripeWhite,font=\sffamily\bfseries\fontsize{28}{28}\selectfont] at (\textwidth-15mm,13.5mm) {#1};
-  \fi}
-\newcommand\sc@chapterband[2]{% #1 number (may be empty), #2 title
-  \noindent\sc@ltr{%
-  \begin{tikzpicture}
-    \useasboundingbox (0,0) rectangle (\textwidth,\sc@bandh);
-    \fill[Asphalt,rounded corners=3mm] (0,0) rectangle (\textwidth,\sc@bandh);
-    \ifx\relax#1\relax\else\sc@badge{#1}\fi
-    \node[rtl,anchor=east,text=StripeWhite,font=\sffamily\bfseries\LARGE,
-      text width=\textwidth-56mm,align=flush right] at (\textwidth-\ifx\relax#1\relax 8mm\else 32mm\fi,17mm) {#2};
-    \node[anchor=west] at (6mm,17mm) {\sc@trafficlight{\ifx\relax#1\relax off\else\sc@lampnow\fi}};
-  \end{tikzpicture}}\par
-  \vspace{2mm}\noindent\sc@ltr{\sc@zebra{\textwidth}{2.6mm}}\par}
-\renewcommand\@makechapterhead[1]{%
-  \sc@computelamp
-  \vspace*{-6mm}\sc@chapterband{\thechapter}{#1}\vspace{9mm}}
-\renewcommand\@makeschapterhead[1]{%
-  \vspace*{-6mm}\sc@chapterband{}{#1}\vspace{9mm}}
-\renewcommand\chaptermark[1]{\markboth{פרק \thechapter{} · #1}{}}
-
-%% ---------------------------------------------------------------- sections
-\renewcommand\section{\@startsection{section}{1}{\z@}{-3.2ex plus -1ex minus -.2ex}%
-  {1.2ex plus .2ex}{\sffamily\Large\bfseries\color{Asphalt}}}
+%% ================================================================ SECTIONS
+\newcommand\sc@secchip[1]{\leavevmode\hbox dir TLT{\tikz[baseline=(c.base)]{%
+  \ifsc@A\node[fill=Asphalt,text=StripeWhite,rounded corners=1.2pt,inner xsep=3.2pt,inner ysep=2.6pt,
+     font=\sffamily\bfseries\normalsize] (c) {#1};
+  \else\node[draw=\sc@phasecolor,line width=0.7pt,text=\sc@phasecolor,rounded corners=1pt,inner xsep=3pt,
+     inner ysep=2.2pt,font=\sffamily\bfseries\normalsize] (c) {#1};\fi}}\hspace{0.65em}}
+\renewcommand\section{\@startsection{section}{1}{\z@}{-3.4ex plus -1ex minus -.2ex}%
+  {1.3ex plus .2ex}{\sffamily\bfseries\color{Asphalt}\fontsize{\ifsc@A 16.5\else 15\fi}{21}\selectfont}}
 \renewcommand\subsection{\@startsection{subsection}{2}{\z@}{-2.6ex plus -1ex minus -.2ex}%
-  {0.8ex plus .2ex}{\sffamily\large\bfseries\color{Asphalt}}}
-\renewcommand\@seccntformat[1]{{\color{SignalRed}\csname the#1\endcsname}\hspace{0.7em}}
+  {0.9ex plus .2ex}{\sffamily\bfseries\color{Asphalt}\fontsize{12.5}{16}\selectfont}}
+\def\sc@secname{section}
+%% LaTeX expands \@seccntformat inside \protected@edef: the logic lives in a \protected macro.
+\protected\def\sc@seccnt#1{\edef\sc@t{#1}\ifx\sc@t\sc@secname \sc@secchip{\csname the#1\endcsname}%
+  \else{\color{\sc@phasecolor}\csname the#1\endcsname}\hspace{0.6em}\fi}
+\renewcommand\@seccntformat[1]{\sc@seccnt{#1}}
 \setcounter{tocdepth}{2}
 \setcounter{secnumdepth}{2}
 
-%% ---------------------------------------------------------------- header banner + footer (PRD §6.3)
-\newcommand\sc@headbanner{%
-  \sc@ltr{\begin{tikzpicture}
-    \useasboundingbox (0,0) rectangle (\headwidth,6.5mm);
-    \fill[Asphalt,rounded corners=1.5mm] (0,0) rectangle (\headwidth,6.5mm);
-    \foreach \i in {0,...,7}{\fill[StripeWhite] (30mm+\i*4.4mm,1.2mm) rectangle ++(2.2mm,4.1mm);}
-    \node[anchor=west,text=StripeWhite,font=\sffamily\scriptsize\bfseries] at (3mm,3.25mm) {\sc@group};
-    \node[rtl,anchor=east,text=StripeWhite,font=\sffamily\footnotesize] at (\headwidth-3mm,3.25mm) {\leftmark};
+%% ================================================================ CHAPTER OPENERS (full-bleed band)
+\newcommand\sc@mission{}
+\newcommand\ChapterMission[1]{\gdef\sc@mission{#1}}       % one-line mission subtitle for the next chapter
+\newcommand\sc@chaptericon{}
+\newcommand\ChapterIcon[1]{\gdef\sc@chaptericon{#1}}       % pictogram shown in the next chapter band
+%% band height (mm) and the skip that brings the text below it
+\ifsc@A \def\sc@Hmm{98}\newcommand\sc@bandskip{82mm}
+\else   \def\sc@Hmm{74}\newcommand\sc@bandskip{55mm}\fi
+\newcommand\sc@band[3]{% #1 two-digit number (empty = unnumbered), #2 title, #3 mission
+  \noindent\sc@ltr{\begin{tikzpicture}[remember picture,overlay,x=1mm,y=1mm]
+    \coordinate (P) at (current page.north west);
+    \fill[\ifsc@A Asphalt\else AsphaltDeep\fi] (P) rectangle ($(P)+(210,-\sc@Hmm)$);
+    \ifsc@A
+      \pgfmathsetseed{17}
+      \foreach \k in {1,...,260}{\fill[white,opacity=0.035] ($(P)+({rnd*210},{-rnd*(\sc@Hmm-6)})$) circle (0.3);}
+      \fill[AsphaltDeep] ($(P)+(0,-\sc@Hmm)$) rectangle ($(P)+(210,-\sc@Hmm-5)$);
+      \foreach \i in {0,...,17}{\fill[StripeWhite] ($(P)+(3+\i*12,-\sc@Hmm-0.9)$) rectangle ++(6,-3.2);}
+    \else
+      \fill[\sc@phasecolor] ($(P)+(0,-\sc@Hmm)$) rectangle ($(P)+(210,-\sc@Hmm-2.2)$);
+      \foreach \x in {0,12,...,210}{\draw[white,opacity=0.05,line width=0.3pt] ($(P)+(\x,0)$) -- ++(0,-\sc@Hmm);}
+    \fi
+    \ifx\relax#1\relax
+      \node[rtl,anchor=south east,inner sep=0pt,text=StripeWhite,font=\sffamily\bfseries\fontsize{30}{36}\selectfont]
+        at ($(P)+(188,-\sc@Hmm+16)$) {#2};
+      \node[anchor=south west,inner sep=0pt] at ($(P)+(20,-\sc@Hmm+16)$) {\sc@lamps{off}{h}{2.6}};
+    \else
+      \ifsc@A
+        \node[anchor=south west,inner sep=0pt] at ($(P)+(14,-\sc@Hmm+16)$) {\sc@lamps{\sc@phase}{v}{3.4}};
+        \node[anchor=south west,inner sep=0pt,text=\sc@phasecolor,
+          font=\sffamily\bfseries\fontsize{150}{150}\selectfont] at ($(P)+(32,-\sc@Hmm+12)$) {#1};
+        \node[anchor=north east,inner sep=0pt,text=StripeWhite!55,font=\fontsize{7}{9}\selectfont]
+          at ($(P)+(188,-16)$) {\enlabel{Chapter #1 · \sc@phaseen}};
+        \node[rtl,anchor=north east,inner sep=0pt,text=\sc@phasecolor,font=\sffamily\bfseries\fontsize{9.5}{12}\selectfont]
+          at ($(P)+(188,-22)$) {פרק~\num{#1}~·~\sc@phasename\ifx\sc@chaptericon\@empty\else~~\picto[\sc@phasecolor]{\sc@chaptericon}\fi};
+        \node[rtl,anchor=north east,inner sep=0pt,text=StripeWhite,text width=96mm,align=flush right,
+          font=\sffamily\bfseries\fontsize{27}{33}\selectfont] (T) at ($(P)+(188,-31)$) {#2};
+        \ifx\relax#3\relax\else
+          \fill[\sc@phasecolor] ($(T.south east)+(0,-4.5)$) rectangle ++(-14,-0.9);
+          \node[rtl,anchor=north east,inner sep=0pt,text=StripeWhite!78,text width=96mm,align=flush right,
+            font=\sffamily\fontsize{11.5}{15}\selectfont] at ($(T.south east)+(0,-8)$) {#3};
+        \fi
+      \else
+        \node[anchor=north west,inner sep=0pt] at ($(P)+(20,-14)$) {\sc@lamps{\sc@phase}{h}{2.4}};
+        \node[anchor=south west,inner sep=0pt,text=StripeWhite,
+          font=\sffamily\fontsize{96}{96}\selectfont] at ($(P)+(19,-\sc@Hmm+9)$) {#1};
+        \node[anchor=north east,inner sep=0pt,text=\sc@phasecolor,font=\fontsize{7}{9}\selectfont]
+          at ($(P)+(185,-15)$) {\enlabel{\sc@docnumber{} · Section #1}};
+        \node[rtl,anchor=north east,inner sep=0pt,text=StripeWhite,text width=112mm,align=flush right,
+          font=\sffamily\bfseries\fontsize{23}{29}\selectfont] (T) at ($(P)+(185,-24)$)
+          {\ifx\sc@chaptericon\@empty\else\picto[\sc@phasecolor]{\sc@chaptericon}~\fi#2};
+        \ifx\relax#3\relax\else
+          \node[rtl,anchor=north east,inner sep=0pt,text=StripeWhite!70,text width=112mm,align=flush right,
+            font=\sffamily\fontsize{11}{14.5}\selectfont] at ($(T.south east)+(0,-5)$) {#3};
+        \fi
+      \fi
+    \fi
+  \end{tikzpicture}}\par
+  \vspace*{\sc@bandskip}}
+\gdef\sc@tabnum{}
+\renewcommand\@makechapterhead[1]{%
+  \sc@computelamp\xdef\sc@tabnum{\two@digits{\c@chapter}}%
+  \sc@band{\two@digits{\c@chapter}}{#1}{\sc@mission}%
+  \gdef\sc@mission{}\gdef\sc@chaptericon{}}
+\renewcommand\@makeschapterhead[1]{%
+  \gdef\sc@phase{none}\sc@band{}{#1}{}}
+\renewcommand\chaptermark[1]{\markboth{#1}{}}
+
+%% ================================================================ THUMB TABS (outer = left edge in RTL)
+\newcommand\sc@thumbtab{%
+  \ifx\sc@phase\sc@ph@red\def\sc@tabtop{112}\else\ifx\sc@phase\sc@ph@amber\def\sc@tabtop{162}\else
+    \ifx\sc@phase\sc@ph@green\def\sc@tabtop{212}\else\def\sc@tabtop{}\fi\fi\fi
+  \ifx\sc@tabtop\@empty\else
+  \sc@ltr{\begin{tikzpicture}[remember picture,overlay,x=1mm,y=1mm]
+    \coordinate (P) at (current page.north west);
+    \ifsc@A
+      \fill[\sc@phasecolor,rounded corners=2mm] ($(P)+(-4,-\sc@tabtop)$) rectangle ++(13,-44);
+      \node[text=\ifx\sc@phase\sc@ph@amber Asphalt\else StripeWhite\fi,font=\sffamily\bfseries\fontsize{10}{10}\selectfont]
+        at ($(P)+(4.3,-\sc@tabtop-22)$) {\sc@tabnum};
+    \else
+      \fill[\sc@phasecolor] ($(P)+(0,-\sc@tabtop)$) rectangle ++(5.5,-44);
+      \node[rotate=90,text=\ifx\sc@phase\sc@ph@amber Asphalt\else StripeWhite\fi,font=\sffamily\bfseries\fontsize{6.5}{6.5}\selectfont]
+        at ($(P)+(2.75,-\sc@tabtop-22)$) {\sc@tabnum};
+    \fi
+  \end{tikzpicture}}\fi}
+
+%% ================================================================ HEADER / FOOTER
+\newcommand\sc@headtext{%
+  \sc@ltr{\begin{tikzpicture}[x=1mm,y=1mm]
+    \useasboundingbox (0,0) rectangle (\headwidth,6mm);
+    \ifsc@A
+      \node[anchor=west,inner sep=0pt,text=AsphaltLight,font=\fontsize{6.5}{8}\selectfont] at (0,2.2)
+        {\enlabel{Smart Crosswalk · Preparatory Report}};
+      \node[rtl,anchor=east,inner sep=0pt,text=Asphalt,font=\sffamily\fontsize{8.5}{10}\selectfont] (h) at (\headwidth,2.2mm) {\leftmark};
+      \fill[\sc@phasecolor] ($(h.west)+(-2.6,-1.1)$) rectangle ++(-2.2,2.2);
+    \else
+      \node[anchor=west,inner sep=0pt,text=AsphaltLight,font=\ttfamily\fontsize{7}{8}\selectfont] at (0,2.2)
+        {\en{\sc@docnumber{} · Rev \sc@revision}};
+      \node[rtl,anchor=east,inner sep=0pt,text=Asphalt,font=\sffamily\fontsize{8.5}{10}\selectfont] at (\headwidth,2.2mm) {\leftmark};
+      \fill[Hairline] (0,-0.8) rectangle (\headwidth,-0.6);
+      \fill[\sc@phasecolor] (\headwidth,-0.9) rectangle ++(-14,0.5);
+    \fi
   \end{tikzpicture}}}
-\newcommand\sc@footer{%
-  \sc@ltr{\begin{tikzpicture}
+\newcommand\sc@foottext{%
+  \sc@ltr{\begin{tikzpicture}[x=1mm,y=1mm]
     \useasboundingbox (0,0) rectangle (\headwidth,7mm);
-    \node[anchor=west,text=Asphalt,font=\sffamily\small\bfseries] at (0,1.5mm) {\thepage};
-    \node[rtl,anchor=east,text=AsphaltLight,font=\sffamily\scriptsize] at (\headwidth,1.5mm)
-      {\sc@footertitle~·~\en{\sc@group}~\num{©\,2026}};
-    \fill[Asphalt] (0,5.4mm) rectangle (\headwidth,6.3mm);
-    \begin{scope}\clip (0.5mm,5.4mm) rectangle (\headwidth-0.5mm,6.3mm);
-      \foreach \i in {0,...,45}{\fill[StripeWhite] (1mm+\i*4.2mm,5.6mm) rectangle ++(2.1mm,0.5mm);}
-    \end{scope}
+    \ifsc@A
+      \node[anchor=south west,inner sep=0pt,text=Asphalt,font=\sffamily\bfseries\fontsize{14}{14}\selectfont] (n) at (0,0.6) {\thepage};
+      \begin{scope}\clip ($(n.south east)+(3,0.3)$) rectangle ++(20,3);
+        \fill[Asphalt] ($(n.south east)+(3,0.3)$) rectangle ++(20,3);
+        \foreach \i in {0,...,6}{\fill[StripeWhite] ($(n.south east)+(4+\i*3,0.9)$) rectangle ++(1.5,1.8);}
+      \end{scope}
+      \node[rtl,anchor=south east,inner sep=0pt,text=AsphaltLight,font=\sffamily\fontsize{7.5}{9}\selectfont] at (\headwidth,1.2)
+        {\sc@footertitle~·~\en{\sc@group}~·~\num{©\,2026}};
+    \else
+      \fill[Hairline] (0,6) rectangle (\headwidth,6.2);
+      \node[anchor=south west,inner sep=0pt,text=Asphalt,font=\sffamily\fontsize{8.5}{10}\selectfont] at (0,1.2)
+        {\thepage};
+      \node[rtl,anchor=south east,inner sep=0pt,text=AsphaltLight,font=\sffamily\fontsize{7.5}{9}\selectfont] at (\headwidth,1.2)
+        {\sc@footertitle~·~\en{\sc@group}~·~\num{©\,2026}~·~גרסה~\num{\sc@revision}};
+    \fi
   \end{tikzpicture}}}
 \pagestyle{fancy}
 \fancyhf{}
-\fancyhead[C]{\sc@headbanner}
-\fancyfoot[C]{\sc@footer}
+\fancyhead[C]{\sc@thumbtab\sc@headtext}
+\fancyfoot[C]{\sc@foottext}
 \renewcommand\headrulewidth{0pt}
 \renewcommand\footrulewidth{0pt}
-\fancypagestyle{plain}{\fancyhf{}\fancyfoot[C]{\sc@footer}}
+\fancypagestyle{plain}{\fancyhf{}\fancyhead[C]{\sc@thumbtab}\fancyfoot[C]{\sc@foottext}}
 
 %% ---------------------------------------------------------------- front / main matter
 \newcommand\FrontMatter{\clearpage\pagenumbering{roman}%
   \renewcommand\thepage{\localecounter{letters}{page}}}
 \newcommand\MainMatter{\clearpage\pagenumbering{arabic}}
 
-%% ---------------------------------------------------------------- callout boxes (PRD §6.3)
-%% tcolorbox draws its frame with TikZ in LTR coordinates. Each public box environment therefore
-%% builds the box in an LTR paragraph and sets title + content RTL (otherwise the frame is shifted
-%% off the page in RTL text – defect found in the Step 09 style sample).
-\tcbset{sc base/.style={enhanced,breakable,arc=2mm,boxrule=0.9pt,
-  left=3.5mm,right=3.5mm,top=2mm,bottom=2mm,toptitle=1.2mm,bottomtitle=1.2mm,
-  fonttitle=\sffamily\bfseries\small,coltitle=StripeWhite,
-  before skip=9pt,after skip=9pt,parbox=false,
-  before upper={\pardir TRT\textdir TRT},before title={\pardir TRT\textdir TRT}}}
-\newtcolorbox{sc@findingbox}[1]{sc base,colback=SignalGreen!6,colframe=SignalGreen,
-  title={\sc@lampicon{SignalGreen!60!white}~#1}}
-\newtcolorbox{sc@cautionbox}[1]{sc base,colback=SignalAmber!12,colframe=SignalAmber,
-  coltitle=Asphalt,title={\sc@lampicon{SignalAmber!80!black}~#1}}
-\newtcolorbox{sc@trapbox}[1]{sc base,colback=SignalRed!5,colframe=SignalRed,
-  title={\sc@lampicon{SignalRed!60!white}~#1}}
-\newtcolorbox{sc@definitionbox}[1]{sc base,colback=StripeWhite,colframe=Asphalt,title={#1}}
-\newtcolorbox{sc@projectbox}[1]{sc base,colback=AsphaltLight!7,colframe=AsphaltLight,title={#1}}
+%% ---------------------------------------------------------------- table of contents
+\renewcommand*\l@chapter[2]{%
+  \ifnum\c@tocdepth>\m@ne
+    \addpenalty{-\@highpenalty}\vskip 1.1em \@plus\p@
+    \setlength\@tempdima{2.4em}%
+    \begingroup\parindent\z@\rightskip\@pnumwidth\parfillskip-\@pnumwidth
+      \leavevmode\sffamily\bfseries\fontsize{12.5}{16}\selectfont
+      \def\numberline##1{\sc@tocchip{##1}\hspace{0.7em}}%
+      {\color{Asphalt}#1}\nobreak\hfil\nobreak\hb@xt@\@pnumwidth{\hss\color{Asphalt}#2}\par
+      \penalty\@highpenalty
+    \endgroup
+  \fi}
+\newcommand\sc@tocchip[1]{\hbox dir TLT{\tikz[baseline=(c.base)]{%
+  \ifsc@A\node[fill=\sc@phasecolorof{#1},text=\ifnum#1>3 \ifnum#1<8 Asphalt\else StripeWhite\fi\else StripeWhite\fi,
+    rounded corners=1.5pt,inner xsep=3.5pt,inner ysep=2.5pt,font=\sffamily\bfseries\small] (c) {\two@digits{#1}};
+  \else\node[text=\sc@phasecolorof{#1},inner sep=0pt,font=\sffamily\bfseries] (c) {\two@digits{#1}};\fi}}}
+
+%% ================================================================ CALLOUT BOXES (PRD §6.3)
+%% tcolorbox draws its frame with TikZ in LTR coordinates: each public box builds the box in an LTR
+%% paragraph and sets title + content RTL (DS-02).
+\ifsc@A
+  \tcbset{sc base/.style={enhanced,breakable,arc=1.6mm,boxrule=0pt,
+    left=4mm,right=4mm,top=2.6mm,bottom=2.8mm,toptitle=1.6mm,bottomtitle=1.6mm,
+    fonttitle=\sffamily\bfseries\fontsize{10}{12}\selectfont,
+    before skip=11pt,after skip=11pt,parbox=false,
+    before upper={\pardir TRT\textdir TRT},before title={\pardir TRT\textdir TRT}},
+    sc box/.style 2 args={sc base,colback=#1!7,colbacktitle=#1,coltitle=#2}}
+\else
+  \tcbset{sc base/.style={enhanced,breakable,arc=0pt,boxrule=0pt,
+    left=4.5mm,right=5.5mm,top=1.2mm,bottom=2.6mm,toptitle=2.4mm,bottomtitle=0.2mm,
+    fonttitle=\sffamily\bfseries\fontsize{9.5}{12}\selectfont,
+    before skip=11pt,after skip=11pt,parbox=false,
+    before upper={\pardir TRT\textdir TRT},before title={\pardir TRT\textdir TRT}},
+    sc box/.style={sc base,colback=StripeWhite!70,colbacktitle=StripeWhite!70,coltitle=#1,
+      borderline east={2.6pt}{0pt}{#1}}}
+\fi
+\newcommand\sc@boxtitle[2]{\picto[#1]{#2}\hspace{0.5em}}
+\ifsc@A
+  \newtcolorbox{sc@findingbox}[1]{sc box={SignalGreen}{StripeWhite},title={\sc@boxtitle{StripeWhite}{signal}#1}}
+  \newtcolorbox{sc@cautionbox}[1]{sc box={SignalAmber}{Asphalt},colback=SignalAmber!11,title={\sc@boxtitle{Asphalt}{warning}#1}}
+  \newtcolorbox{sc@trapbox}[1]{sc box={SignalRed}{StripeWhite},title={\sc@boxtitle{StripeWhite}{pedestrian}#1}}
+  \newtcolorbox{sc@definitionbox}[1]{sc box={Asphalt}{StripeWhite},colback=StripeWhite,title={\sc@boxtitle{StripeWhite}{info}#1}}
+  \newtcolorbox{sc@projectbox}[1]{sc box={AsphaltLight}{StripeWhite},title={\sc@boxtitle{StripeWhite}{sensor}#1}}
+\else
+  \newtcolorbox{sc@findingbox}[1]{sc box=SignalGreen,title={\sc@boxtitle{SignalGreen}{signal}#1}}
+  \newtcolorbox{sc@cautionbox}[1]{sc box=SignalAmber!85!black,title={\sc@boxtitle{SignalAmber!85!black}{warning}#1}}
+  \newtcolorbox{sc@trapbox}[1]{sc box=SignalRed,title={\sc@boxtitle{SignalRed}{pedestrian}#1}}
+  \newtcolorbox{sc@definitionbox}[1]{sc box=Asphalt,title={\sc@boxtitle{Asphalt}{info}#1}}
+  \newtcolorbox{sc@projectbox}[1]{sc box=AsphaltLight,title={\sc@boxtitle{AsphaltLight}{sensor}#1}}
+\fi
 %% scene box: chapter-opening street scene, max 4 lines (PRD §12)
-\newtcolorbox{sc@scenebox}{enhanced,colback=Asphalt,colupper=StripeWhite,boxrule=0pt,arc=2mm,
-  left=5mm,right=17mm,top=4.2mm,bottom=4.2mm,fontupper=\sffamily\small,parbox=false,
-  before skip=4pt,after skip=12pt,before upper={\pardir TRT\textdir TRT},
-  overlay={
-    \begin{scope}
-      \clip ($(frame.south west)+(2.5mm,0)$) rectangle ($(frame.north east)+(-2.5mm,0)$);
-      \foreach \i in {0,...,60}{%
-        \fill[StripeWhite,opacity=0.85] ($(frame.north west)+(3mm+\i*4.4mm,-1.1mm)$) rectangle ++(2.2mm,-0.9mm);
-        \fill[StripeWhite,opacity=0.85] ($(frame.south west)+(3mm+\i*4.4mm,1.1mm)$) rectangle ++(2.2mm,0.9mm);}
-    \end{scope}
-    \node[anchor=east] at ($(frame.east)+(-3.5mm,0)$) {\sc@pedestrianicon};
-  }}
+\ifsc@A
+  \newtcolorbox{sc@scenebox}{enhanced,colback=AsphaltDeep,colupper=StripeWhite,boxrule=0pt,arc=1.6mm,
+    left=5mm,right=18mm,top=5mm,bottom=5mm,fontupper=\sffamily\fontsize{10.5}{15}\selectfont,parbox=false,
+    before skip=2pt,after skip=14pt,before upper={\pardir TRT\textdir TRT},
+    overlay={
+      \begin{scope}\clip ($(frame.south west)+(2.5mm,0)$) rectangle ($(frame.north east)+(-2.5mm,0)$);
+        \foreach \i in {0,...,60}{%
+          \fill[StripeWhite,opacity=0.8] ($(frame.north west)+(3mm+\i*4.4mm,-1.2mm)$) rectangle ++(2.2mm,-1mm);
+          \fill[StripeWhite,opacity=0.8] ($(frame.south west)+(3mm+\i*4.4mm,1.2mm)$) rectangle ++(2.2mm,1mm);}
+      \end{scope}
+      \node[anchor=east,fill=HousingBlack,rounded corners=1.2mm,inner sep=1.6mm] at ($(frame.east)+(-4mm,0)$)
+        {\fontsize{16}{16}\selectfont\picto[SignalRed]{pedestrian}};}}
+\else
+  \newtcolorbox{sc@scenebox}{enhanced,colback=StripeWhite,colupper=Asphalt,boxrule=0pt,arc=0pt,
+    left=5mm,right=15mm,top=3.6mm,bottom=3.6mm,fontupper=\sffamily\fontsize{10}{14.5}\selectfont,parbox=false,
+    before skip=2pt,after skip=14pt,before upper={\pardir TRT\textdir TRT},
+    borderline north={0.4pt}{0pt}{Hairline},borderline south={0.4pt}{0pt}{Hairline},
+    overlay={\node[anchor=east] at ($(frame.east)+(-4.5mm,0)$) {\fontsize{14}{14}\selectfont\picto[AsphaltLight]{pedestrian}};}}
+\fi
 \newcommand\sc@ltrpar{\par\pardir TLT\textdir TLT}
 \newenvironment{findingbox}[1][ממצא מרכזי]{\sc@ltrpar\begin{sc@findingbox}{#1}}{\end{sc@findingbox}\par}
 \newenvironment{cautionbox}[1][שימו לב: סוגיה בנתונים]{\sc@ltrpar\begin{sc@cautionbox}{#1}}{\end{sc@cautionbox}\par}
@@ -293,81 +466,248 @@
 \newenvironment{projectbox}[1][בפרויקט הנוכחי]{\sc@ltrpar\begin{sc@projectbox}{#1}}{\end{sc@projectbox}\par}
 \newenvironment{scenebox}{\sc@ltrpar\begin{sc@scenebox}}{\end{sc@scenebox}\par}
 
-%% ---------------------------------------------------------------- tables
-%% Column 1 is on the right (babel layout=tabular). Use booktabs rules; header row via \thead.
-\renewcommand\arraystretch{1.25}
-\newcommand\thead[1]{{\sffamily\bfseries\color{Asphalt}#1}}
-\AtBeginEnvironment{tabular}{\small}
+%% ================================================================ PULL QUOTE
+\ifsc@A
+  \newtcolorbox{sc@pullquote}{enhanced,blank,parbox=false,left=0mm,right=9mm,top=1mm,bottom=1mm,
+    before skip=12pt,after skip=12pt,borderline east={2.4pt}{0pt}{SignalRed},
+    fontupper=\sffamily\bfseries\color{Asphalt}\fontsize{15.5}{21}\selectfont,
+    before upper={\pardir TRT\textdir TRT}}
+\else
+  \newtcolorbox{sc@pullquote}{enhanced,blank,parbox=false,left=10mm,right=10mm,top=3mm,bottom=3mm,
+    before skip=12pt,after skip=12pt,borderline north={0.5pt}{0pt}{Asphalt},borderline south={0.5pt}{0pt}{Asphalt},
+    fontupper=\sffamily\color{Asphalt}\fontsize{13.5}{19}\selectfont,halign upper=center,
+    before upper={\pardir TRT\textdir TRT}}
+\fi
+\newcommand\sc@quoteby{}
+\newenvironment{pullquote}[1][]{\def\sc@quoteby{#1}\sc@ltrpar\begin{sc@pullquote}}%
+  {\ifx\sc@quoteby\@empty\else\par\vspace{3pt}{\normalfont\sffamily\fontsize{8.5}{11}\selectfont\color{AsphaltLight}— \sc@quoteby}\fi
+   \end{sc@pullquote}\par}
+
+%% ================================================================ MARGIN NOTES (left / outer margin)
+\reversemarginpar
+\newcommand\sidenote[1]{\marginpar{\pardir TRT\textdir TRT\raggedright\hyphenpenalty=10000\sffamily\fontsize{7.8}{10.5}\selectfont\color{AsphaltLight}%
+  \ifsc@A\picto[SignalRed]{info}\hspace{0.3em}\else\rule[-0.2ex]{0.6pt}{1.8ex}\hspace{0.4em}\fi#1}}
+
+%% ================================================================ KEY-FIGURE (STAT) TILES
+%% \begin{statrow}[n] \stattile[colour]{number}{label} ... \end{statrow}
+\newlength\sc@tilew
+\newenvironment{statrow}[1][3]{\par\vspace{8pt}\noindent
+  \setlength\sc@tilew{\dimexpr(\linewidth-4mm*(#1-1))/#1\relax}\parfillskip=0pt\ignorespaces}{\unskip\unskip\par\vspace{8pt}}
+\newcommand\stattile[3][SignalAmber]{%
+  \sc@ltr{\begin{tikzpicture}[x=1mm,y=1mm]
+    \pgfmathsetmacro\sc@tw{\sc@tilew/1mm}
+    \useasboundingbox (0,0) rectangle (\sc@tw,31);
+    \ifsc@A
+      \fill[Asphalt,rounded corners=1.6mm] (0,0) rectangle (\sc@tw,31);
+      \fill[#1] (\sc@tw-4,31) rectangle ++(-12,-1.4);
+      \node[anchor=north east,inner sep=0pt,text=#1,font=\sffamily\bfseries\fontsize{27}{27}\selectfont] at (\sc@tw-4,25.5) {#2};
+      \node[rtl,anchor=north east,inner sep=0pt,text=StripeWhite!85,text width={(\sc@tw-8)*1mm},align=flush right,
+        font=\sffamily\fontsize{8.5}{11}\selectfont] at (\sc@tw-4,12) {#3};
+    \else
+      \fill[white] (0,0) rectangle (\sc@tw,31);
+      \draw[Hairline,line width=0.5pt] (0,0) rectangle (\sc@tw,31);
+      \fill[#1] (\sc@tw,0) rectangle ++(-1.2,31);
+      \node[anchor=north east,inner sep=0pt,text=Asphalt,font=\sffamily\fontsize{25}{25}\selectfont] at (\sc@tw-5,25.5) {#2};
+      \node[rtl,anchor=north east,inner sep=0pt,text=AsphaltLight,text width={(\sc@tw-9)*1mm},align=flush right,
+        font=\sffamily\fontsize{8.5}{11}\selectfont] at (\sc@tw-5,12) {#3};
+    \fi
+  \end{tikzpicture}}\hspace{4mm plus 2pt minus 1pt}\ignorespaces}
+
+%% ================================================================ AUTHOR PHOTO (PRD §5: own photographs only)
+%% \authorphoto[height]{file}{caption}{label} – our own photograph, credited "צילום: המחברים".
+%% If the file does not exist yet, a placeholder frame is drawn.
+\newcommand\photocredit{צילום: המחברים}
+\newcommand\authorphoto[4][62mm]{%
+  \begin{figure}[ht]\centering
+    \sc@ltrcenter{\IfFileExists{#2}{%
+      \ifsc@A\tikz{\node[inner sep=0pt,draw=Asphalt,line width=0.6pt]
+        {\includegraphics[width=\linewidth,height=#1,keepaspectratio]{#2}};}%
+      \else\tikz{\node[inner sep=0pt]{\includegraphics[width=\linewidth,height=#1,keepaspectratio]{#2}};}\fi}%
+     {\begin{tikzpicture}[x=1mm,y=1mm]
+        \pgfmathsetmacro\sc@ph{#1/1mm}\pgfmathsetmacro\sc@pw{\linewidth/1mm}
+        \fill[\ifsc@A Concrete!55\else StripeWhite\fi] (0,0) rectangle (\sc@pw,\sc@ph);
+        \draw[AsphaltLight,line width=0.5pt,dash pattern=on 3pt off 2pt] (1.5,1.5) rectangle (\sc@pw-1.5,\sc@ph-1.5);
+        \node at (\sc@pw/2,\sc@ph/2+7) {\fontsize{30}{30}\selectfont\picto[AsphaltLight]{camera}};
+        \node[rtl,text=AsphaltLight,font=\sffamily\fontsize{9.5}{12}\selectfont] at (\sc@pw/2,\sc@ph/2-6) {מקום לצילום של המחברים};
+        \node[text=AsphaltLight,font=\ttfamily\fontsize{7.5}{9}\selectfont] at (\sc@pw/2,\sc@ph/2-11) {\detokenize{#2}};
+      \end{tikzpicture}}}%
+    \caption{#3. \photocredit}\label{#4}
+  \end{figure}}
+
+%% ---------------------------------------------------------------- captions
+\DeclareCaptionFont{scasphalt}{\color{Asphalt}}
+\DeclareCaptionFont{scgrey}{\color{AsphaltLight}}
+\captionsetup{font={small,sf,scgrey},labelfont={bf,scasphalt},labelsep=colon,skip=7pt}
+\captionsetup[table]{position=top}
+
+%% ================================================================ TABLES
+%% Column 1 is on the right (babel layout=tabular). Header row: \headrow \thead{..} & \thead{..} \\
+\renewcommand\arraystretch{1.32}
+\ifsc@A
+  \setlength\heavyrulewidth{0pt}\setlength\lightrulewidth{0.4pt}\arrayrulecolor{Hairline}
+  \newcommand\thead[1]{{\sffamily\bfseries\color{StripeWhite}#1}}
+  \newcommand\headrow{\rowcolor{Asphalt}}
+  \AtBeginEnvironment{tabular}{\small\rowcolors{2}{white}{StripeWhite}}
+\else
+  \setlength\heavyrulewidth{0.9pt}\setlength\lightrulewidth{0.4pt}\arrayrulecolor{Asphalt}
+  \newcommand\thead[1]{{\sffamily\bfseries\color{Asphalt}#1}}
+  \newcommand\headrow{}
+  \AtBeginEnvironment{tabular}{\small}
+\fi
 \AtBeginEnvironment{tabularx}{\small}
-\setlength\heavyrulewidth{1.1pt}
-\setlength\lightrulewidth{0.5pt}
-\arrayrulecolor{Asphalt}
+
+%% ---------------------------------------------------------------- floats (DS-16)
+\setlength\@fptop{0pt}\setlength\@fpsep{14pt}\setlength\@fpbot{0pt plus 1fil}% skip registers in LaTeX 2025+
+\renewcommand\topfraction{0.85}\renewcommand\textfraction{0.12}\renewcommand\floatpagefraction{0.75}
 
 %% ---------------------------------------------------------------- equations
 \numberwithin{equation}{chapter}
 
-%% ---------------------------------------------------------------- cover page (PRD §6.3)
-\newcommand\sc@coverart{%
-  {\begin{tikzpicture}[x=1mm,y=1mm]
-    % road
-    \fill[Asphalt,rounded corners=4mm] (0,0) rectangle (130,52);
-    % curbs
-    \fill[AsphaltLight] (0,46) rectangle (130,52);
-    \fill[AsphaltLight] (0,0) rectangle (130,6);
-    % zebra crossing
-    \foreach \i in {0,...,8}{\fill[StripeWhite] (22+\i*9,9) rectangle ++(5,34);}
-    % waiting pedestrians on the far curb (a group)
-    \foreach \x/\s in {30/1,36/0.9,41/1.05,47/0.95}{
-      \fill[StripeWhite] (\x,49.8+\s*1.2) circle (\s*1.1);
-      \fill[StripeWhite,rounded corners=0.4mm] (\x-\s*1.05,46.6) rectangle (\x+\s*1.05,49.4+\s*0.4);}
-    % signal pole + pedestrian head with countdown
-    \fill[black!70] (112,6) rectangle (114,62);
-    \fill[HousingBlack,rounded corners=1.5mm] (104,62) rectangle (122,90);
-    \draw[StripeWhite,line width=0.5pt,rounded corners=1.5mm] (104,62) rectangle (122,90);
-    \begin{scope}[shift={(108.5,77)},scale=1]
-      \fill[SignalRed] (4.5,8.6) circle (0.95);
-      \fill[SignalRed,rounded corners=0.5mm] (3.2,4.2) rectangle (5.8,7.4);
-      \draw[SignalRed,line width=1.1pt,line cap=round] (3.3,7.0) -- (2.6,4.6) (5.7,7.0) -- (6.4,4.6)
-        (3.9,4.4) -- (3.8,1.6) (5.1,4.4) -- (5.2,1.6);
+%% ================================================================ COVER (full bleed)
+%% Aerial (top-down) crosswalk, drawn in local mm coordinates: width 210, height #1.
+\newcommand\sc@ped[5]{% x, y, jacket colour, rotation, scale – top-down pedestrian with shadow
+  \colorlet{sc@jacket}{#3}%
+  \begin{scope}[shift={(#1,#2)},rotate=#4,scale=#5]
+    \fill[black,opacity=0.30] (1.5,-1.5) ellipse (3.2 and 1.75);
+    \fill[black,opacity=0.30] (1.5,-1.3) circle (1.35);
+    \fill[sc@jacket] (0,0) ellipse (3.2 and 1.7);
+    \fill[sc@jacket!70!black] (0,-0.55) ellipse (2.4 and 0.8);
+    \fill[black!80] (0,0.15) circle (1.3);
+  \end{scope}}
+\newcommand\sc@signalhead[3]{% x, y, scale – countdown pedestrian head on a pole (stylised, with shadow)
+  \begin{scope}[shift={(#1,#2)},scale=#3]
+    \fill[black,opacity=0.28] (1.6,-1.6) circle (1.6);
+    \fill[black!65] (0,0) circle (1.5);
+    \fill[black,opacity=0.25,rounded corners=1.4] (-4.4,1.4) rectangle (7.6,19.4);
+    \fill[HousingBlack,rounded corners=1.4] (-6,3) rectangle (6,21);
+    \draw[white!30!HousingBlack,line width=0.4pt,rounded corners=1.4] (-6,3) rectangle (6,21);
+    \fill[black] (-4.6,12.6) rectangle (4.6,19.6);
+    \begin{scope}[shift={(-5,11.9)}]
+      \fill[SignalRed] (5,6.4) circle (0.95);
+      \fill[SignalRed,rounded corners=0.4] (3.9,2.9) rectangle (6.1,5.5);
+      \draw[SignalRed,line width=0.9pt,line cap=round] (4.0,5.2)--(3.4,3.1) (6.0,5.2)--(6.6,3.1) (4.5,3.0)--(4.4,0.9) (5.5,3.0)--(5.6,0.9);
     \end{scope}
-    \node[text=SignalAmber,font=\sffamily\bfseries\fontsize{20}{20}\selectfont] at (113,69) {12};
-  \end{tikzpicture}}}
+    \fill[black] (-4.6,4.4) rectangle (4.6,11.4);
+    \node[text=SignalAmber,font=\sffamily\bfseries\fontsize{15}{15}\selectfont,inner sep=0pt] at (0,7.9) {12};
+  \end{scope}}
+\newcommand\sc@aerial[1]{%
+  \pgfmathsetmacro\H{#1}\pgfmathsetmacro\mid{(32+\H-40)/2}
+  % road with texture
+  \fill[Road] (0,32) rectangle (210,\H-40);
+  \pgfmathsetseed{2026}
+  \foreach \k in {1,...,520}{\fill[white,opacity=0.045] ({rnd*210},{32+rnd*(\H-72)}) circle (0.28);}
+  % sidewalks, paving joints, curbs
+  \fill[Concrete] (0,\H-38) rectangle (210,\H);  \fill[Concrete] (0,0) rectangle (210,30);
+  \foreach \x in {0,14,...,210}{\draw[ConcreteJoint,line width=0.35pt] (\x,\H-38)--(\x,\H) (\x,0)--(\x,30);}
+  \foreach \y in {12,24}{\draw[ConcreteJoint,line width=0.35pt] (0,\H-38+\y)--(210,\H-38+\y) (0,\y-6)--(210,\y-6);}
+  \fill[Curb] (0,\H-40) rectangle (210,\H-38); \fill[Curb] (0,30) rectangle (210,32);
+  \fill[black,opacity=0.18] (0,\H-41.2) rectangle (210,\H-40);
+  % lane markings and stop lines
+  \foreach \x in {2,16,...,64}{\fill[StripeWhite,opacity=0.75] (\x,\mid-0.6) rectangle ++(8,1.2);}
+  \foreach \x in {146,160,...,206}{\fill[StripeWhite,opacity=0.75] (\x,\mid-0.6) rectangle ++(8,1.2);}
+  \fill[StripeWhite,opacity=0.9] (70,32) rectangle (71.8,\mid-1.5);
+  \fill[StripeWhite,opacity=0.9] (138.2,\mid+1.5) rectangle (140,\H-40);
+  % zebra crossing
+  \pgfmathtruncatemacro\nz{floor((\H-40-32-6)/9)}
+  \foreach \i in {0,...,\nz}{\fill[StripeWhite] (80,{35+\i*9}) rectangle (130,{39.8+\i*9});}
+  % stopped car (lower lane, before the stop line)
+  \begin{scope}[shift={(48,{(32+\mid)/2})}]
+    \fill[black,opacity=0.28,rounded corners=3] (-11.5,-5.6) rectangle (13.5,7.6);
+    \fill[AsphaltLight!80!white,rounded corners=3] (-13,-7) rectangle (12,6.4);
+    \fill[HousingBlack,rounded corners=1.5] (3,-5.6) rectangle (7.6,5.0);
+    \fill[HousingBlack,rounded corners=1.5] (-10.5,-5) rectangle (-7.6,4.4);
+    \fill[SignalRed!80!black] (-13,-6) rectangle (-12.2,-3.8); \fill[SignalRed!80!black] (-13,3.2) rectangle (-12.2,5.4);
+  \end{scope}
+  % curb-side sensing zone (the smart crossing)
+  \fill[SignalAmber,opacity=0.16] (140,\H-35) -- ++(186:56) arc[start angle=186,end angle=154,radius=56] -- cycle;
+  \draw[SignalAmber,line width=0.6pt,dash pattern=on 2.4pt off 1.6pt,opacity=0.9]
+    (140,\H-35) -- ++(186:56) arc[start angle=186,end angle=154,radius=56] -- cycle;
+  \fill[HousingBlack] (140,\H-35) circle (1.7); \fill[SignalAmber] (140,\H-35) circle (0.7);
+  % the waiting group (far curb) and the lone pedestrian (near curb, stepping off)
+  \sc@ped{91}{\H-27}{AsphaltLight}{0}{1.45}
+  \sc@ped{102}{\H-23}{Asphalt!80}{8}{1.5}
+  \sc@ped{112}{\H-29}{SignalGreen!75!black}{-6}{1.4}
+  \sc@ped{122}{\H-22}{AsphaltLight!70!black}{4}{1.45}
+  \sc@ped{130}{\H-30}{SignalAmber!85!black}{-10}{1.4}
+  \sc@ped{98}{27}{SignalRed}{12}{1.5}
+  % countdown signal heads (one per curb)
+  \sc@signalhead{146}{\H-22}{0.95}
+  \sc@signalhead{66}{9}{0.95}}
 \newcommand\makecover{%
-  \begin{titlepage}
-    \thispagestyle{empty}
-    \begin{tikzpicture}[remember picture,overlay]
-      \draw[Asphalt,line width=3.2pt] ($(current page.north west)+(12mm,-12mm)$)
-        rectangle ($(current page.south east)+(-12mm,12mm)$);
-      \draw[Asphalt,line width=0.7pt] ($(current page.north west)+(15.5mm,-15.5mm)$)
-        rectangle ($(current page.south east)+(-15.5mm,15.5mm)$);
-    \end{tikzpicture}%
-    \centering
-    {\sffamily\large\color{Asphalt}\sc@institution\par}
-    \vspace{2mm}{\sffamily\normalsize\color{AsphaltLight}\sc@course\par}
-    \vspace{14mm}
-    \sc@ltrcenter{\sc@coverart}\par
-    \vspace{12mm}
-    {\sffamily\bfseries\fontsize{30}{38}\selectfont\color{Asphalt}\sc@title\par}
-    \vspace{5mm}
-    {\sffamily\Large\color{Asphalt}\sc@subtitle\par}
-    \vspace{6mm}
-    {\sffamily\bfseries\large\color{StripeWhite}\colorbox{SignalRed}{\hspace{3mm}דוח מכין\hspace{3mm}}\par}
-    \vspace{7mm}
-    {\large\color{AsphaltLight}\en{\sc@entitle}\par}
-    \vfill
-    \noindent\sc@ltr{\sc@zebra{\textwidth}{2.2mm}}\par\vspace{5mm}
-    {\sffamily\normalsize\color{Asphalt}\sc@authors\par}
-    \vspace{2mm}{\sffamily\small\color{AsphaltLight}\sc@lecturer\par}
-    \vspace{2mm}{\sffamily\small\color{AsphaltLight}\sc@docdate\par}
-    \vspace{4mm}{\sffamily\scriptsize\color{AsphaltLight}\num{©}~\num{2026}~קבוצת~\sc@group.~כל הזכויות שמורות.\par}
+  \begin{titlepage}\thispagestyle{empty}
+  \noindent\sc@ltr{\begin{tikzpicture}[remember picture,overlay,x=1mm,y=1mm]
+    \begin{scope}[shift={(current page.south west)}]
+    \ifsc@A
+      %% ---------------- A: bold editorial
+      \begin{scope}[shift={(0,112)}]\sc@aerial{185}\end{scope}
+      \fill[AsphaltDeep] (0,0) rectangle (210,112);
+      \fill[SignalRed] (0,112) rectangle (210,113.4);
+      \node[anchor=north west,inner sep=0pt,text=StripeWhite!50,font=\fontsize{7}{9}\selectfont] at (20,102)
+        {\enlabel{Preparatory report · Group \sc@group{} · 2026}};
+      \node[rtl,anchor=north east,fill=white,draw=SignalRed,line width=1.5pt,rounded corners=1.6mm,
+        inner xsep=4.5mm,inner ysep=2.2mm,text=Asphalt,font=\sffamily\bfseries\fontsize{11}{13}\selectfont] (plate) at (190,104)
+        {דוח מכין};
+      \draw[white,line width=0.6pt,rounded corners=2.4mm] ($(plate.south west)+(-1,-1)$) rectangle ($(plate.north east)+(1,1)$);
+      \node[rtl,anchor=north east,inner sep=0pt,text=StripeWhite,font=\sffamily\bfseries\fontsize{50}{56}\selectfont] at (190,88)
+        {\sc@title};
+      \node[rtl,anchor=north east,inner sep=0pt,text=StripeWhite!82,text width=170mm,align=flush right,
+        font=\sffamily\fontsize{15}{20}\selectfont] at (190,62) {\sc@subtitle};
+      \node[anchor=north east,inner sep=0pt,text=SignalAmber,font=\fontsize{11}{14}\selectfont] at (190,49)
+        {\en{\itshape\sc@entitle}};
+      \begin{scope}\clip (20,35) rectangle (190,37.6);
+        \fill[Asphalt] (20,35) rectangle (190,37.6);
+        \foreach \i in {0,...,40}{\fill[StripeWhite] (21+\i*4.4,35.5) rectangle ++(2.2,1.6);}\end{scope}
+      \foreach \x/\lab/\val in {190/מוסד/\sc@institution, 125/מרצה/\sc@lecturer, 62/קבוצה/\sc@authors}{
+        \node[rtl,anchor=north east,inner sep=0pt,text=SignalAmber,font=\sffamily\bfseries\fontsize{7.5}{9}\selectfont] at (\x,29) {\lab};
+        \node[rtl,anchor=north east,inner sep=0pt,text=StripeWhite!85,text width=58mm,align=flush right,
+          font=\sffamily\fontsize{9}{12}\selectfont] at (\x,24) {\val};}
+      \node[rtl,anchor=north east,inner sep=0pt,text=StripeWhite!60,text width=58mm,align=flush right,
+          font=\sffamily\fontsize{8}{11}\selectfont] at (190,14.5) {\sc@course};
+      \node[rtl,anchor=north east,inner sep=0pt,text=StripeWhite!60,font=\sffamily\fontsize{8}{11}\selectfont] at (62,14.5) {\sc@docdate};
+    \else
+      %% ---------------- B: clean engineering report
+      \fill[white] (0,0) rectangle (210,297);
+      \begin{scope}[shift={(0,150)}]\sc@aerial{147}\end{scope}
+      \fill[AsphaltDeep] (0,74) rectangle (210,150);
+      \fill[SignalAmber] (0,150) rectangle (210,151.2);
+      \node[rtl,anchor=north east,fill=white,draw=SignalRed,line width=1.3pt,rounded corners=1.4mm,
+        inner xsep=4mm,inner ysep=1.8mm,text=Asphalt,font=\sffamily\bfseries\fontsize{10}{12}\selectfont] (plate) at (185,141)
+        {דוח מכין};
+      \draw[white,line width=0.5pt,rounded corners=2.2mm] ($(plate.south west)+(-0.9,-0.9)$) rectangle ($(plate.north east)+(0.9,0.9)$);
+      \node[anchor=north west,inner sep=0pt,text=SignalAmber,font=\fontsize{7}{9}\selectfont] at (25,139)
+        {\enlabel{\sc@docnumber{} · Rev \sc@revision}};
+      \node[rtl,anchor=north east,inner sep=0pt,text=StripeWhite,font=\sffamily\bfseries\fontsize{40}{46}\selectfont] at (185,127)
+        {\sc@title};
+      \node[rtl,anchor=north east,inner sep=0pt,text=StripeWhite!80,text width=160mm,align=flush right,
+        font=\sffamily\fontsize{13}{17}\selectfont] at (185,106) {\sc@subtitle};
+      \node[anchor=north east,inner sep=0pt,text=StripeWhite!55,font=\sffamily\fontsize{9.5}{12}\selectfont] at (185,92)
+        {\en{\sc@entitle}};
+      % document-control block
+      \node[anchor=north east,inner sep=0pt,text=Asphalt,font=\fontsize{7}{9}\selectfont] at (185,62)
+        {\enlabel{Document control}};
+      \fill[Asphalt] (185,58.4) rectangle (95,58.0);
+      \foreach \i/\lab/\val in {0/מספר מסמך/\en{\sc@docnumber}, 1/גרסה/\num{\sc@revision}~(\sc@status),
+          2/תאריך/\sc@docdate, 3/קבוצה/\sc@authors, 4/מרצה/\sc@lecturer}{
+        \node[rtl,anchor=east,inner sep=0pt,text=AsphaltLight,font=\sffamily\fontsize{8}{10}\selectfont] at (185,{54-\i*6.6}) {\lab};
+        \node[rtl,anchor=east,inner sep=0pt,text=Asphalt,font=\sffamily\bfseries\fontsize{8.5}{10}\selectfont] at (152,{54-\i*6.6}) {\val};
+        \fill[Hairline] (185,{50.6-\i*6.6}) rectangle (95,{50.9-\i*6.6});}
+      \node[rtl,anchor=north west,inner sep=0pt,text=Asphalt,text width=58mm,align=flush right,
+        font=\sffamily\bfseries\fontsize{9}{12}\selectfont] at (25,62) {\sc@institution};
+      \node[rtl,anchor=north west,inner sep=0pt,text=AsphaltLight,text width=58mm,align=flush right,
+        font=\sffamily\fontsize{8}{11}\selectfont] at (25,56) {\sc@course};
+      \node[anchor=south west,inner sep=0pt] at (25,17) {\fontsize{22}{22}\selectfont\picto[Asphalt]{signal}};
+      \node[anchor=south west,inner sep=0pt,text=AsphaltLight,font=\fontsize{6.5}{8}\selectfont] at (33,17.5) {\enlabel{\sc@group}};
+      \fill[Asphalt] (0,0) rectangle (210,3);
+    \fi
+    \end{scope}
+  \end{tikzpicture}}
   \end{titlepage}}
 
-%% ---------------------------------------------------------------- bibliography
-%% Citations are one LTR unit, otherwise the brackets break apart in RTL text ("[,1").
+%% ================================================================ BIBLIOGRAPHY
+%% Citations are one LTR unit set in ENGLISH: otherwise the brackets mirror in RTL text (DS-04).
 \AtBeginDocument{%
   \let\sc@origcite\cite
   \DeclareRobustCommand\cite{\@ifnextchar[\sc@citeopt\sc@citeplain}}
-%% Set in ENGLISH, not just LTR: in a Hebrew LTR box babel still mirrors the brackets ("]1[").
 \def\sc@citebox#1{\leavevmode\hbox dir TLT{\foreignlanguage{english}{#1}}}
 \def\sc@citeplain#1{\sc@citebox{\sc@origcite{#1}}}
 \def\sc@citeopt[#1]{\@ifnextchar[{\sc@citetwo[#1]}{\sc@citeone[#1]}}

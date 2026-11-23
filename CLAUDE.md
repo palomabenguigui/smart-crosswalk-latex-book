@@ -22,6 +22,7 @@ Project: **Assignment 02 – Hebrew PDF book in LaTeX, produced by a team of AI 
 
 ## 5. Copyright
 - **No images from the internet.** All illustrations are drawn with **TikZ** or **Python** (scripts in `scripts/`, output in `figures/`).
+- **Only exception:** photographs taken by the group itself, placed with `\authorphoto` and credited "צילום: המחברים" (PRD §5).
 
 ## Repository layout
 | Folder | Purpose |

@@ -40,3 +40,21 @@ They're recorded because each one becomes a regression check in `qa-BiDi` / `qa-
 | DS-08 | Cover art pushed to the right | LTR box inside a centred RTL paragraph | `\sc@ltrcenter` (LTR box `to\linewidth` with `\hss` on both sides) |
 | DS-09 | Bibliography title opened with a Hebrew quote ”…” | csquotes kept the Hebrew quote style after `autolang=none` | `\setquotestyle{english}` inside `\printreferences` |
 | DS-10 | Log warnings: csquotes missing; "Language 'hebrew' not supported" (biblatex, csquotes) | No Hebrew modules in biblatex/csquotes | Load `csquotes`; `hebrew.lbx` inherits English strings; Hebrew quote style declared |
+
+## Design-direction findings (Step 10) – found by page-render inspection of samples A and B, all fixed in `smartcross.cls` v0.2
+
+| ID | Symptom on the rendered page | Root cause | Fix in `smartcross.cls` |
+|---|---|---|---|
+| DS-11 | B: English phrase hyphenated at a line end next to RTL text ("countdown sig--ו") | English words inherited normal hyphenation inside a Hebrew paragraph | `\en` sets `\lefthyphenmin=\righthyphenmin=62`: English inside Hebrew never hyphenates |
+| DS-12 | Margin notes justified with huge gaps, one word per line | Narrow justified column | `\sidenote` is ragged, no hyphenation |
+| DS-13 | Thumb tab overlapping the chapter band; page 4 tab showing "03" for chapter 1 | Tab position above band bottom; tab read `\c@chapter` at ship-out (after `\setcounter`) | Tabs start below the band (112/162/212 mm); number frozen at chapter start (`\sc@tabnum`) |
+| DS-14 | A: chapter title/mission running close to the giant number | Title block 104 mm wide | Title block 96 mm |
+| DS-15 | Stat row 1.5–3.8 pt overfull / underfull | Spaces between tiles; tile border widening the bounding box; no stretch | `\ignorespaces`, clamped bounding box, gap `4mm plus 2pt minus 1pt` |
+| DS-16 | Photo float alone on a vertically centred page | Default float-page centring | Float pages top-aligned (`\@fptop` = 0pt) |
+| DS-17 | Font warning: Hebrew italic undefined (cover) | `\itshape` selected before switching to English | Italic selected inside `\en` |
+| DS-18 | Cover: sensing zone clipped at the page top; pedestrians too small to read | Fan angles reached above the sidewalk | Fan turned along the sidewalk (154°–186°); pedestrians ×1.45 |
+| DS-19 | B: closing crosswalk rule alone on an otherwise empty last page | Ornament placed after a full page | `\crosswalkrule` is dropped at a page top or when < 20 pt remain |
+
+Build-time errors met while writing v0.2 (not visual defects): `\pdfstrcmp` doesn't exist in LuaTeX; `\@seccntformat` is
+expanded inside `\protected@edef`; `\@fptop`/`\@fpsep`/`\@fpbot` are skip registers in LaTeX 2025+ (use `\setlength`);
+xcolor can't append `!70!black` to an expression that is already a mix.

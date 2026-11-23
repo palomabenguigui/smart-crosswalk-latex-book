@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 # build.sh – reproducible build of build/main.pdf (PLAN §8).
-# Usage (from anywhere):  scripts/build.sh [jobname]      default jobname: main
+# Usage (from anywhere):  scripts/build.sh [file.tex]      default: main.tex  (e.g. samples/style-A.tex)
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
-JOB="${1:-main}"
+SRC="${1:-main.tex}"
+JOB="$(basename "$SRC" .tex)"
 
 # --- toolchain: TeX Live 2026 first on PATH (old MiKTeX links in ~/bin must not win)
 export PATH="/Library/TeX/texbin:$PATH"
@@ -24,7 +25,7 @@ fi
 
 # --- LaTeX: lualatex -> biber -> lualatex x2
 mkdir -p build
-LTX=(lualatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=build "$JOB.tex")
+LTX=(lualatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=build "$SRC")
 run() { echo "[build] $*"; "$@" > "build/$JOB.console" 2>&1 || { tail -30 "build/$JOB.console"; exit 1; }; }
 run "${LTX[@]}"
 run biber --input-directory build --output-directory build "$JOB"
