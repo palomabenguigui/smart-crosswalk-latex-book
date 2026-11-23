@@ -3,7 +3,7 @@
 **Project:** Crossing at a Red Light – Smart Pedestrian Crossing: A Preparatory Report
 **Hebrew title:** חוצים באדום – מעבר חציה חכם: דוח מכין
 **Group:** `shirloma` · **Course:** Generative AI: LLMs, Agents and Multi-Agent Systems – Dr. Yoram Segal, Bar-Ilan University
-**Version:** 1.1 (2026-11-19) · **Status:** **approved by the user** (incl. the INC-000 correction in §9) · v1.1 adds §12 Writing style, AC-19, AC-20 and the Researcher verification rule (§11) · no book content written yet
+**Version:** 1.2 (2026-11-24) · **Status:** **approved by the user** (incl. the INC-000 correction in §9) · v1.1 adds §12 Writing style, AC-19, AC-20 and the Researcher verification rule (§11) · no book content written yet
 
 Sources this PRD is built on (all in `references/`, kept locally): the Assignment 02 brief, the booklet *From Problem to PDF*
 (Part A: report content, Part B: production), the L04 multi-agent guide, and the flagship paper (Rosenbloom, 2009).
@@ -155,44 +155,61 @@ onwards merges these bars into a single specification. Where experts disagreed, 
 - All OFL-licensed and bundled in `fonts/` with their licence files.
 - Body size 11 pt and line spread 1.15, on A4.
 
-### 6.3 Page elements
-- **Banner (header):** a thin asphalt strip with a crosswalk-stripe pattern, chapter title on the right (RTL) and group code on the left.
-- **Footer:** page number (outer side), "© shirloma 2026 – חוצים באדום" and a thin crosswalk rule.
-- **Chapter openers styled as road signs**, each drawn in TikZ:
-  - The chapter number sits in a sign-shaped badge (a rounded square with a white border on asphalt).
-  - A **3-lamp traffic-light progress indicator** shows where the reader is: red lamp for chapters 1–3 (the problem), amber for 4–7 (analysis and design), green for 8–10 (ready to implement).
-  - The risk chapter uses a warning-triangle variant.
-- **Crosswalk-stripe decorative rules** (`\crosswalkrule`): alternating asphalt/white bars under chapter titles and at chapter ends. Used sparingly, never between paragraphs.
-- **Callout boxes** (`tcolorbox`, defined only in the `.cls`):
+### 6.3 Final design (`smartcross.cls` v1.0, chosen in Step 13)
 
-| Box | Colour | Purpose |
+The final design is a **mix of the two directions sampled in Step 10**: the editorial layout of direction A, with the
+side-bar boxes and booktabs tables of direction B. Reference renders: `screenshots/style-final/` (sample
+`samples/style-final.tex`); design history: `screenshots/style-sample/` (v0.1), `-A/`, `-B/` (v0.2).
+
+**Grid and typography**
+- A4, text block 138 mm wide; right (start) margin 22 mm; **left (outer) margin 50 mm** carrying margin notes (31 mm column) and thumb tabs at the page edge.
+- Body: Noto Serif Hebrew 11 pt, line spread 1.18, paragraphs separated by space (no indent).
+- Headings: Noto Sans Hebrew Bold. Sections at 16.5 pt with the number in a filled asphalt chip; subsections at 12.5 pt with the number in the phase colour.
+- English labels in letter-spaced capitals (`\enlabel`). English inside Hebrew is never hyphenated.
+
+**From direction A (editorial)**
+- **Cover** (`\makecover`): full-bleed TikZ aerial view of the crosswalk across the top two thirds (zebra, curbs, stop lines, a stopped car, two countdown signal heads showing "12", a waiting group and a lone pedestrian casting shadows, the amber curb-sensing zone). A solid deep-asphalt title band below has a red top edge, the "דוח מכין" road-sign plate, a 50 pt title, the subtitle, the English title in amber italic, a zebra rule and a three-column details row (institution, lecturer, group). No page number.
+- **Chapter openers:** full-bleed asphalt band about 98 mm tall with subtle texture and a zebra bottom edge. It holds a 150 pt two-digit chapter number in the phase colour, a vertical 3-lamp signal with the phase lamp lit, an English label ("CHAPTER 01 · THE PROBLEM"), a Hebrew phase label with a pictogram, the title (27 pt, white) and the mission line under a short coloured rule. Then comes the dark `scenebox` (striped edges, red-man icon).
+- **Stat tiles** (`statrow` / `\stattile`): dark asphalt tiles, big number in the signal colour, short white label.
+- **Thumb tabs:** rounded tabs on the outer (left) edge with the chapter number: red at 112 mm (ch. 1–3), amber at 162 mm (ch. 4–7), green at 212 mm (ch. 8–10).
+- **Running head:** English label on the left, Hebrew chapter title on the right with a phase-colour square. **Footer:** large bold page number with a mini zebra strip, plus "חוצים באדום · shirloma · © 2026".
+- **Pull quote** with a red side bar; **margin notes** (`\sidenote`) with an info pictogram, ragged.
+
+**From direction B (engineering)**
+- **Callout boxes:** light background, **coloured side bar on the start (right) edge**, title in the box colour with a pictogram:
+
+| Box | Colour / pictogram | Purpose |
 |---|---|---|
-| `scenebox` | Asphalt fill, StripeWhite text, crosswalk-stripe edge, small pedestrian-signal icon | **Chapter-opening street scene** (max 4 lines, §12); placed directly under the chapter opener |
-| `findingbox` | SignalGreen | Key finding / recommendation |
-| `cautionbox` | SignalAmber (fill) + Asphalt text | Data issue, methodological caution |
-| `trapbox` | SignalRed | Pitfall / warning |
-| `definitionbox` | Asphalt | Definition, formula explanation |
-| `projectbox` | AsphaltLight | "In our project" applying a principle |
+| `scenebox` | deep asphalt, white text, striped edges, red-man icon (A style, part of the opener) | Chapter-opening street scene (max 4 lines, §12) |
+| `findingbox` | SignalGreen · signal head | Key finding / recommendation |
+| `cautionbox` | dark amber · warning triangle | Data issue, methodological caution |
+| `trapbox` | SignalRed · pedestrian | Pitfall / warning |
+| `definitionbox` | Asphalt · info | Definition, formula explanation |
+| `projectbox` | AsphaltLight · sensor | "In the current project" |
 
-- **Cover:** a double frame, TikZ crosswalk-and-signal art, bilingual title, subtitle "דוח מכין", authors, affiliation, date and © line. No page number, and no keywords on the cover.
+- **Tables:** booktabs (0.9 pt top/bottom rules, 0.4 pt mid rule, asphalt), bold sans header row, column 1 on the right, caption above.
 
-### 6.4 Premium components (v0.2, Step 10)
+**Shared rules**
+- `\crosswalkrule` closes a section; it is dropped when it would land alone at a page top.
+- Float pages are top-aligned. Figures and photos are captioned below, tables above.
+- `\authorphoto` frames the group's own photographs with a thin asphalt border; the caption ends with "צילום: המחברים".
 
-| Component | Command | Notes |
-|---|---|---|
-| Full-bleed cover | `\makecover` | TikZ aerial view of the crosswalk: zebra, curbs, stop lines, a stopped car, countdown signal heads, a waiting group and a lone pedestrian with shadows, the curb-sensing zone; title block on a solid asphalt band; "דוח מכין" as a road-sign plate |
-| Chapter opener | `\ChapterMission{…}` `\ChapterIcon{…}` `\chapter{…}` | Full-bleed asphalt band, very large two-digit chapter number, 3-lamp signal (phase lit), English letter-spaced label, mission line |
-| Thumb tabs | automatic | Outer (left) page edge, colour and height by phase: red ch. 1–3, amber 4–7, green 8–10 |
-| Key-figure tiles | `\begin{statrow}[n] \stattile[colour]{number}{label} … \end{statrow}` | Big number + short label |
-| Pull quote | `\begin{pullquote}[attribution] … \end{pullquote}` | Only our own sentences (never a quotation from a source) |
-| Margin note | `\sidenote{…}` | Outer (left) margin, ragged, never hyphenated |
-| Pictograms | `\picto[colour]{pedestrian\|signal\|sensor\|warning\|info\|camera}` | Used in box titles, chapter openers, tiles |
-| English labels | `\enlabel{…}` | Letter-spaced capitals for English tags |
-| Author photo | `\authorphoto[height]{file}{caption}{label}` | See §5 |
+### 6.4 Component reference
 
-**Design directions (to be chosen by the user):** `\documentclass[A]{smartcross}` = bold editorial (serif body, wide
-outer margin, dark tiles, filled box titles); `[B]` = clean engineering report (sans body, document-control block on the
-cover, hairlines, white tiles, side-bar boxes). Samples: `samples/style-A.tex`, `samples/style-B.tex`.
+| Component | Command |
+|---|---|
+| Cover | `\makecover` (metadata: `\Title`, `\Subtitle`, `\EnglishTitle`, `\Institution`, `\Course`, `\Lecturer`, `\Authors`, `\DocDate`, `\GroupCode`, `\FooterTitle`) |
+| Chapter opener | `\ChapterMission{…}` `\ChapterIcon{pedestrian\|signal\|sensor\|warning\|info\|camera}` `\chapter{…}` |
+| Street scene | `\begin{scenebox} … \end{scenebox}` |
+| Boxes | `findingbox`, `cautionbox`, `trapbox`, `definitionbox[title]`, `projectbox` |
+| Key figures | `\begin{statrow}[n] \stattile[colour]{number}{label} … \end{statrow}` |
+| Pull quote | `\begin{pullquote}[attribution] … \end{pullquote}` (our own sentences only) |
+| Margin note | `\sidenote{…}` |
+| Pictogram | `\picto[colour]{name}` |
+| Tables | `\toprule` / `\headrow \thead{…} & …` / `\midrule` / `\bottomrule` |
+| Author photo | `\authorphoto[height]{file}{caption}{label}` |
+| BiDi | `\en`, `\num`, `\pct`, `\range`, `\unit`, `\hebmath`, `\enlabel`, `ltrblock` (§7) |
+| Closing rule | `\crosswalkrule` |
 
 ## 7. BiDi rules (Hebrew / English mixing)
 
