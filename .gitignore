@@ -43,7 +43,6 @@ _minted*/
 build/*
 !build/.gitkeep
 build/*.pdf
-!build/*final*.pdf
 !build/book.pdf
 !build/main.pdf
 

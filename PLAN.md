@@ -66,6 +66,8 @@ The **Leader (orchestrator)** is the main Claude Code session.
 | `qa-infra` | **Toolchain:** `lualatex --version` reports *LuaHBTeX … (TeX Live 2026)* and resolves to `/Library/TeX/texbin` (not a leftover MiKTeX link in `~/bin`); `biber --version` = 2.21; biber's `.bcf` format matches. **Fonts:** all `fonts/*/*.otf` + `OFL.txt` present. Folder structure, required files, paths, page counts (AC-01/02), clean-clone build, `.gitignore` protects references | MiKTeX engine picked up from `PATH`, missing file, broken path |
 | `qa-cls-version` | `.cls` version matches PLAN; the `.cls` declares the toolchain it was tested on (TeX Live 2026, LuaHBTeX ≥ 1.24, babel ≥ v26.4) and stops with a clear error when the engine is older or isn't LuaTeX; the Hebrew font fallbacks are defined; no `\newcommand` / colour / font definitions in chapter files | Formatting defined outside the `.cls`, compiling with an old engine, missing fallback |
 
+**Deterministic checks:** `scripts/qa.py <family>` (`super` runs all, in order). Regression tests: `tests/qa/run_tests.py`.
+
 **Standard report format (every skill):**
 `[skill] [severity: blocker/major/minor] [page N] [file:line] "exact text" → rule broken (PRD/AC id)`.
 A skill that says only "checked" or "OK" without counts and page numbers has failed (booklet §19.5).
@@ -132,6 +134,7 @@ the source page, and `data/*.csv` stores the page reference for each value.
 ├── fonts/                   # bundled OFL fonts + licences
 ├── references/              # README.md, refs.bib, VERIFICATION.md tracked; copyrighted PDFs/MD local only
 ├── skills/                  # qa-* skills + production-agent skills (SKILL.md each)
+├── tests/qa/                # regression fixtures + run_tests.py for scripts/qa.py
 ├── prompts/                 # PROMPTS_LOG.md (verbatim); agents/ = each agent's prompt, verbatim
 ├── screenshots/             # our own screenshots: style-sample/, book pages, graphs, TikZ, agents in action, incidents
 ├── .claude/skills -> ../skills   # symlink so Claude Code loads the project skills

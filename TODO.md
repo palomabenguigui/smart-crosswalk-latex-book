@@ -33,18 +33,13 @@ Mirrors the phases in [`PLAN.md`](PLAN.md). Tick items only when their exit gate
 - [x] Final sample `samples/style-final.tex` (3 pp) built clean, renders in `screenshots/style-final/`; PRD §6 describes the final design (Step 13)
 - [x] Authors' photo `figures/photo-crosswalk.jpg` (1170×1544, no people) used via `\authorphoto` (Step 13)
 
-## P2 – QA skills (before any content)
-- [ ] `skills/qa-infra/SKILL.md`
-- [ ] `skills/qa-typeset/SKILL.md`
-- [ ] `skills/qa-cls-version/SKILL.md`
-- [ ] `skills/qa-BiDi/SKILL.md` (Prompt B2 checks + page render)
-- [ ] `skills/qa-table/SKILL.md`
-- [ ] `skills/qa-img/SKILL.md` (incl. greyscale and colour-blind checks)
-- [ ] `skills/qa-code/SKILL.md`
-- [ ] `skills/qa-super/SKILL.md` (order, report format, n-gram copy check, AC table)
-- [ ] Production-agent skills: `writer` (authorial voice, PRD §12), `researcher` (online verification, drop-if-unverifiable), `python-graphs`, `tikz-illustrations`
-- [ ] Add the AC-21 scene checks (line count, no digits, citations or first person) and the AC-22 verification check to `qa-super`
-- [ ] Dry-run all skills on the skeleton; save a sample report
+## P2 – QA skills (before any content) ✅ DONE (Step 13)
+- [x] `scripts/qa.py`: deterministic Detector for every family (cls-version, infra, typeset, bidi, table, img, code, content, super); standard report format; exit 1 on blocker/major
+- [x] `skills/qa-super`, `qa-cls-version`, `qa-infra`, `qa-typeset`, `qa-BiDi`, `qa-table`, `qa-code`, `qa-img` (each: script checks + visual checklist + DS regressions)
+- [x] Production-agent skills: `writer` (voice PRD §12), `researcher` (online verification, drop-if-unverifiable, rendered-page data rule), `python-graphs`, `tikz-illustrations`
+- [x] AC-21 scene checks and AC-22 verification check in `qa.py content`
+- [x] Regression tests `tests/qa/run_tests.py`: 17/17 pass (each detector fires on the bad fixture, silent on the final sample)
+- [x] Dry run on the final sample: 0 blocker / 0 major / 0 minor
 
 ## P3 – Sources and data
 - [x] `references/refs.bib` with the flagship paper (DOI 10.1016/j.trf.2009.05.002), verified online (Step 09)
