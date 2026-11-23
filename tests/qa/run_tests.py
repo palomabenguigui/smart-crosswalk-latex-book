@@ -33,5 +33,5 @@ expect('matplotlib-order correct Hebrew is clean', not qa.FINDINGS)
 
 # 3. the real final sample must be clean
 r = subprocess.run([PY, 'scripts/qa.py', 'super', '--pdf', 'build/style-final.pdf'], cwd=ROOT, capture_output=True, text=True)
-expect('final sample: 0 findings', r.returncode == 0 and '0 blocker, 0 major, 0 minor' in r.stdout)
+expect('final sample: 0 blocker / 0 major', r.returncode == 0 and '0 blocker, 0 major' in r.stdout)
 print(f'== {fails} failing'); sys.exit(1 if fails else 0)

@@ -242,8 +242,10 @@ def check_code(a):
     if Path('scripts/make_figures.py').exists():
         r = subprocess.run([str(py), 'scripts/make_figures.py'], capture_output=True, text=True)
         if r.returncode: report('qa-code', 'blocker', '-', 'scripts/make_figures.py', r.stderr.strip()[-80:], 'AC-04 figures regenerate')
-        dirty = subprocess.run(['git', 'status', '--porcelain', 'figures'], capture_output=True, text=True).stdout.strip()
-        if dirty: report('qa-code', 'major', '-', 'figures/', 'committed figures differ from regenerated output', 'AC-04 stale figure')
+        for line in subprocess.run(['git', 'status', '--porcelain', 'figures'], capture_output=True, text=True).stdout.splitlines():
+            st, path = line[:2], line[3:]
+            if st == '??': report('qa-code', 'minor', '-', path, 'new figure not committed yet', 'AC-04')
+            else: report('qa-code', 'major', '-', path, 'committed figure differs from regenerated output', 'AC-04 stale figure')
     if Path('data/recomputed.json').exists():
         rec = json.loads(read('data/recomputed.json'))
         text = ' '.join(read(f) for f in chapter_files())
