@@ -168,3 +168,38 @@ Produce TWO distinct design directions as separate style samples (A: bold editor
 ```
 
 ---
+
+## Step 11 – Add the authors' crosswalk photograph
+**Date/time:** 2026-11-24 00:09
+
+```text
+cp ~/Downloads/IMG_9744.* ~/BIU/T02/figures/photo-crosswalk.jpg
+open ~/BIU/T02/figures/photo-crosswalk.jpg
+```
+
+---
+
+## Step 12 – Resize the authors' photo and rebuild the samples
+**Date/time:** 2026-11-24 00:10
+
+```text
+I added my own photo at figures/photo-crosswalk.jpg. Resize it to max 2400 px wide at good JPEG quality, then rebuild the sample so it replaces the placeholder. Log this prompt, commit and push.
+```
+
+---
+
+## Step 13 – Final mixed design, final sample, then continue to P2
+**Date/time:** 2026-11-24 00:12
+
+```text
+Design decision: use a MIX. From A: cover, chapter openers, stat tiles, thumb tabs, footer, serif body with the wide outer margin for notes. From B: boxes with a coloured side bar and coloured title text, and booktabs tables.
+
+1. Implement this as the single final design in smartcross.cls (bump the version), remove the unused A/B branches and delete both style samples — do NOT rebuild them.
+2. My own photo is at figures/photo-crosswalk.jpg: resize it to max 2400 px wide at good JPEG quality and use it in the \authorphoto frame.
+3. Build ONE short final sample (cover + one chapter opener + one content page with the photo), render it to screenshots/style-final/, self-inspect and fix only via the .cls. Update PRD §6 to describe the final design.
+4. Then continue with the next TODO phase (P2) without waiting for me. Stop only when (a) a step needs my decision, or (b) you reach the point where the Writer, Researcher and QA agents must run in parallel — then stop and tell me, because I will launch them in separate Terminal windows.
+
+Log this prompt, commit and push after each step.
+```
+
+---

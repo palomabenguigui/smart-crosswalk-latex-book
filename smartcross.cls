@@ -2,14 +2,13 @@
 %% Group shirloma · Generative AI course (Dr. Yoram Segal, Bar-Ilan University)
 %%
 %% ALL formatting lives here (PLAN §5). Chapter files contain content + template commands only.
-%% Two design directions share every component; only styling differs:
-%%   \documentclass[A]{smartcross}   A = bold editorial (default)
-%%   \documentclass[B]{smartcross}   B = clean engineering report
+%% FINAL DESIGN (v1.0, Step 13): editorial cover, chapter openers, stat tiles, thumb tabs, footer and
+%% serif body with a wide outer note margin; engineering-style side-bar boxes and booktabs tables.
 %% Tested toolchain: TeX Live 2026 (LuaHBTeX 1.24.0, babel v26.4, biber 2.21).
 %% Compile from the REPOSITORY ROOT (fonts are loaded by relative path from fonts/).
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{smartcross}[2026/11/23 v0.2 Smart Crosswalk report class (shirloma)]
-\def\SmartCrossVersion{0.2}
+\ProvidesClass{smartcross}[2026/11/24 v1.0 Smart Crosswalk report class (shirloma)]
+\def\SmartCrossVersion{1.0}
 
 %% ---------------------------------------------------------------- engine guard (qa-cls-version)
 \ifdefined\directlua\else
@@ -20,23 +19,16 @@
     {Use TeX Live 2026 (/Library/TeX/texbin). MiKTeX 22.1 for macOS is not supported (README).}
 \fi
 
-%% ---------------------------------------------------------------- design direction
-\newif\ifsc@A \sc@Atrue
-\DeclareOption{A}{\sc@Atrue}
-\DeclareOption{B}{\sc@Afalse}
 \ProcessOptions\relax
 \LoadClass[11pt,a4paper,oneside]{report}
 
 %% ---------------------------------------------------------------- page grid
 %% RTL book: the text starts at the RIGHT margin; the LEFT (end/outer) margin carries margin notes
 %% and the thumb tabs at the page edge.
-\ifsc@A
+
   \RequirePackage[a4paper,top=27mm,bottom=27mm,right=22mm,left=50mm,
     marginparwidth=31mm,marginparsep=7mm,headheight=8mm,headsep=9mm,footskip=13mm]{geometry}
-\else
-  \RequirePackage[a4paper,top=30mm,bottom=27mm,right=25mm,left=42mm,
-    marginparwidth=23mm,marginparsep=6mm,headheight=8mm,headsep=9mm,footskip=13mm]{geometry}
-\fi
+
 
 %% ---------------------------------------------------------------- languages / BiDi
 \RequirePackage[english,bidi=basic,layout=tabular]{babel}% NOT layout=counters: it reverses 4.1 -> 1.4 (DS-03)
@@ -71,8 +63,8 @@
   ItalicFont=*-Italic]
 
 %% body text: A = serif (editorial), B = sans (engineering)
-\ifsc@A\else\renewcommand\familydefault{\sfdefault}\fi
-\linespread{\ifsc@A 1.18\else 1.15\fi}
+
+\linespread{ 1.18}
 \setlength\parindent{0pt}
 \setlength\parskip{5.5pt plus 2pt minus 1pt}
 \emergencystretch=1.5em
@@ -231,19 +223,15 @@
 \newcommand\crosswalkrule[1][2.4mm]{\par
   \ifdim\pagegoal=\maxdimen\else\ifdim\dimexpr\pagegoal-\pagetotal\relax<20pt\else\sc@crosswalkrule{#1}\fi\fi}
 \newcommand\sc@crosswalkrule[1]{%
-  \nobreak\vspace{6pt}\nobreak\noindent\sc@ltr{\ifsc@A\sc@zebra{\linewidth}{#1}\else
-    \begin{tikzpicture}\fill[Hairline] (0,0) rectangle (\linewidth,0.4pt);
-      \foreach \i in {0,...,5}{\fill[Asphalt] ({\linewidth-\i*3.2mm-2.2mm},-0.7mm) rectangle ++(1.6mm,1.8mm);}
-    \end{tikzpicture}\fi}\par\vspace{6pt}}
+  \nobreak\vspace{6pt}\nobreak\noindent\sc@ltr{\sc@zebra{\linewidth}{#1}}\par\vspace{6pt}}
 
 %% ================================================================ SECTIONS
 \newcommand\sc@secchip[1]{\leavevmode\hbox dir TLT{\tikz[baseline=(c.base)]{%
-  \ifsc@A\node[fill=Asphalt,text=StripeWhite,rounded corners=1.2pt,inner xsep=3.2pt,inner ysep=2.6pt,
+  \node[fill=Asphalt,text=StripeWhite,rounded corners=1.2pt,inner xsep=3.2pt,inner ysep=2.6pt,
      font=\sffamily\bfseries\normalsize] (c) {#1};
-  \else\node[draw=\sc@phasecolor,line width=0.7pt,text=\sc@phasecolor,rounded corners=1pt,inner xsep=3pt,
-     inner ysep=2.2pt,font=\sffamily\bfseries\normalsize] (c) {#1};\fi}}\hspace{0.65em}}
+  }}\hspace{0.65em}}
 \renewcommand\section{\@startsection{section}{1}{\z@}{-3.4ex plus -1ex minus -.2ex}%
-  {1.3ex plus .2ex}{\sffamily\bfseries\color{Asphalt}\fontsize{\ifsc@A 16.5\else 15\fi}{21}\selectfont}}
+  {1.3ex plus .2ex}{\sffamily\bfseries\color{Asphalt}\fontsize{ 16.5}{21}\selectfont}}
 \renewcommand\subsection{\@startsection{subsection}{2}{\z@}{-2.6ex plus -1ex minus -.2ex}%
   {0.9ex plus .2ex}{\sffamily\bfseries\color{Asphalt}\fontsize{12.5}{16}\selectfont}}
 \def\sc@secname{section}
@@ -260,27 +248,24 @@
 \newcommand\sc@chaptericon{}
 \newcommand\ChapterIcon[1]{\gdef\sc@chaptericon{#1}}       % pictogram shown in the next chapter band
 %% band height (mm) and the skip that brings the text below it
-\ifsc@A \def\sc@Hmm{98}\newcommand\sc@bandskip{82mm}
-\else   \def\sc@Hmm{74}\newcommand\sc@bandskip{55mm}\fi
+ \def\sc@Hmm{98}\newcommand\sc@bandskip{82mm}
+
 \newcommand\sc@band[3]{% #1 two-digit number (empty = unnumbered), #2 title, #3 mission
   \noindent\sc@ltr{\begin{tikzpicture}[remember picture,overlay,x=1mm,y=1mm]
     \coordinate (P) at (current page.north west);
-    \fill[\ifsc@A Asphalt\else AsphaltDeep\fi] (P) rectangle ($(P)+(210,-\sc@Hmm)$);
-    \ifsc@A
+    \fill[ Asphalt] (P) rectangle ($(P)+(210,-\sc@Hmm)$);
+    
       \pgfmathsetseed{17}
       \foreach \k in {1,...,260}{\fill[white,opacity=0.035] ($(P)+({rnd*210},{-rnd*(\sc@Hmm-6)})$) circle (0.3);}
       \fill[AsphaltDeep] ($(P)+(0,-\sc@Hmm)$) rectangle ($(P)+(210,-\sc@Hmm-5)$);
       \foreach \i in {0,...,17}{\fill[StripeWhite] ($(P)+(3+\i*12,-\sc@Hmm-0.9)$) rectangle ++(6,-3.2);}
-    \else
-      \fill[\sc@phasecolor] ($(P)+(0,-\sc@Hmm)$) rectangle ($(P)+(210,-\sc@Hmm-2.2)$);
-      \foreach \x in {0,12,...,210}{\draw[white,opacity=0.05,line width=0.3pt] ($(P)+(\x,0)$) -- ++(0,-\sc@Hmm);}
-    \fi
+    
     \ifx\relax#1\relax
       \node[rtl,anchor=south east,inner sep=0pt,text=StripeWhite,font=\sffamily\bfseries\fontsize{30}{36}\selectfont]
         at ($(P)+(188,-\sc@Hmm+16)$) {#2};
       \node[anchor=south west,inner sep=0pt] at ($(P)+(20,-\sc@Hmm+16)$) {\sc@lamps{off}{h}{2.6}};
     \else
-      \ifsc@A
+      
         \node[anchor=south west,inner sep=0pt] at ($(P)+(14,-\sc@Hmm+16)$) {\sc@lamps{\sc@phase}{v}{3.4}};
         \node[anchor=south west,inner sep=0pt,text=\sc@phasecolor,
           font=\sffamily\bfseries\fontsize{150}{150}\selectfont] at ($(P)+(32,-\sc@Hmm+12)$) {#1};
@@ -295,20 +280,7 @@
           \node[rtl,anchor=north east,inner sep=0pt,text=StripeWhite!78,text width=96mm,align=flush right,
             font=\sffamily\fontsize{11.5}{15}\selectfont] at ($(T.south east)+(0,-8)$) {#3};
         \fi
-      \else
-        \node[anchor=north west,inner sep=0pt] at ($(P)+(20,-14)$) {\sc@lamps{\sc@phase}{h}{2.4}};
-        \node[anchor=south west,inner sep=0pt,text=StripeWhite,
-          font=\sffamily\fontsize{96}{96}\selectfont] at ($(P)+(19,-\sc@Hmm+9)$) {#1};
-        \node[anchor=north east,inner sep=0pt,text=\sc@phasecolor,font=\fontsize{7}{9}\selectfont]
-          at ($(P)+(185,-15)$) {\enlabel{\sc@docnumber{} · Section #1}};
-        \node[rtl,anchor=north east,inner sep=0pt,text=StripeWhite,text width=112mm,align=flush right,
-          font=\sffamily\bfseries\fontsize{23}{29}\selectfont] (T) at ($(P)+(185,-24)$)
-          {\ifx\sc@chaptericon\@empty\else\picto[\sc@phasecolor]{\sc@chaptericon}~\fi#2};
-        \ifx\relax#3\relax\else
-          \node[rtl,anchor=north east,inner sep=0pt,text=StripeWhite!70,text width=112mm,align=flush right,
-            font=\sffamily\fontsize{11}{14.5}\selectfont] at ($(T.south east)+(0,-5)$) {#3};
-        \fi
-      \fi
+      
     \fi
   \end{tikzpicture}}\par
   \vspace*{\sc@bandskip}}
@@ -328,38 +300,28 @@
   \ifx\sc@tabtop\@empty\else
   \sc@ltr{\begin{tikzpicture}[remember picture,overlay,x=1mm,y=1mm]
     \coordinate (P) at (current page.north west);
-    \ifsc@A
+    
       \fill[\sc@phasecolor,rounded corners=2mm] ($(P)+(-4,-\sc@tabtop)$) rectangle ++(13,-44);
       \node[text=\ifx\sc@phase\sc@ph@amber Asphalt\else StripeWhite\fi,font=\sffamily\bfseries\fontsize{10}{10}\selectfont]
         at ($(P)+(4.3,-\sc@tabtop-22)$) {\sc@tabnum};
-    \else
-      \fill[\sc@phasecolor] ($(P)+(0,-\sc@tabtop)$) rectangle ++(5.5,-44);
-      \node[rotate=90,text=\ifx\sc@phase\sc@ph@amber Asphalt\else StripeWhite\fi,font=\sffamily\bfseries\fontsize{6.5}{6.5}\selectfont]
-        at ($(P)+(2.75,-\sc@tabtop-22)$) {\sc@tabnum};
-    \fi
+    
   \end{tikzpicture}}\fi}
 
 %% ================================================================ HEADER / FOOTER
 \newcommand\sc@headtext{%
   \sc@ltr{\begin{tikzpicture}[x=1mm,y=1mm]
     \useasboundingbox (0,0) rectangle (\headwidth,6mm);
-    \ifsc@A
+    
       \node[anchor=west,inner sep=0pt,text=AsphaltLight,font=\fontsize{6.5}{8}\selectfont] at (0,2.2)
         {\enlabel{Smart Crosswalk · Preparatory Report}};
       \node[rtl,anchor=east,inner sep=0pt,text=Asphalt,font=\sffamily\fontsize{8.5}{10}\selectfont] (h) at (\headwidth,2.2mm) {\leftmark};
       \fill[\sc@phasecolor] ($(h.west)+(-2.6,-1.1)$) rectangle ++(-2.2,2.2);
-    \else
-      \node[anchor=west,inner sep=0pt,text=AsphaltLight,font=\ttfamily\fontsize{7}{8}\selectfont] at (0,2.2)
-        {\en{\sc@docnumber{} · Rev \sc@revision}};
-      \node[rtl,anchor=east,inner sep=0pt,text=Asphalt,font=\sffamily\fontsize{8.5}{10}\selectfont] at (\headwidth,2.2mm) {\leftmark};
-      \fill[Hairline] (0,-0.8) rectangle (\headwidth,-0.6);
-      \fill[\sc@phasecolor] (\headwidth,-0.9) rectangle ++(-14,0.5);
-    \fi
+    
   \end{tikzpicture}}}
 \newcommand\sc@foottext{%
   \sc@ltr{\begin{tikzpicture}[x=1mm,y=1mm]
     \useasboundingbox (0,0) rectangle (\headwidth,7mm);
-    \ifsc@A
+    
       \node[anchor=south west,inner sep=0pt,text=Asphalt,font=\sffamily\bfseries\fontsize{14}{14}\selectfont] (n) at (0,0.6) {\thepage};
       \begin{scope}\clip ($(n.south east)+(3,0.3)$) rectangle ++(20,3);
         \fill[Asphalt] ($(n.south east)+(3,0.3)$) rectangle ++(20,3);
@@ -367,13 +329,7 @@
       \end{scope}
       \node[rtl,anchor=south east,inner sep=0pt,text=AsphaltLight,font=\sffamily\fontsize{7.5}{9}\selectfont] at (\headwidth,1.2)
         {\sc@footertitle~·~\en{\sc@group}~·~\num{©\,2026}};
-    \else
-      \fill[Hairline] (0,6) rectangle (\headwidth,6.2);
-      \node[anchor=south west,inner sep=0pt,text=Asphalt,font=\sffamily\fontsize{8.5}{10}\selectfont] at (0,1.2)
-        {\thepage};
-      \node[rtl,anchor=south east,inner sep=0pt,text=AsphaltLight,font=\sffamily\fontsize{7.5}{9}\selectfont] at (\headwidth,1.2)
-        {\sc@footertitle~·~\en{\sc@group}~·~\num{©\,2026}~·~גרסה~\num{\sc@revision}};
-    \fi
+    
   \end{tikzpicture}}}
 \pagestyle{fancy}
 \fancyhf{}
@@ -401,21 +357,14 @@
     \endgroup
   \fi}
 \newcommand\sc@tocchip[1]{\hbox dir TLT{\tikz[baseline=(c.base)]{%
-  \ifsc@A\node[fill=\sc@phasecolorof{#1},text=\ifnum#1>3 \ifnum#1<8 Asphalt\else StripeWhite\fi\else StripeWhite\fi,
+  \node[fill=\sc@phasecolorof{#1},text=\ifnum#1>3 \ifnum#1<8 Asphalt\else StripeWhite\fi\else StripeWhite\fi,
     rounded corners=1.5pt,inner xsep=3.5pt,inner ysep=2.5pt,font=\sffamily\bfseries\small] (c) {\two@digits{#1}};
-  \else\node[text=\sc@phasecolorof{#1},inner sep=0pt,font=\sffamily\bfseries] (c) {\two@digits{#1}};\fi}}}
+  }}}
 
 %% ================================================================ CALLOUT BOXES (PRD §6.3)
 %% tcolorbox draws its frame with TikZ in LTR coordinates: each public box builds the box in an LTR
 %% paragraph and sets title + content RTL (DS-02).
-\ifsc@A
-  \tcbset{sc base/.style={enhanced,breakable,arc=1.6mm,boxrule=0pt,
-    left=4mm,right=4mm,top=2.6mm,bottom=2.8mm,toptitle=1.6mm,bottomtitle=1.6mm,
-    fonttitle=\sffamily\bfseries\fontsize{10}{12}\selectfont,
-    before skip=11pt,after skip=11pt,parbox=false,
-    before upper={\pardir TRT\textdir TRT},before title={\pardir TRT\textdir TRT}},
-    sc box/.style 2 args={sc base,colback=#1!7,colbacktitle=#1,coltitle=#2}}
-\else
+
   \tcbset{sc base/.style={enhanced,breakable,arc=0pt,boxrule=0pt,
     left=4.5mm,right=5.5mm,top=1.2mm,bottom=2.6mm,toptitle=2.4mm,bottomtitle=0.2mm,
     fonttitle=\sffamily\bfseries\fontsize{9.5}{12}\selectfont,
@@ -423,23 +372,17 @@
     before upper={\pardir TRT\textdir TRT},before title={\pardir TRT\textdir TRT}},
     sc box/.style={sc base,colback=StripeWhite!70,colbacktitle=StripeWhite!70,coltitle=#1,
       borderline east={2.6pt}{0pt}{#1}}}
-\fi
+
 \newcommand\sc@boxtitle[2]{\picto[#1]{#2}\hspace{0.5em}}
-\ifsc@A
-  \newtcolorbox{sc@findingbox}[1]{sc box={SignalGreen}{StripeWhite},title={\sc@boxtitle{StripeWhite}{signal}#1}}
-  \newtcolorbox{sc@cautionbox}[1]{sc box={SignalAmber}{Asphalt},colback=SignalAmber!11,title={\sc@boxtitle{Asphalt}{warning}#1}}
-  \newtcolorbox{sc@trapbox}[1]{sc box={SignalRed}{StripeWhite},title={\sc@boxtitle{StripeWhite}{pedestrian}#1}}
-  \newtcolorbox{sc@definitionbox}[1]{sc box={Asphalt}{StripeWhite},colback=StripeWhite,title={\sc@boxtitle{StripeWhite}{info}#1}}
-  \newtcolorbox{sc@projectbox}[1]{sc box={AsphaltLight}{StripeWhite},title={\sc@boxtitle{StripeWhite}{sensor}#1}}
-\else
+
   \newtcolorbox{sc@findingbox}[1]{sc box=SignalGreen,title={\sc@boxtitle{SignalGreen}{signal}#1}}
   \newtcolorbox{sc@cautionbox}[1]{sc box=SignalAmber!85!black,title={\sc@boxtitle{SignalAmber!85!black}{warning}#1}}
   \newtcolorbox{sc@trapbox}[1]{sc box=SignalRed,title={\sc@boxtitle{SignalRed}{pedestrian}#1}}
   \newtcolorbox{sc@definitionbox}[1]{sc box=Asphalt,title={\sc@boxtitle{Asphalt}{info}#1}}
   \newtcolorbox{sc@projectbox}[1]{sc box=AsphaltLight,title={\sc@boxtitle{AsphaltLight}{sensor}#1}}
-\fi
+
 %% scene box: chapter-opening street scene, max 4 lines (PRD §12)
-\ifsc@A
+
   \newtcolorbox{sc@scenebox}{enhanced,colback=AsphaltDeep,colupper=StripeWhite,boxrule=0pt,arc=1.6mm,
     left=5mm,right=18mm,top=5mm,bottom=5mm,fontupper=\sffamily\fontsize{10.5}{15}\selectfont,parbox=false,
     before skip=2pt,after skip=14pt,before upper={\pardir TRT\textdir TRT},
@@ -451,13 +394,7 @@
       \end{scope}
       \node[anchor=east,fill=HousingBlack,rounded corners=1.2mm,inner sep=1.6mm] at ($(frame.east)+(-4mm,0)$)
         {\fontsize{16}{16}\selectfont\picto[SignalRed]{pedestrian}};}}
-\else
-  \newtcolorbox{sc@scenebox}{enhanced,colback=StripeWhite,colupper=Asphalt,boxrule=0pt,arc=0pt,
-    left=5mm,right=15mm,top=3.6mm,bottom=3.6mm,fontupper=\sffamily\fontsize{10}{14.5}\selectfont,parbox=false,
-    before skip=2pt,after skip=14pt,before upper={\pardir TRT\textdir TRT},
-    borderline north={0.4pt}{0pt}{Hairline},borderline south={0.4pt}{0pt}{Hairline},
-    overlay={\node[anchor=east] at ($(frame.east)+(-4.5mm,0)$) {\fontsize{14}{14}\selectfont\picto[AsphaltLight]{pedestrian}};}}
-\fi
+
 \newcommand\sc@ltrpar{\par\pardir TLT\textdir TLT}
 \newenvironment{findingbox}[1][ממצא מרכזי]{\sc@ltrpar\begin{sc@findingbox}{#1}}{\end{sc@findingbox}\par}
 \newenvironment{cautionbox}[1][שימו לב: סוגיה בנתונים]{\sc@ltrpar\begin{sc@cautionbox}{#1}}{\end{sc@cautionbox}\par}
@@ -467,17 +404,12 @@
 \newenvironment{scenebox}{\sc@ltrpar\begin{sc@scenebox}}{\end{sc@scenebox}\par}
 
 %% ================================================================ PULL QUOTE
-\ifsc@A
+
   \newtcolorbox{sc@pullquote}{enhanced,blank,parbox=false,left=0mm,right=9mm,top=1mm,bottom=1mm,
     before skip=12pt,after skip=12pt,borderline east={2.4pt}{0pt}{SignalRed},
     fontupper=\sffamily\bfseries\color{Asphalt}\fontsize{15.5}{21}\selectfont,
     before upper={\pardir TRT\textdir TRT}}
-\else
-  \newtcolorbox{sc@pullquote}{enhanced,blank,parbox=false,left=10mm,right=10mm,top=3mm,bottom=3mm,
-    before skip=12pt,after skip=12pt,borderline north={0.5pt}{0pt}{Asphalt},borderline south={0.5pt}{0pt}{Asphalt},
-    fontupper=\sffamily\color{Asphalt}\fontsize{13.5}{19}\selectfont,halign upper=center,
-    before upper={\pardir TRT\textdir TRT}}
-\fi
+
 \newcommand\sc@quoteby{}
 \newenvironment{pullquote}[1][]{\def\sc@quoteby{#1}\sc@ltrpar\begin{sc@pullquote}}%
   {\ifx\sc@quoteby\@empty\else\par\vspace{3pt}{\normalfont\sffamily\fontsize{8.5}{11}\selectfont\color{AsphaltLight}— \sc@quoteby}\fi
@@ -486,7 +418,7 @@
 %% ================================================================ MARGIN NOTES (left / outer margin)
 \reversemarginpar
 \newcommand\sidenote[1]{\marginpar{\pardir TRT\textdir TRT\raggedright\hyphenpenalty=10000\sffamily\fontsize{7.8}{10.5}\selectfont\color{AsphaltLight}%
-  \ifsc@A\picto[SignalRed]{info}\hspace{0.3em}\else\rule[-0.2ex]{0.6pt}{1.8ex}\hspace{0.4em}\fi#1}}
+  \picto[SignalRed]{info}\hspace{0.3em}#1}}
 
 %% ================================================================ KEY-FIGURE (STAT) TILES
 %% \begin{statrow}[n] \stattile[colour]{number}{label} ... \end{statrow}
@@ -497,20 +429,13 @@
   \sc@ltr{\begin{tikzpicture}[x=1mm,y=1mm]
     \pgfmathsetmacro\sc@tw{\sc@tilew/1mm}
     \useasboundingbox (0,0) rectangle (\sc@tw,31);
-    \ifsc@A
+    
       \fill[Asphalt,rounded corners=1.6mm] (0,0) rectangle (\sc@tw,31);
       \fill[#1] (\sc@tw-4,31) rectangle ++(-12,-1.4);
       \node[anchor=north east,inner sep=0pt,text=#1,font=\sffamily\bfseries\fontsize{27}{27}\selectfont] at (\sc@tw-4,25.5) {#2};
       \node[rtl,anchor=north east,inner sep=0pt,text=StripeWhite!85,text width={(\sc@tw-8)*1mm},align=flush right,
         font=\sffamily\fontsize{8.5}{11}\selectfont] at (\sc@tw-4,12) {#3};
-    \else
-      \fill[white] (0,0) rectangle (\sc@tw,31);
-      \draw[Hairline,line width=0.5pt] (0,0) rectangle (\sc@tw,31);
-      \fill[#1] (\sc@tw,0) rectangle ++(-1.2,31);
-      \node[anchor=north east,inner sep=0pt,text=Asphalt,font=\sffamily\fontsize{25}{25}\selectfont] at (\sc@tw-5,25.5) {#2};
-      \node[rtl,anchor=north east,inner sep=0pt,text=AsphaltLight,text width={(\sc@tw-9)*1mm},align=flush right,
-        font=\sffamily\fontsize{8.5}{11}\selectfont] at (\sc@tw-5,12) {#3};
-    \fi
+    
   \end{tikzpicture}}\hspace{4mm plus 2pt minus 1pt}\ignorespaces}
 
 %% ================================================================ AUTHOR PHOTO (PRD §5: own photographs only)
@@ -520,12 +445,12 @@
 \newcommand\authorphoto[4][62mm]{%
   \begin{figure}[ht]\centering
     \sc@ltrcenter{\IfFileExists{#2}{%
-      \ifsc@A\tikz{\node[inner sep=0pt,draw=Asphalt,line width=0.6pt]
+      \tikz{\node[inner sep=0pt,draw=Asphalt,line width=0.6pt]
         {\includegraphics[width=\linewidth,height=#1,keepaspectratio]{#2}};}%
-      \else\tikz{\node[inner sep=0pt]{\includegraphics[width=\linewidth,height=#1,keepaspectratio]{#2}};}\fi}%
+      }%
      {\begin{tikzpicture}[x=1mm,y=1mm]
         \pgfmathsetmacro\sc@ph{#1/1mm}\pgfmathsetmacro\sc@pw{\linewidth/1mm}
-        \fill[\ifsc@A Concrete!55\else StripeWhite\fi] (0,0) rectangle (\sc@pw,\sc@ph);
+        \fill[ Concrete!55] (0,0) rectangle (\sc@pw,\sc@ph);
         \draw[AsphaltLight,line width=0.5pt,dash pattern=on 3pt off 2pt] (1.5,1.5) rectangle (\sc@pw-1.5,\sc@ph-1.5);
         \node at (\sc@pw/2,\sc@ph/2+7) {\fontsize{30}{30}\selectfont\picto[AsphaltLight]{camera}};
         \node[rtl,text=AsphaltLight,font=\sffamily\fontsize{9.5}{12}\selectfont] at (\sc@pw/2,\sc@ph/2-6) {מקום לצילום של המחברים};
@@ -543,17 +468,12 @@
 %% ================================================================ TABLES
 %% Column 1 is on the right (babel layout=tabular). Header row: \headrow \thead{..} & \thead{..} \\
 \renewcommand\arraystretch{1.32}
-\ifsc@A
-  \setlength\heavyrulewidth{0pt}\setlength\lightrulewidth{0.4pt}\arrayrulecolor{Hairline}
-  \newcommand\thead[1]{{\sffamily\bfseries\color{StripeWhite}#1}}
-  \newcommand\headrow{\rowcolor{Asphalt}}
-  \AtBeginEnvironment{tabular}{\small\rowcolors{2}{white}{StripeWhite}}
-\else
+
   \setlength\heavyrulewidth{0.9pt}\setlength\lightrulewidth{0.4pt}\arrayrulecolor{Asphalt}
   \newcommand\thead[1]{{\sffamily\bfseries\color{Asphalt}#1}}
   \newcommand\headrow{}
   \AtBeginEnvironment{tabular}{\small}
-\fi
+
 \AtBeginEnvironment{tabularx}{\small}
 
 %% ---------------------------------------------------------------- floats (DS-16)
@@ -637,7 +557,7 @@
   \begin{titlepage}\thispagestyle{empty}
   \noindent\sc@ltr{\begin{tikzpicture}[remember picture,overlay,x=1mm,y=1mm]
     \begin{scope}[shift={(current page.south west)}]
-    \ifsc@A
+    
       %% ---------------- A: bold editorial
       \begin{scope}[shift={(0,112)}]\sc@aerial{185}\end{scope}
       \fill[AsphaltDeep] (0,0) rectangle (210,112);
@@ -664,41 +584,7 @@
       \node[rtl,anchor=north east,inner sep=0pt,text=StripeWhite!60,text width=58mm,align=flush right,
           font=\sffamily\fontsize{8}{11}\selectfont] at (190,14.5) {\sc@course};
       \node[rtl,anchor=north east,inner sep=0pt,text=StripeWhite!60,font=\sffamily\fontsize{8}{11}\selectfont] at (62,14.5) {\sc@docdate};
-    \else
-      %% ---------------- B: clean engineering report
-      \fill[white] (0,0) rectangle (210,297);
-      \begin{scope}[shift={(0,150)}]\sc@aerial{147}\end{scope}
-      \fill[AsphaltDeep] (0,74) rectangle (210,150);
-      \fill[SignalAmber] (0,150) rectangle (210,151.2);
-      \node[rtl,anchor=north east,fill=white,draw=SignalRed,line width=1.3pt,rounded corners=1.4mm,
-        inner xsep=4mm,inner ysep=1.8mm,text=Asphalt,font=\sffamily\bfseries\fontsize{10}{12}\selectfont] (plate) at (185,141)
-        {דוח מכין};
-      \draw[white,line width=0.5pt,rounded corners=2.2mm] ($(plate.south west)+(-0.9,-0.9)$) rectangle ($(plate.north east)+(0.9,0.9)$);
-      \node[anchor=north west,inner sep=0pt,text=SignalAmber,font=\fontsize{7}{9}\selectfont] at (25,139)
-        {\enlabel{\sc@docnumber{} · Rev \sc@revision}};
-      \node[rtl,anchor=north east,inner sep=0pt,text=StripeWhite,font=\sffamily\bfseries\fontsize{40}{46}\selectfont] at (185,127)
-        {\sc@title};
-      \node[rtl,anchor=north east,inner sep=0pt,text=StripeWhite!80,text width=160mm,align=flush right,
-        font=\sffamily\fontsize{13}{17}\selectfont] at (185,106) {\sc@subtitle};
-      \node[anchor=north east,inner sep=0pt,text=StripeWhite!55,font=\sffamily\fontsize{9.5}{12}\selectfont] at (185,92)
-        {\en{\sc@entitle}};
-      % document-control block
-      \node[anchor=north east,inner sep=0pt,text=Asphalt,font=\fontsize{7}{9}\selectfont] at (185,62)
-        {\enlabel{Document control}};
-      \fill[Asphalt] (185,58.4) rectangle (95,58.0);
-      \foreach \i/\lab/\val in {0/מספר מסמך/\en{\sc@docnumber}, 1/גרסה/\num{\sc@revision}~(\sc@status),
-          2/תאריך/\sc@docdate, 3/קבוצה/\sc@authors, 4/מרצה/\sc@lecturer}{
-        \node[rtl,anchor=east,inner sep=0pt,text=AsphaltLight,font=\sffamily\fontsize{8}{10}\selectfont] at (185,{54-\i*6.6}) {\lab};
-        \node[rtl,anchor=east,inner sep=0pt,text=Asphalt,font=\sffamily\bfseries\fontsize{8.5}{10}\selectfont] at (152,{54-\i*6.6}) {\val};
-        \fill[Hairline] (185,{50.6-\i*6.6}) rectangle (95,{50.9-\i*6.6});}
-      \node[rtl,anchor=north west,inner sep=0pt,text=Asphalt,text width=58mm,align=flush right,
-        font=\sffamily\bfseries\fontsize{9}{12}\selectfont] at (25,62) {\sc@institution};
-      \node[rtl,anchor=north west,inner sep=0pt,text=AsphaltLight,text width=58mm,align=flush right,
-        font=\sffamily\fontsize{8}{11}\selectfont] at (25,56) {\sc@course};
-      \node[anchor=south west,inner sep=0pt] at (25,17) {\fontsize{22}{22}\selectfont\picto[Asphalt]{signal}};
-      \node[anchor=south west,inner sep=0pt,text=AsphaltLight,font=\fontsize{6.5}{8}\selectfont] at (33,17.5) {\enlabel{\sc@group}};
-      \fill[Asphalt] (0,0) rectangle (210,3);
-    \fi
+    
     \end{scope}
   \end{tikzpicture}}
   \end{titlepage}}
