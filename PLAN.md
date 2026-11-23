@@ -1,7 +1,7 @@
 # PLAN – How the book is produced
 
 Companion to [`PRD.md`](PRD.md) (what to build) and [`TODO.md`](TODO.md) (ordered checklist).
-**Version:** 1.1 (2026-11-19) · **Target `.cls` version:** `smartcross` v1.0 (tracked by `qa-cls-version`) · v1.1 adds §10 Writing style, §11 Parallel-agent run, and online source verification
+**Version:** 1.2 (2026-11-23) · **Target `.cls` version:** `smartcross` v1.0 (tracked by `qa-cls-version`) · **Toolchain:** TeX Live 2026 (MacTeX), LuaHBTeX 1.24.0, biber 2.21 · v1.1 adds §10 Writing style, §11 Parallel-agent run, online source verification · v1.2 switches MiKTeX → TeX Live 2026 and splits P1 into P1a/P1b
 
 ---
 
@@ -26,7 +26,8 @@ setup → skeleton by page map → sources → chapter writing → graphics and 
 | Phase | Name | Main agents | Exit gate |
 |---|---|---|---|
 | P0 | Planning (PRD / PLAN / TODO) | Leader + committee | Documents committed |
-| P1 | Infrastructure: toolchain, fonts, Python env, `.cls` v0.1, `main.tex` skeleton, build script | Leader, TikZ agent (for `.cls` graphics) | Empty skeleton compiles; `qa-infra` + `qa-typeset` clean |
+| P1a | Toolchain and environment: TeX Live 2026, bundled fonts + fallbacks, Python `.venv` | Leader | Font + BiDi smoke test compiles cleanly ✅ |
+| P1b | Project skeleton: `.cls` v0.1, `main.tex`, `build.sh`, `INCIDENTS.md`, `data/`, skills mirror | Leader, TikZ agent (for `.cls` graphics) | Empty skeleton compiles; `qa-infra` + `qa-typeset` clean |
 | P2 | QA skills written and tested on the skeleton | QA lead | Every skill runs and produces a report in the standard format |
 | P3 | Sources and data: `.bib`, verified DOIs, data transcription of Tables 1–2, recomputation script | Researcher, Python agent | AC-09 (partial), AC-14 |
 | P4 | Design system in `.cls` v1.0: colours, fonts, banner/footer, chapter openers, boxes, rules, cover | TikZ agent, Leader | `qa-cls-version`, `qa-BiDi`, `qa-img` clean on a design-sample page |
@@ -62,8 +63,8 @@ The **Leader (orchestrator)** is the main Claude Code session.
 | `qa-code` | Python scripts run cleanly from a fresh env, outputs match committed figures, numbers in text match script output; code boxes LTR | Stale figure, mismatched number |
 | `qa-img` | Every figure exists, is vector, has a Hebrew caption and a reference, readable labels, palette consistency, greyscale legibility, no external images | Overlapping labels, red/green-only encoding |
 | `qa-typeset` | Log: errors, warnings, overfull/underfull boxes, undefined references, widows/orphans, boxes split badly | `Overfull \hbox`, `??` in the text |
-| `qa-infra` | Folder structure, required files, paths, page counts (AC-01/02), clean-clone build, `.gitignore` protects references | Missing file, broken path |
-| `qa-cls-version` | `.cls` version matches PLAN; no `\newcommand` / colour / font definitions in chapter files | Formatting defined outside the `.cls` |
+| `qa-infra` | **Toolchain:** `lualatex --version` reports *LuaHBTeX … (TeX Live 2026)* and resolves to `/Library/TeX/texbin` (not a leftover MiKTeX link in `~/bin`); `biber --version` = 2.21; biber's `.bcf` format matches. **Fonts:** all `fonts/*/*.otf` + `OFL.txt` present. Folder structure, required files, paths, page counts (AC-01/02), clean-clone build, `.gitignore` protects references | MiKTeX engine picked up from `PATH`, missing file, broken path |
+| `qa-cls-version` | `.cls` version matches PLAN; the `.cls` declares the toolchain it was tested on (TeX Live 2026, LuaHBTeX ≥ 1.24, babel ≥ v26.4) and stops with a clear error when the engine is older or isn't LuaTeX; the Hebrew font fallbacks are defined; no `\newcommand` / colour / font definitions in chapter files | Formatting defined outside the `.cls`, compiling with an old engine, missing fallback |
 
 **Standard report format (every skill):**
 `[skill] [severity: blocker/major/minor] [page N] [file:line] "exact text" → rule broken (PRD/AC id)`.
@@ -137,9 +138,12 @@ the source page, and `data/*.csv` stores the page reference for each value.
 
 ## 8. Build
 
+**Toolchain:** TeX Live 2026 via MacTeX (`/Library/TeX/texbin`): LuaHBTeX 1.24.0, biber 2.21. MiKTeX isn't used: the macOS build is frozen at 22.1 and can't compile current Hebrew babel. `scripts/build.sh` puts `/Library/TeX/texbin` first on `PATH` and aborts if `lualatex --version` doesn't report TeX Live 2026.
+
 ```bash
 # from the repository root (wrapped by scripts/build.sh)
-python3 scripts/make_figures.py                       # regenerate all Python graphs
+export PATH=/Library/TeX/texbin:$PATH
+.venv/bin/python scripts/make_figures.py             # regenerate all Python graphs
 lualatex -output-directory=build main.tex             # pass 1
 biber --input-directory build --output-directory build main   # bibliography
 lualatex -output-directory=build main.tex             # pass 2

@@ -283,7 +283,8 @@ regression. The coefficient is meaningless, and H2 cannot be tested from this mo
 - Hebrew RTL book; code, commands, file names and commit messages in English (`CLAUDE.md`).
 - No text copied from sources: always paraphrase and cite (`CLAUDE.md`).
 - Copyrighted references stay local (`references/README.md`, `.gitignore`).
-- Toolchain: LuaLaTeX (LuaHBTeX) + biber, MiKTeX. The brief targets MiKTeX 25.x and the local machine has **MiKTeX 22.1**, so updating is a TODO item and a risk.
+- Toolchain: LuaLaTeX (LuaHBTeX) + biber on **TeX Live 2026 (MacTeX)**: LuaHBTeX 1.24.0, biber 2.21. The brief names MiKTeX, but MiKTeX for macOS is frozen at 22.1 (LuaHBTeX 1.14), which can't compile current Hebrew babel. The compile sequence (lualatex → biber → lualatex ×2) is unchanged (decision of Step 08).
+- The Noto Hebrew fonts contain only Hebrew glyphs. Digits, Latin letters and punctuation in Hebrew text come from a luaotfload **fallback** to Noto Serif/Sans, defined in the `.cls` (INC-001).
 - Every prompt is logged verbatim in `prompts/PROMPTS_LOG.md`.
 - **Source verification (Researcher rule):** every bibliography entry must be **verified online**. The DOI or URL is actually opened, and the title, authors, year, venue and pages are checked against the landing page. The result is recorded in `references/VERIFICATION.md`. **Any source that can't be verified is dropped, never invented or "reconstructed".** If dropping sources takes the count below AC-09, the Researcher searches again rather than lowering the bar.
 - **INC-000 is kept as a showcase:** the README presents it as a real red-team example (wrong claim in the brief → detected against the rendered page → corrected → detection rule added).

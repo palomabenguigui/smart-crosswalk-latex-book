@@ -10,18 +10,21 @@ Mirrors the phases in [`PLAN.md`](PLAN.md). Tick items only when their exit gate
 - [x] User reviews and approves PRD (incl. INC-000 correction) (Step 06)
 - [x] PRD/PLAN v1.1: Writing style, AC-19, AC-20, online source verification (Step 06)
 
-## P1 – Infrastructure
+## P1a – Toolchain and environment ✅ DONE (Steps 07–08)
 - [x] `.gitignore`: `!references/VERIFICATION.md` exception; `references/VERIFICATION.md` created and tracked (Step 07)
-- [x] MiKTeX packages updated (`mpm --update`, 10 packages); 22.1 is the newest MiKTeX released for macOS (Step 07)
-- [ ] **BLOCKED:** MiKTeX 22.1 engine (LuaHBTeX 1.14) cannot compile current babel (`\matheqdirmode` undefined). Needs a newer engine (user decision, see Step 07)
-- [ ] Record toolchain versions in `README.md`
+- [x] MiKTeX tried: packages updated, but MiKTeX for macOS is frozen at 22.1 (LuaHBTeX 1.14) and can't compile current babel (`\matheqdirmode` undefined) → **abandoned** (Step 07)
+- [x] Toolchain switched to **TeX Live 2026 (MacTeX .pkg)**: LuaHBTeX 1.24.0, biber 2.21, babel v26.4, LaTeX2e 2025-11-01 (Step 08)
+- [x] Toolchain versions recorded in `README.md` (Step 08)
 - [x] Noto Serif Hebrew 2.004, Noto Sans Hebrew 3.001, Noto Serif 2.015, Noto Sans 2.015, Noto Sans Mono 2.014 in `fonts/` with OFL licence files (Step 07)
-- [ ] Font smoke test `scripts/font-test.tex` compiles (blocked by the engine issue above)
+- [x] Font + BiDi smoke test `scripts/font-test.tex` compiles cleanly: 0 errors, 0 warnings, 0 missing characters, 0 overfull boxes (Step 08)
+- [x] Hebrew-font **fallback** (Noto Hebrew has no digits, Latin or punctuation) + `\setmathrm` → pattern to copy into `smartcross.cls` (Step 08)
 - [x] Python env `.venv` + `requirements.txt` (matplotlib, numpy, python-bidi) (Step 07)
-- [ ] Add `data/`, `fonts/` folders and `INCIDENTS.md` (with INC-000)
-- [ ] `smartcross.cls` v0.1: babel Hebrew main + English, fontspec, geometry, biblatex `style=ieee`
+
+## P1b – Project skeleton (next)
+- [ ] Add `data/` folder and `INCIDENTS.md` (with INC-000 and INC-001: missing glyphs in the Hebrew fonts, caught by the smoke test)
+- [ ] `smartcross.cls` v0.1: babel Hebrew main + English, bundled fonts **with fallbacks** (from `scripts/font-test.tex`), geometry, biblatex `style=ieee`
 - [ ] `main.tex` skeleton: front matter + empty `\input` for chapters 1–10
-- [ ] `scripts/build.sh` implementing PLAN §8; first successful build of the skeleton
+- [ ] `scripts/build.sh` implementing PLAN §8 (puts `/Library/TeX/texbin` first on `PATH`, checks TeX Live 2026); first successful build of the skeleton
 - [ ] Mirror `skills/` into `.claude/skills/` (symlink) so Claude Code can load them
 
 ## P2 – QA skills (before any content)

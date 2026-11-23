@@ -34,7 +34,11 @@ _TBD – the AI agents, their roles and how they collaborate._
 ```
 
 ## How to Build
+
+**Toolchain.** The assignment brief names MiKTeX, but MiKTeX for macOS is frozen at version 22.1. Its LuaHBTeX 1.14 engine can't compile current Hebrew `babel`. The project therefore uses **TeX Live 2026 (MacTeX)** with the same LuaLaTeX + biber toolchain: LuaHBTeX 1.24.0, biber 2.21, babel v26.4, Python 3.13 (`.venv`, see `requirements.txt`) and bundled OFL Noto fonts in `fonts/`.
+
 ```bash
+export PATH=/Library/TeX/texbin:$PATH   # make sure TeX Live, not an old MiKTeX, is used
 lualatex main.tex
 biber main
 lualatex main.tex

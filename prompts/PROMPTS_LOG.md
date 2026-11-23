@@ -118,3 +118,17 @@ Then set up the environment on macOS:
 ```
 
 ---
+
+## Step 08 – Switch toolchain to TeX Live 2026 (MacTeX)
+**Date/time:** 2026-11-23 21:46
+
+```text
+MacTeX is installed (LuaHBTeX 1.24.0, TeX Live 2026, biber 2.21) in /Library/TeX/texbin — add it to PATH for this session if needed. Homebrew's cask failed on macOS 14, so it was installed directly from the downloaded .pkg; MiKTeX is no longer used.
+
+1. Re-run the font + BiDi smoke test and confirm it compiles cleanly.
+2. Update README with one short paragraph: MiKTeX for macOS is frozen at 22.1 and cannot compile current Hebrew babel, so the project uses TeX Live 2026 (MacTeX) with the same LuaLaTeX + biber toolchain.
+3. Adapt PLAN.md, TODO.md and the qa-cls-version / qa-infra checks to TeX Live 2026 instead of MiKTeX 25.x.
+4. Mark P1 done in TODO.md, report versions, log this prompt, commit and push.
+```
+
+---

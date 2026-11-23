@@ -7,6 +7,14 @@
 \babelprovide[import,main]{hebrew}
 
 \newcommand\fontopts[1]{Path=fonts/#1/, Extension=.otf}
+% Noto Hebrew fonts contain ONLY Hebrew glyphs (no digits, Latin, punctuation).
+% Fallback chains supply the missing characters from the matching Latin family.
+\directlua{
+  luaotfload.add_fallback("hebrm",   {"[fonts/NotoSerif/NotoSerif-Regular.otf]:mode=harf;"})
+  luaotfload.add_fallback("hebrmbf", {"[fonts/NotoSerif/NotoSerif-Bold.otf]:mode=harf;"})
+  luaotfload.add_fallback("hebsf",   {"[fonts/NotoSans/NotoSans-Regular.otf]:mode=harf;"})
+  luaotfload.add_fallback("hebsfbf", {"[fonts/NotoSans/NotoSans-Bold.otf]:mode=harf;"})
+}
 % Latin
 \babelfont{rm}[\fontopts{NotoSerif}, UprightFont=*-Regular, BoldFont=*-Bold,
   ItalicFont=*-Italic, BoldItalicFont=*-BoldItalic]{NotoSerif}
@@ -14,8 +22,12 @@
   ItalicFont=*-Italic, BoldItalicFont=*-BoldItalic]{NotoSans}
 \babelfont{tt}[\fontopts{NotoSansMono}, UprightFont=*-Regular, BoldFont=*-Bold]{NotoSansMono}
 % Hebrew
-\babelfont[hebrew]{rm}[\fontopts{NotoSerifHebrew}, UprightFont=*-Regular, BoldFont=*-Bold]{NotoSerifHebrew}
-\babelfont[hebrew]{sf}[\fontopts{NotoSansHebrew}, UprightFont=*-Regular, BoldFont=*-Bold]{NotoSansHebrew}
+\babelfont[hebrew]{rm}[\fontopts{NotoSerifHebrew}, UprightFont=*-Regular, BoldFont=*-Bold,
+  UprightFeatures={RawFeature={fallback=hebrm}}, BoldFeatures={RawFeature={fallback=hebrmbf}}]{NotoSerifHebrew}
+\babelfont[hebrew]{sf}[\fontopts{NotoSansHebrew}, UprightFont=*-Regular, BoldFont=*-Bold,
+  UprightFeatures={RawFeature={fallback=hebsf}}, BoldFeatures={RawFeature={fallback=hebsfbf}}]{NotoSansHebrew}
+% Math letters (\mathrm) from the Latin serif, not from the Hebrew main font
+\setmathrm{NotoSerif}[\fontopts{NotoSerif}, UprightFont=*-Regular, BoldFont=*-Bold, ItalicFont=*-Italic]
 
 \begin{document}
 \section{בדיקת גופנים}
@@ -25,8 +37,11 @@
 {\sffamily זוהי שורה בגופן נוטו סאנס עברי, \textbf{ובהדגשה}.}
 
 \begin{otherlanguage}{english}
-English paragraph in Noto Serif with \textit{italic}, \textbf{bold} and \textbf{\textit{bold italic}};
-{\sffamily Noto Sans with \textit{italic}}; \texttt{Noto Sans Mono: lualatex main.tex}.
+Noto Serif: \textit{italic}, \textbf{bold}, \textbf{\textit{bold italic}};
+{\sffamily Noto Sans with \textit{italic}}.
+
+\texttt{Noto Sans Mono: lualatex main.tex}
+
 Math: $\mathrm{OR} = e^{b}$, $p < 0.001$.
 \end{otherlanguage}
 \end{document}
