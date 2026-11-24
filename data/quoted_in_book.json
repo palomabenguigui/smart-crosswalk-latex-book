@@ -15,6 +15,7 @@
     {"shown": "2.95",  "source": "table1.age_chi2_variants.phase_3x3.0", "decimals": 2, "chapter": "ch04"},
     {"shown": "0.96",  "source": "table1.age_chi2_variants.crossed_vs_not.0", "decimals": 2, "chapter": "ch04"},
     {"shown": "0.55",  "source": "table1.age_chi2_variants.red_arrivals_only.0", "decimals": 2, "chapter": "ch04"},
-    {"shown": "0.82",  "source": "table1.age_chi2_variants.expected_60plus_crossers", "decimals": 2, "chapter": "ch04"}
+    {"shown": "0.82",  "source": "table1.age_chi2_variants.expected_60plus_crossers", "decimals": 2, "chapter": "ch04"},
+    {"shown": "0.63",  "source": "table2.joining.exp_b_recomputed", "decimals": 2, "chapter": "ch04"}
   ]
 }

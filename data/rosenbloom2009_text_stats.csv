@@ -1,0 +1,35 @@
+# source: rosenbloom2009 (Transportation Research Part F 12(5), 389-394) - statistics printed in the TEXT (abstract, sections 1-4), INC-003
+# every value_as_printed was checked against the RENDERED page image (render scale 2.5) on 2026-11-24 - INC-000 rule; tables 1-2 are in rosenbloom2009_table1/2.csv
+# recomputed values come from Table 1/Table 2 as transcribed and from data/recomputed.json; values marked * were computed by the Researcher for this inventory (arithmetic shown in note)
+# reproducible: yes = matches after rounding; no = does not match (candidate data issue); not-checkable = external figure or needs raw data
+statistic,value_as_printed,page,reproducible,recomputed_value,note
+N observed pedestrians,1392,389;390;391,yes,1392,"abstract, Methods and Results; equals Table 1 total"
+N female (share),842 (60.5%),389;390,yes,60.49%,842/1392; matches Table 1
+N male (share),550 (39.5%),389;390,yes,39.51%,550/1392; matches Table 1
+Age 20-40 (share),1314 (94.3%),390,no,94.40%,"1314/1392 = 94.40%; Table 1 prints 94.4% (already PRD D5)"
+Age 40-60 (share),63 (4.5%),390,yes,4.53%,63/1392
+Age 60+ (share),15 (1.1%),390,yes,1.08%,15/1392
+Observation window,07:30-08:30,389;390,not-checkable,,design fact
+Sessions,eight 1 h sessions over 6 weeks,390,not-checkable,,design fact; implies 8 h of observation (used in the pedestrian-volume check)
+Crosswalk width,7 m (two-lane one-way street),390,not-checkable,,design fact
+Red-light phase,52-53 s (M = 52.7; SD = 0.37),390,not-checkable,*0.46,"mean lies inside the range; if every red lasted exactly 52 or 53 s, a mean of 52.7 forces SD = sqrt(0.7*0.3) = 0.46 (0.49 with n-1, n = 8), not 0.37 - plausible only if durations were timed to fractions of a second; minor, not a D-issue"
+Green-light phase,56-57 s (M = 56.6; SD = 0.48),390,yes,*0.49,"mean inside range; two-valued SD = sqrt(0.6*0.4) = 0.49 - consistent"
+Cycle length (derived),not printed,390,not-checkable,*109.3 s,"52.7 + 56.6; about 32.9 cycles per hour"
+Traffic volume,456 vehicles per hour,390,no,*514 veh/h,"inconsistent with the next row: 15.6 vehicles per red x 32.9 cycles/h = 514 veh/h > 456; equivalently 456/h gives 13.8 per red - candidate D8"
+Vehicles per crosswalk-red,M = 15.6 (SD 4.32); min 0; max 53,390,no,*13.8,"see row above; max 53 lies (53-15.6)/4.32 = 8.7 SD above the mean, and 53 vehicles in 52.7 s on two lanes is about 1810 veh/h/lane (near saturation flow) - possible outlier or typo; candidate D8"
+Pedestrian volume,166 per hour,390,no,*174 per hour,"1392 valid observations / 8 one-hour sessions = 174 per hour; 166 x 8 = 1328 - candidate D9 (unless volume was counted separately or sessions differed in length; not stated)"
+Arrived on red (share),563 (40.4%),391,yes,40.45%,"563/1392; note: red is 48.2% of the cycle (52.7/109.3), so uniform arrivals would give ~671 red arrivals (z = -5.8) - arrivals were not uniform or 'arrived on red' was defined differently; candidate D10 (low priority, interpretive)"
+Crossed on red (share of all),76 (5.5%),391,yes,5.46%,76/1392
+Crossed on red (share of red arrivals),13.5%,391,yes,13.50%,76/563 (Discussion)
+Gender chi-square,"chi2(1, N = 563) = 17.17, p < 0.001",391,yes,"17.17; p = 3.4e-5",recomputed from Table 1 red arrivals (F 28/330; M 48/233) - recomputed.json chi2_gender_recomputed
+Age chi-square,"chi2(2, N = 1392) = 1.02, p = NS",391,no,"2.95 (df 4); 0.96 (df 2); 0.55 (df 2, N 563)",PRD D7 - no variant reproduces 1.02 with df 2 and N 1392 (recomputed.json age_chi2_variants)
+Hosmer-Lemeshow,p = 0.65,391,not-checkable,,needs individual-level data and the model intercept (not reported)
+Table 2 significance marks,* p < 0.001 for gender / waiting / joining,391,yes,"p = 3.4e-5 / 1.6e-5 / 5.3e-4",from the printed Wald values on 1 df; all < 0.001
+Traffic volume Wald (no mark),6.06 (not starred),391,no,p = 0.014,"not starred is consistent with the p < 0.001 threshold, but p = 0.014 < 0.05 contradicts the text 'did not significantly predict' - PRD D2"
+Gender x group interaction,"'no interaction was found' (no statistic)",392,not-checkable,,claim made without a test statistic; the interaction term is not in Table 2 - note for ch. 4 critique
+Israeli red-crossing rate,about 15% (CBS 2005),391,not-checkable,,external statistic; used by the author to argue representativeness of 13.5%
+Pedestrian share of collisions,about 15%,389,not-checkable,,external (no source given in the sentence)
+Pedestrian mortality in collisions,as high as 33%,389,not-checkable,,external (no source given in the sentence)
+Pedestrians killed in Israel 2006,139 (33% of road fatalities),389,not-checkable,*~421 total deaths implied,external (National Authority of Road Safety 2006); 139/0.33
+Fatal pedestrian collisions near crosswalks,about 53%,389,not-checkable,,external (Israel CBS 2003)
+US pedestrian fatalities at night,62%,393,not-checkable,,external (FHWA 2004); peaks 5-11 p.m. and midnight-2 a.m.
