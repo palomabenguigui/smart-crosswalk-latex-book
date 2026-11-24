@@ -1,4 +1,5 @@
-% T1 – the smart crossing in plan view: waiting zone, curb sensing zone, countdown heads, controller, awareness display.
+% T1 – the smart crossing in plan view: waiting zone, curb sensing zone, signal heads with clearance-only countdown,
+% adaptive-red controller, awareness display (final concept, PRD §1 Step 15).
 % LTR coordinates; every Hebrew node uses the 'rtl' style (DS-01). Colours/pictograms from smartcross.cls only.
 \begin{tikzpicture}[x=1mm,y=1mm,
   lab/.style={rtl,font=\sffamily\fontsize{7.5}{9.5}\selectfont,text=Asphalt,align=flush right,inner sep=1pt},
@@ -22,7 +23,7 @@
   % countdown signal heads (both curbs)
   \foreach \x/\y in {86/57,48/5}{
     \fill[HousingBlack,rounded corners=.8] (\x-3,\y-2.5) rectangle (\x+3,\y+5.5);
-    \node[inner sep=0] at (\x,\y+3) {\fontsize{6}{6}\selectfont\picto[SignalRed]{pedestrian}};
+    \node[inner sep=0] at (\x,\y+3) {\fontsize{6}{6}\selectfont\picto[SignalGreen]{walker}};
     \node[inner sep=0,text=SignalAmber,font=\sffamily\bfseries\fontsize{5.5}{5.5}\selectfont] at (\x,\y-0.6) {12};}
   % awareness display (near curb) and controller cabinet
   \fill[Asphalt,rounded corners=.8] (88,3) rectangle (104,9); \node[inner sep=0,text=StripeWhite,font=\sffamily\bfseries\fontsize{5}{5}\selectfont] at (96,6) {\num{4}~\picto[StripeWhite]{pedestrian}};
@@ -35,9 +36,9 @@
   % callouts (Hebrew, RTL)
   \draw[lead] (67,62) -- (67,68.5); \node[lab,anchor=south] at (67,68.8) {אזור המתנה};
   \draw[lead] (56,52.8) -- (32,52.8) -- (32,68.5); \node[lab,anchor=south] at (32,68.8) {אזור חישה (מונה ממתינים)};
-  \draw[lead] (86,63) -- (86,64.5) -- (106,64.5) -- (106,68.5); \node[lab,anchor=south] at (106,68.8) {ראש רמזור עם ספירה לאחור};
+  \draw[lead] (86,63) -- (86,64.5) -- (106,64.5) -- (106,68.5); \node[lab,anchor=south] at (106,68.8) {ספירה לאחור בזמן הפינוי בלבד};
   \draw[lead] (67,13.5) -- (67,-4); \node[lab,anchor=north] at (67,-4) {מעבר חצייה};
   \draw[lead] (96,3) -- (96,-4); \node[lab,anchor=north] at (96,-4) {שלט מודעות};
-  \draw[lead] (119,2) -- (119,-4); \node[lab,anchor=north] at (121,-4) {בקר הרמזור};
+  \draw[lead] (119,2) -- (119,-4); \node[lab,anchor=north] at (121,-4) {בקר: אדום אדפטיבי};
   \draw[link] (4,-7.5) -- ++(7,0); \node[lab,anchor=west] at (12,-7.5) {קישור נתונים};
 \end{tikzpicture}

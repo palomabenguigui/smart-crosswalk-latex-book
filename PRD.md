@@ -3,7 +3,7 @@
 **Project:** Crossing at a Red Light – Smart Pedestrian Crossing: A Preparatory Report
 **Hebrew title:** חוצים באדום – מעבר חצייה חכם: דוח מכין
 **Group:** `shirloma` · **Course:** Generative AI: LLMs, Agents and Multi-Agent Systems – Dr. Yoram Segal, Bar-Ilan University
-**Version:** 1.3 (2026-11-24) · **Status:** **approved by the user** (incl. the INC-000 correction in §9) · v1.1 adds §12 Writing style, AC-19, AC-20 and the Researcher verification rule (§11) · no book content written yet
+**Version:** 1.4 (2026-11-24) · **Status:** **approved by the user** (incl. the INC-000 correction in §9) · v1.4 (Step 15): final concept = adaptive red + clearance-only countdown + campaign (§1 pivot) · v1.1 adds §12 Writing style, AC-19, AC-20 and the Researcher verification rule (§11) · no book content written yet
 
 Sources this PRD is built on (all in `references/`, kept locally): the Assignment 02 brief, the booklet *From Problem to PDF*
 (Part A: report content, Part B: production), the L04 multi-agent guide, and the flagship paper (Rosenbloom, 2009).
@@ -13,17 +13,29 @@ Sources this PRD is built on (all in `references/`, kept locally): the Assignmen
 ## 1. Goal
 
 Produce a **professional Hebrew (RTL) PDF book**, compiled with **LuaLaTeX + biber** and a **custom `.cls`**, written as a
-*preparatory report* (דוח מכין) for a technology-management project: a **Smart Pedestrian Crossing** that combines:
+*preparatory report* (דוח מכין) for a technology-management project: a **Smart Pedestrian Crossing** that combines
+(**final concept, Step 15**):
 
-1. **A countdown pedestrian signal** that shows the time left on red.
-2. **Curb-side sensing** of pedestrians waiting at the curb (count and waiting time).
-3. **A "social control" awareness campaign** that presents waiting at the curb as the norm.
+1. **Adaptive red (core):** curb-side sensing detects pedestrians waiting at the curb – their number and waiting time, with
+   priority for **a lone pedestrian** – and the controller **shortens the pedestrian red phase within safe limits**
+   (vehicle minimum green, cycle bounds, coordination constraints; exact limits are requirements in ch. 3).
+2. **Standard-compliant countdown:** a pedestrian countdown **only during the clearance interval** (flashing DON'T WALK / flashing
+   green), as required by the US MUTCD 11th ed. §4I.04 [`fhwa2025mutcd`]. **No countdown during red.**
+3. **Social-control campaign:** an awareness campaign (on-site display + media) that presents waiting at the curb as the norm.
 
-**Motivation, from the flagship paper:**
-- Pedestrians alone at the curb cross on red more than pedestrians standing with others.
+**Motivation, from the flagship paper [`rosenbloom2009`]:**
+- Pedestrians **alone** at the curb cross on red more than pedestrians standing with others; each additional person waiting lowers the odds.
 - Men cross on red more than women.
-- The paper itself recommends signals that show the remaining time (§4.2) and campaigns based on the positive value of social control (§4.5).
+- The paper recommends **shortening the red-light duration at certain times of the day** and campaigns based on the positive value of social control (§4.5); it also suggests signals that show the remaining time (§4.2).
 - Its stated limitations motivate the sensing component: dichotomous data, no waiting-time measurement, a single site, and a call for video or technology-based timing (§4.4).
+
+**Evidence-driven design pivot (Step 15 – must be presented explicitly in the book, ch. 1, 4, 6, 7, 9):**
+the original concept (PRD v1.0–1.3) was a countdown showing the **time left on red**. The round-1 research showed that
+(a) the MUTCD allows pedestrian countdowns only during the clearance interval [`fhwa2025mutcd`], and (b) a countdown during red
+**increased early starts** among children [`fu2016`]; evidence on red-phase countdowns is mixed. The project therefore moved the
+countdown to the clearance interval and uses sensing to act on the cause the flagship paper identified – the *lone, waiting*
+pedestrian – by **shortening red** instead of displaying it. The red-phase countdown is kept as **Alternative 1** in ch. 6 and rejected
+in the weighted decision matrix; **Alternative 2** = the final concept; **Alternative 3** = campaign only (no hardware).
 
 The report must persuade an evaluation committee that:
 - the problem is real and quantified;
@@ -112,8 +124,8 @@ onwards merges these bars into a single specification. Where experts disagreed, 
 | 3 | מפרט הדרישות | 2 | Functional / non-functional requirements and constraints, each with ID, target and verification method | Requirements table (`REQ-…`) |
 | 4 | סקירת ספרות ומאמר הדגל | 6 | Thematic, critical review (social control, social learning, countdown signals, pedestrian sensing); literature matrix; **flagship paper analysis**: method, Table 1 and 2 data, logistic model, **critical analysis of the data issues (§9)**; knowledge gap | Literature-matrix table; Tables 1 & 2 re-typeset with citation; logistic-regression formula; ≥ 2 Python graphs |
 | 5 | חקר שוק ומוצרים קיימים | 3 | Market in three layers; technical (not marketing) comparison of existing product classes (countdown heads, pedestrian detectors, audible/smart crossings) | Product-comparison table; positioning graph |
-| 6 | חלופות תכן ומטריצת החלטה | 3 | 2–3 fundamentally different alternatives; weighted decision matrix with justified weights; choice | Formula S_j = Σ w_i c_ij; matrix table |
-| 7 | ארכיטקטורת המערכת וחדשנות | 2 | Block diagram (sensing → controller → countdown display → campaign/data layer), data flow, privacy by design, innovation | **TikZ architecture diagram**; TikZ crosswalk scene with sensing zones |
+| 6 | חלופות תכן ומטריצת החלטה | 3 | Three alternatives: **A1 red-phase countdown** (rejected: MUTCD §4I.04, `fu2016`), **A2 adaptive red + clearance countdown + campaign** (chosen), **A3 campaign only**; weighted decision matrix with justified weights; the pivot told as an evidence-driven change | Formula S_j = Σ w_i c_ij; matrix table |
+| 7 | ארכיטקטורת המערכת וחדשנות | 2 | Block diagram (curb sensing → adaptive-red logic in the controller (safe limits) → signal heads with clearance-only countdown → campaign/data layer), data flow, privacy by design, innovation | **TikZ architecture diagram**; TikZ crosswalk scene with sensing zones |
 | 8 | תוכנית עבודה: WBS, RACI, גאנט | 3 | 5 work packages, RACI matrix, Gantt with milestones | TikZ WBS tree; RACI table; Gantt (pgfgantt) |
 | 9 | ניתוח סיכונים ותוכנית הפחתה | 2 | Risk register with R = P × I, mitigation + contingency for R ≥ 12, residual risk | Risk table; risk heat-map (Python) |
 | 10 | סיכום | 1 | Findings, readiness, immediate next steps | — |
@@ -131,7 +143,7 @@ onwards merges these bars into a single specification. Where experts disagreed, 
 | **Python graphs (≥ 1)** | Vector PDF, generated by scripts in `scripts/`; data from cited tables, **except G4**, whose P/I values are the team's own estimates from the risk register (the caption says so) | **G1** red-light crossing rate among red-phase arrivals by gender (from Table 1); **G2** forest plot of odds ratios, *reported vs recomputed* (Table 2, §9); **G3** relative odds of crossing vs number of people waiting (reported vs recomputed OR); **G4** risk heat-map |
 | **Tables (≥ 1)** | Booktabs style from the `.cls`, column 1 on the right | Tables 1 & 2 re-typeset ("adapted from [n]"), literature matrix, requirements, product comparison, decision matrix, RACI, risk register, abbreviations |
 | **Formulas (≥ 1)** | Numbered and referenced in the text | Logistic model logit(p) = β₀ + Σ βᵢxᵢ; OR = e^β; Wald = (b/SE)²; 95% CI = e^(b ± 1.96·SE); S_j = Σ wᵢcᵢⱼ; R = P × I |
-| **TikZ illustrations (≥ 1)** | Drawn in code, no external images | **T1** crosswalk scene with curb-sensing zones and countdown head; **T2** system architecture; **T3** WBS tree; **T4** social-control feedback loop; chapter-opener road signs; cover art |
+| **TikZ illustrations (≥ 1)** | Drawn in code, no external images | **T1** crosswalk scene with curb-sensing zones, adaptive-red controller and clearance countdown head; **T2** system architecture; **T3** WBS tree; **T4** social-control feedback loop; chapter-opener road signs; cover art |
 | Bibliography | IEEE, biber, two-way match between citations and list | ≥ 12 sources, ≥ 8 peer-reviewed, each DOI/URL **verified online** (§11, AC-22) |
 | **No copyrighted images** | Zero images from the internet or from the references | Only TikZ / Python output in `figures/`, plus **our own photographs** (see next row) |
 | **Authors' own photograph** (allowed source) | A photo taken by the group itself (e.g. `figures/photo-crosswalk.jpg`), placed with `\authorphoto`, caption credits **"צילום: המחברים"** (Photo: the authors); no people identifiable without consent; no internet or stock photos | `\authorphoto[height]{file}{caption}{label}`; a placeholder frame is drawn until the file exists |
@@ -359,3 +371,11 @@ The Writer agent has one defined authorial voice with two registers, used in a f
 - One voice across the book. The scenes follow a light thread (the same crosswalk at different times of day), but each scene stands on its own.
 - Scenes don't count toward any chapter's content requirements; page allocation (§4) includes them.
 - Checked by AC-21. The Hebrew editor's skill rejects scenes over 4 lines, scenes with facts or numbers, and any narrative tone in the body.
+
+## 13. Decision log
+
+| Date | Step | Decision | Evidence | Affects |
+|---|---|---|---|---|
+| 2026-11-19 | 06 | PRD approved incl. INC-000 correction | rendered page of the flagship paper | §9 |
+| 2026-11-24 | 13 | Final design = A layout + B boxes/tables | style samples A/B | §6 |
+| 2026-11-24 | 15 | **Pivot:** countdown only in the clearance interval; adaptive red as the core; red-phase countdown becomes rejected Alternative 1; campaign-only = Alternative 3 | `fhwa2025mutcd` §4I.04 (pp. 718–719), `fu2016`, `rosenbloom2009` §4.5 + lone-pedestrian finding | §1, §4 (ch. 1, 4, 6, 7, 9), §5 T1/T2, cover art |

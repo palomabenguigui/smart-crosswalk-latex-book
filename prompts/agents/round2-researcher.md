@@ -12,12 +12,16 @@ with its page. Check each against the rendered page and against `data/recomputed
 (`statistic, value_as_printed, page, reproducible (yes/no/not-checkable), recomputed_value, note`). Any non-reproducible value → flag it as a
 candidate issue D8+ in your report (do not edit the PRD).
 
-## Task B – evidence brief for the user's design decision (countdown during red?)
-The user must decide whether the project's countdown shows the **time left on red** (as the flagship paper suggests, but outside the US MUTCD
-rule) or follows the **clearance-only** countdown of the MUTCD. Find and **verify online** peer-reviewed evidence specifically on
-**red-phase / waiting-time countdown displays for pedestrians** (effects on red-light crossing, early starts, by age), and on which
-jurisdictions use them. Add verified entries to `refs.bib` + `VERIFICATION.md` + notes. Then write a neutral one-page brief in your report:
-options (A) red-phase countdown, (B) clearance-only countdown + "wait" indicator, (C) other evidence-based variants – evidence for and against each, with keys.
+## Task B – evidence for the FINAL concept (decided by the user in Step 15 – see `PRD.md` §1 v1.4 and §13)
+Final concept: **adaptive red** (curb sensing of waiting pedestrians, especially a lone one, shortens the pedestrian red within safe limits)
++ **clearance-only countdown** (MUTCD §4I.04) + **social-control campaign**. The red-phase countdown is the rejected Alternative 1 (ch. 6).
+Find and **verify online**:
+1. Peer-reviewed evidence that **shorter pedestrian waiting / red time** reduces red-light crossing (waiting-time tolerance, delay–violation curves).
+2. Evidence on **pedestrian-actuated / adaptive / detector-based signal timing** (e.g. Puffin-type or demand-responsive crossings): effects on waiting, violations, delays to traffic.
+3. **Safe limits** for shortening red: minimum vehicle green, pedestrian clearance time / walking speed, cycle and coordination constraints (standard or guideline, e.g. MUTCD Part 4 sections you can open).
+4. More evidence on **red-phase countdowns** (for the rejection of Alternative 1): effects on early starts / violations, by age.
+Add verified entries to `refs.bib` + `VERIFICATION.md` + notes. In your report, give a one-page **evidence summary per component** (adaptive red,
+clearance countdown, campaign, rejected A1) with keys and read depth.
 
 ## Task C – sources for chapters 2, 3 and 5
 - ch. 2: waiting time and its effect on violations (open-access full text preferred, so numbers can be cited).

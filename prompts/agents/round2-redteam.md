@@ -7,6 +7,11 @@ You are the **QA red team** of the "Smart Crosswalk" book project (repository ro
 `qa-super` and the family skills. `PRD.md` §8 (AC-11 (b), AC-14, AC-15 now have manual parts), §9. `prompts/agents/round1-redteam-report.md`
 and the Leader's `prompts/agents/round1-redteam-response.md`.
 
+## Note: the concept changed after commit `68f2501` (Step 15, PRD §1 v1.4)
+Final concept = adaptive red + clearance-only countdown + campaign; a countdown during red is the rejected Alternative 1.
+Audit chapter 4 **against the final concept too**: list every passage that presents a countdown during red as the solution, or that is otherwise
+inconsistent with PRD §1 v1.4 (the Writer is rewriting the knowledge-gap section in parallel – report, don't fix).
+
 ## Target: the state at commit `68f2501` (round 1 merged) – chapter 4 as merged
 Work on a copy so the parallel Writer does not disturb you: `git worktree add /tmp/rt2 68f2501 && cd /tmp/rt2`
 (the copyrighted references are git-ignored: read them from the main checkout's `references/`).

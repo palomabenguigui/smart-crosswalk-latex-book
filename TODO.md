@@ -67,7 +67,7 @@ Mirrors the phases in [`PLAN.md`](PLAN.md). Tick items only when their exit gate
 - [x] G3 relative odds vs number of people waiting (reported vs recomputed) → `figures/g3-relative-odds.pdf`
 - [ ] G4 risk heat-map → **after** the ch. 9 risk register exists (writing round)
 - [x] T1 crosswalk plan view: waiting zone, sensing zone, countdown heads, awareness display, controller → `figures/tikz/t1-crosswalk-zones.tex`; all figures checked in `samples/figures-test.tex` (clean log, 0 BiDi findings)
-- [ ] T2 system architecture → after ch. 6 picks the alternative (writing round)
+- [ ] T2 system architecture: curb sensing → adaptive-red logic (safe limits) → heads with clearance-only countdown → campaign/data layer (round 3)
 - [ ] T3 WBS tree → with ch. 8 (writing round)
 - [ ] T4 social-control feedback loop → with ch. 4 theory section (writing round)
 - [ ] Positioning graph for ch. 5 → after the Researcher's market sources (writing round)
@@ -77,8 +77,10 @@ Mirrors the phases in [`PLAN.md`](PLAN.md). Tick items only when their exit gate
 Every chapter opens with a `scenebox` street scene (≤ 4 lines), then formal third person (PRD §12).
 - [x] **Parallel round 1** (Steps 13–14): Writer (ch. 4 flagship sections), Researcher (15 sources), QA red team (38 findings + 10 weakest points) – prompts, reports and Leader response in `prompts/agents/round1-*` (AC-20: add the user's screenshots to `screenshots/`)
 - [x] Round 1 merged: all 38 findings + 10 points closed or answered (`round1-redteam-response.md`), INC-003/004, DS-22, `.cls` v1.1, PRD v1.3
-- [ ] **Decision needed (user):** countdown during red vs MUTCD clearance-only countdown (Researcher finding 1) – blocks ch. 3, 6, 7, 9
-- [ ] Parallel round 2: Writer ch. 4 thematic review + Table 2 re-typeset, ch. 1 intro; Researcher full texts + Israeli sources; red team on ch. 4
+- [x] **Decision (user, Step 15):** final concept = **adaptive red** (curb sensing, lone pedestrian, shorter red within safe limits) + **clearance-only countdown** (MUTCD §4I.04) + campaign; red-phase countdown = rejected Alternative 1, campaign only = Alternative 3; the pivot is told explicitly (PRD v1.4 §1, §13)
+- [x] Cover art and T1 updated to the clearance countdown (green walker + digits), T1 controller = adaptive red; `.cls` v1.2
+- [ ] **Parallel round 2** (prompts updated for the pivot): Writer – ch. 4 thematic review + literature matrix + Table 2 + knowledge gap aligned with the final concept, ch. 1 with the pivot; Researcher – statistics inventory, evidence per component (adaptive red, safe limits, clearance countdown, rejected A1), ch. 2/3/5 sources; red team – verify round-1 fixes, translation check, ch. 4 audit incl. consistency with PRD §1 v1.4
+- [ ] Round 3 (after round 2 merge): ch. 2, 3 (safe limits for adaptive red as requirements), 6 (A1 red countdown / **A2 chosen** / A3 campaign-only matrix), 7 (T2 architecture with adaptive-red logic)
 - [ ] Ch. 1 מבוא ורקע (2 pp)
 - [ ] Ch. 2 הגדרת הבעיה, שאלת המחקר והיעדים (2 pp)
 - [ ] Ch. 3 מפרט הדרישות (2 pp)

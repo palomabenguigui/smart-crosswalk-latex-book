@@ -212,3 +212,12 @@ The three agents finished round 1 (reports in prompts/agents/round1-*-report.md)
 ```
 
 ---
+
+## Step 15 – Design pivot: clearance-only countdown + adaptive red + campaign
+**Date/time:** 2026-11-24 15:01
+
+```text
+Decision on the countdown question: the project changes, based on the evidence. Final concept = countdown ONLY during the pedestrian clearance interval (standard-compliant, MUTCD §4I.04) + ADAPTIVE RED: curb sensing detects pedestrians waiting (especially a lone pedestrian) and shortens the red phase within safe limits (grounded in the paper's §4.5 recommendation and its lone-pedestrian finding) + the social-control campaign. A red-phase countdown is NOT part of the solution: it becomes Alternative 1 in chapter 6, compared in the weighted decision matrix and rejected with the MUTCD and fu2016 evidence; Alternative 3 = campaign only. Present this pivot explicitly in the book as an evidence-driven design change. Update PRD §1 (bump version), the round-2 prompts (especially the Writer's chapter 1 brief) and TODO.md before I launch round 2. Log this prompt, commit and push, then tell me when to launch.
+```
+
+---

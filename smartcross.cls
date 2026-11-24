@@ -7,8 +7,8 @@
 %% Tested toolchain: TeX Live 2026 (LuaHBTeX 1.24.0, babel v26.4, biber 2.21).
 %% Compile from the REPOSITORY ROOT (fonts are loaded by relative path from fonts/).
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{smartcross}[2026/11/24 v1.1 Smart Crosswalk report class (shirloma)]
-\def\SmartCrossVersion{1.1}
+\ProvidesClass{smartcross}[2026/11/24 v1.2 Smart Crosswalk report class (shirloma)]
+\def\SmartCrossVersion{1.2}
 
 %% ---------------------------------------------------------------- engine guard (qa-cls-version)
 \ifdefined\directlua\else
@@ -145,7 +145,7 @@
 \newcommand\DocStatus[1]{\renewcommand\sc@status{#1}}
 
 %% ================================================================ PICTOGRAMS
-%% \picto[colour]{pedestrian|signal|sensor|warning|info|camera}  – 1em high, inline, LTR-safe.
+%% \picto[colour]{pedestrian|walker|signal|sensor|warning|info|camera}  – 1em high, inline, LTR-safe.
 \newcommand\picto[2][Asphalt]{\leavevmode\hbox dir TLT{\tikz[x=0.1em,y=0.1em,baseline=-1.2]{%
   \csname sc@picto@#2\endcsname{#1}}}}
 \newcommand\sc@picto@pedestrian[1]{%
@@ -153,6 +153,11 @@
   \fill[#1,rounded corners=0.5] (3.6,3.9) rectangle (6.4,7.5);
   \draw[#1,line width=0.1em,line cap=round] (3.7,7.0)--(2.9,4.3) (6.3,7.0)--(7.1,4.3)
     (4.35,4.0)--(4.15,0.4) (5.65,4.0)--(5.85,0.4);}
+\newcommand\sc@picto@walker[1]{% walking figure (WALK / clearance interval)
+  \fill[#1] (5.6,9.1) circle (1.3);
+  \draw[#1,line width=0.16em,line cap=round] (5.3,7.3)--(4.7,4.2);
+  \draw[#1,line width=0.1em,line cap=round] (5.2,6.8)--(7.2,5.4) (5.2,6.8)--(3.4,5.6)
+    (4.7,4.2)--(6.8,2.4)--(7.4,0.4) (4.7,4.2)--(3.9,2.2)--(2.4,0.9);}
 \newcommand\sc@picto@signal[1]{%
   \fill[#1,even odd rule,rounded corners=0.9] (2.4,-0.2) rectangle (7.6,10.4)
     (5,8.3) circle (1.25) (5,5.1) circle (1.25) (5,1.9) circle (1.25);}
@@ -510,11 +515,8 @@
     \fill[HousingBlack,rounded corners=1.4] (-6,3) rectangle (6,21);
     \draw[white!30!HousingBlack,line width=0.4pt,rounded corners=1.4] (-6,3) rectangle (6,21);
     \fill[black] (-4.6,12.6) rectangle (4.6,19.6);
-    \begin{scope}[shift={(-5,11.9)}]
-      \fill[SignalRed] (5,6.4) circle (0.95);
-      \fill[SignalRed,rounded corners=0.4] (3.9,2.9) rectangle (6.1,5.5);
-      \draw[SignalRed,line width=0.9pt,line cap=round] (4.0,5.2)--(3.4,3.1) (6.0,5.2)--(6.6,3.1) (4.5,3.0)--(4.4,0.9) (5.5,3.0)--(5.6,0.9);
-    \end{scope}
+    % clearance interval: green walking figure + countdown (the project counts down ONLY here – PRD §1, Step 15)
+    \node[inner sep=0] at (0,16.1) {\fontsize{17}{17}\selectfont\picto[SignalGreen]{walker}};
     \fill[black] (-4.6,4.4) rectangle (4.6,11.4);
     \node[text=SignalAmber,font=\sffamily\bfseries\fontsize{15}{15}\selectfont,inner sep=0pt] at (0,7.9) {12};
   \end{scope}}
