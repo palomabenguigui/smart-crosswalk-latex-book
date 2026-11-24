@@ -18,7 +18,7 @@ os.chdir(ROOT)
 FINDINGS: list[tuple] = []
 HEB = '\u0590-\u05FF'
 FINALS = 'ךםןףץ'
-CLS_TARGET = '1.3'                      # PLAN: target .cls version (qa-cls-version)
+CLS_TARGET = '1.4'                      # PLAN: target .cls version (qa-cls-version)
 
 def report(skill, sev, page, loc, text, rule):
     text = text.replace('\n', ' ').strip()

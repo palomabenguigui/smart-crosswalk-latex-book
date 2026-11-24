@@ -7,6 +7,7 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
 SRC="${1:-main.tex}"
 JOB="$(basename "$SRC" .tex)"
+B="${BUILD_DIR:-build}"          # parallel agents: BUILD_DIR=build/<role> scripts/build.sh
 
 # --- toolchain: TeX Live 2026 first on PATH (old MiKTeX links in ~/bin must not win)
 export PATH="/Library/TeX/texbin:$PATH"
@@ -24,19 +25,19 @@ if [[ -f scripts/make_figures.py ]]; then
 fi
 
 # --- LaTeX: lualatex -> biber -> lualatex x2
-mkdir -p build
-LTX=(lualatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory=build "$SRC")
-run() { echo "[build] $*"; "$@" > "build/$JOB.console" 2>&1 || { tail -30 "build/$JOB.console"; exit 1; }; }
+mkdir -p "$B"
+LTX=(lualatex -interaction=nonstopmode -halt-on-error -file-line-error -output-directory="$B" "$SRC")
+run() { echo "[build] $*"; "$@" > "$B/$JOB.console" 2>&1 || { tail -30 "$B/$JOB.console"; exit 1; }; }
 run "${LTX[@]}"
-run biber --input-directory build --output-directory build "$JOB"
+run biber --input-directory "$B" --output-directory "$B" "$JOB"
 run "${LTX[@]}"
 run "${LTX[@]}"
-if grep -q "Rerun to get" "build/$JOB.log"; then run "${LTX[@]}"; fi   # labels moved (long books): one more pass
+if grep -q "Rerun to get" "$B/$JOB.log"; then run "${LTX[@]}"; fi   # labels moved (long books): one more pass
 
 # --- log summary (AC-03)
-LOG="build/$JOB.log"
+LOG="$B/$JOB.log"
 count() { grep -c -E "$1" "$LOG" || true; }
-echo "[build] done: build/$JOB.pdf"
+echo "[build] done: $B/$JOB.pdf"
 echo "[build] errors:            $(count '^!|^[^ ]*:[0-9]+: ')"
 echo "[build] undefined refs:    $(count 'undefined|There were undefined')"
 echo "[build] missing chars:     $(count 'Missing character')"

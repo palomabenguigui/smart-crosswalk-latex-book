@@ -7,8 +7,8 @@
 %% Tested toolchain: TeX Live 2026 (LuaHBTeX 1.24.0, babel v26.4, biber 2.21).
 %% Compile from the REPOSITORY ROOT (fonts are loaded by relative path from fonts/).
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{smartcross}[2026/11/24 v1.3 Smart Crosswalk report class (shirloma)]
-\def\SmartCrossVersion{1.3}
+\ProvidesClass{smartcross}[2026/11/24 v1.4 Smart Crosswalk report class (shirloma)]
+\def\SmartCrossVersion{1.4}
 
 %% ---------------------------------------------------------------- engine guard (qa-cls-version)
 \ifdefined\directlua\else
@@ -474,6 +474,17 @@
       \end{tikzpicture}}}%
     \caption{#3. \photocredit}\label{#4}
   \end{figure}}
+
+%% ---------------------------------------------------------------- figure inclusion that tolerates files not yet produced
+%% \inputfigure{figures/tikz/name}      – TikZ file in an LTR block
+%% \includefigure[width]{figures/name.pdf} – PDF figure
+%% Until the file exists, a labelled placeholder frame is shown (parallel rounds).
+\newcommand\sc@figpending[1]{\sc@ltrcenter{\begin{tikzpicture}[x=1mm,y=1mm]
+  \draw[AsphaltLight,dash pattern=on 3pt off 2pt] (0,0) rectangle (120,30);
+  \node[rtl,text=AsphaltLight,font=\sffamily\small] at (60,18) {איור בהכנה};
+  \node[text=AsphaltLight,font=\ttfamily\scriptsize] at (60,10) {\detokenize{#1}};\end{tikzpicture}}}
+\newcommand\inputfigure[1]{\IfFileExists{#1.tex}{\begin{ltrblock}\input{#1}\end{ltrblock}}{\sc@figpending{#1.tex}}}
+\newcommand\includefigure[2][\linewidth]{\IfFileExists{#2}{\sc@ltrcenter{\includegraphics[width=#1]{#2}}}{\sc@figpending{#2}}}
 
 %% ---------------------------------------------------------------- captions
 \DeclareCaptionFont{scasphalt}{\color{Asphalt}}
