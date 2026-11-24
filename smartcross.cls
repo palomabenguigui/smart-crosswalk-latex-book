@@ -7,8 +7,8 @@
 %% Tested toolchain: TeX Live 2026 (LuaHBTeX 1.24.0, babel v26.4, biber 2.21).
 %% Compile from the REPOSITORY ROOT (fonts are loaded by relative path from fonts/).
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{smartcross}[2026/11/24 v1.2 Smart Crosswalk report class (shirloma)]
-\def\SmartCrossVersion{1.2}
+\ProvidesClass{smartcross}[2026/11/24 v1.3 Smart Crosswalk report class (shirloma)]
+\def\SmartCrossVersion{1.3}
 
 %% ---------------------------------------------------------------- engine guard (qa-cls-version)
 \ifdefined\directlua\else
@@ -122,7 +122,8 @@
 \newcommand\sc@ltr[1]{\hbox dir TLT{#1}}                           % internal: LTR picture box
 \newcommand\sc@ltrcenter[1]{\hbox dir TLT to\linewidth{\hss#1\hss}}  % internal: centred LTR picture (DS-08)
 %% TikZ draws in LTR coordinates; Hebrew node text must be set RTL explicitly (DS-01).
-\tikzset{rtl/.style={execute at begin node={\pardir TRT\textdir TRT}}}
+\tikzset{rtl/.style={execute at begin node={\begin{otherlanguage*}{hebrew}\pardir TRT\textdir TRT},
+  execute at end node={\end{otherlanguage*}}}}% Hebrew language too: nodes on English pages (bibliography) need Hebrew fonts
 
 %% ---------------------------------------------------------------- document metadata
 \newcommand\sc@title{}\newcommand\sc@subtitle{}\newcommand\sc@entitle{}
@@ -303,7 +304,8 @@
   \gdef\sc@phase{none}\sc@band{}{#1}{}}
 \renewcommand\chaptermark[1]{\markboth{#1}{}}
 %% \inputchapter{N}{file}: chapter N keeps its number, phase, lamp and tab whatever is (not yet) included before it.
-\newcommand\inputchapter[2]{\clearpage\setcounter{chapter}{\numexpr#1-1\relax}\input{#2}}
+%% A chapter file that does not exist yet is skipped (parallel writing).
+\newcommand\inputchapter[2]{\IfFileExists{#2.tex}{\clearpage\setcounter{chapter}{\numexpr#1-1\relax}\input{#2}}{}}
 
 %% ================================================================ THUMB TABS (outer = left edge in RTL)
 \newcommand\sc@thumbtab{%
@@ -352,6 +354,7 @@
 \fancypagestyle{plain}{\fancyhf{}\fancyhead[C]{\sc@thumbtab}\fancyfoot[C]{\sc@foottext}}
 
 %% ---------------------------------------------------------------- front / main matter
+\newcommand\inputfront[1]{\IfFileExists{#1.tex}{\input{#1}}{}}
 \newcommand\FrontMatter{\clearpage\pagenumbering{roman}%
   \renewcommand\thepage{\localecounter{letters}{page}}}
 \newcommand\MainMatter{\clearpage\pagenumbering{arabic}}
@@ -611,6 +614,6 @@
 \def\sc@citetwo[#1][#2]#3{\sc@citebox{\sc@origcite[#1][#2]{#3}}}
 \newcommand\printreferences{%
   \chapter*{מקורות}\addcontentsline{toc}{chapter}{מקורות}\markboth{מקורות}{}%
-  \begin{otherlanguage}{english}\setquotestyle{english}\printbibliography[heading=none]\end{otherlanguage}}
+  \begin{otherlanguage}{english}\setquotestyle{english}\raggedright\printbibliography[heading=none]\end{otherlanguage}}
 
 \endinput

@@ -221,3 +221,20 @@ Decision on the countdown question: the project changes, based on the evidence. 
 ```
 
 ---
+
+## Step 16 – Finish efficiently: one final parallel round
+**Date/time:** 2026-11-24 15:18
+
+```text
+Change of pace: the goal now is to FINISH efficiently. Do not add new acceptance criteria, tests or extra review rounds.
+
+1. Countdown decision: final concept = countdown ONLY during the pedestrian clearance interval (MUTCD §4I.04) + ADAPTIVE RED (curb sensing shortens the red phase when pedestrians, especially a lone pedestrian, are waiting — grounded in the paper's §4.5 and its lone-pedestrian finding) + the social-control campaign. Red-phase countdown becomes Alternative 1 in chapter 6, rejected in the decision matrix with the MUTCD and fu2016 evidence; campaign-only is Alternative 3. Present this as an evidence-driven design change. Update PRD §1.
+
+2. Replace rounds 2+ with ONE final round covering everything left: all remaining chapters, remaining figures (G4, T2–T4), cover, front matter and README. Prepare the 3 agent prompts (writer, researcher+visuals, redteam), tell me the 3 commands, and I will launch them once.
+
+3. After that round: merge, run QA once, fix blockers and majors only (minors may stay), build the final PDF, update README with screenshots, commit and push. Only stop if something truly needs my decision.
+
+Log this prompt, commit and push.
+```
+
+---

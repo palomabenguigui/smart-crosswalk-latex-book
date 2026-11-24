@@ -18,7 +18,7 @@ os.chdir(ROOT)
 FINDINGS: list[tuple] = []
 HEB = '\u0590-\u05FF'
 FINALS = 'ךםןףץ'
-CLS_TARGET = '1.2'                      # PLAN: target .cls version (qa-cls-version)
+CLS_TARGET = '1.3'                      # PLAN: target .cls version (qa-cls-version)
 
 def report(skill, sev, page, loc, text, rule):
     text = text.replace('\n', ' ').strip()
@@ -103,7 +103,7 @@ def check_infra(a):
     if r is not None and Path(a.pdf).name == 'main.pdf':
         n = len(r.pages); labels = r.page_labels
         body = sum(1 for l in labels if l.isdigit())
-        active = re.findall(r'^\\inputchapter\{(\d+)\}', read('main.tex'), re.M)
+        active = [n for n, f in re.findall(r'^\\inputchapter\{(\d+)\}\{([^}]+)\}', read('main.tex'), re.M) if Path(f + '.tex').exists()]
         sev = 'major' if len(active) == 10 else 'minor'          # gate: binding only when all 10 chapters are in
         if not 28 <= n <= 32: report('qa-infra', sev, '-', a.pdf, f'{n} pages ({len(active)}/10 chapters)', 'AC-01 (28–32)')
         if body < 25: report('qa-infra', sev, '-', a.pdf, f'{body} body pages ({len(active)}/10 chapters)', 'AC-02 (>= 25)')
