@@ -7,8 +7,8 @@
 %% Tested toolchain: TeX Live 2026 (LuaHBTeX 1.24.0, babel v26.4, biber 2.21).
 %% Compile from the REPOSITORY ROOT (fonts are loaded by relative path from fonts/).
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{smartcross}[2026/11/24 v1.0 Smart Crosswalk report class (shirloma)]
-\def\SmartCrossVersion{1.0}
+\ProvidesClass{smartcross}[2026/11/24 v1.1 Smart Crosswalk report class (shirloma)]
+\def\SmartCrossVersion{1.1}
 
 %% ---------------------------------------------------------------- engine guard (qa-cls-version)
 \ifdefined\directlua\else
@@ -78,6 +78,7 @@
 \definecolor{SignalRed}{HTML}{C8102E}
 \definecolor{SignalAmber}{HTML}{F2A900}
 \definecolor{SignalGreen}{HTML}{00843D}
+\definecolor{SignalAmberDark}{HTML}{9A6B00}% amber for LINES/TEXT on light backgrounds (≥ 4.5:1 on white; QA-06/11)
 \definecolor{StripeWhite}{HTML}{F4F4F2}
 \definecolor{Paper}{HTML}{FFFFFF}
 \definecolor{Concrete}{HTML}{CFD2D5}
@@ -91,7 +92,7 @@
 %% ---------------------------------------------------------------- packages
 \RequirePackage{graphicx}
 \RequirePackage{tikz}
-\usetikzlibrary{calc,shapes.geometric}
+\usetikzlibrary{calc,shapes.geometric,patterns}
 \RequirePackage[most]{tcolorbox}
 \RequirePackage{booktabs,array,tabularx}
 \RequirePackage{fancyhdr}
@@ -296,6 +297,8 @@
 \renewcommand\@makeschapterhead[1]{%
   \gdef\sc@phase{none}\sc@band{}{#1}{}}
 \renewcommand\chaptermark[1]{\markboth{#1}{}}
+%% \inputchapter{N}{file}: chapter N keeps its number, phase, lamp and tab whatever is (not yet) included before it.
+\newcommand\inputchapter[2]{\clearpage\setcounter{chapter}{\numexpr#1-1\relax}\input{#2}}
 
 %% ================================================================ THUMB TABS (outer = left edge in RTL)
 \newcommand\sc@thumbtab{%
@@ -390,6 +393,7 @@
   \newtcolorbox{sc@scenebox}{enhanced,colback=AsphaltDeep,colupper=StripeWhite,boxrule=0pt,arc=1.6mm,
     left=5mm,right=18mm,top=5mm,bottom=5mm,fontupper=\sffamily\fontsize{10.5}{15}\selectfont,parbox=false,
     before skip=2pt,after skip=14pt,before upper={\pardir TRT\textdir TRT},
+    after upper={\par\typeout{SCENE-LINES:\thechapter:\the\prevgraf}},
     overlay={
       \begin{scope}\clip ($(frame.south west)+(2.5mm,0)$) rectangle ($(frame.north east)+(-2.5mm,0)$);
         \foreach \i in {0,...,60}{%

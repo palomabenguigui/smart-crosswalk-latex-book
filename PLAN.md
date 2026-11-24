@@ -13,7 +13,7 @@ Companion to [`PRD.md`](PRD.md) (what to build) and [`TODO.md`](TODO.md) (ordere
 | 2 | Write `PRD.md` | Expert committee → merged requirements | `PRD.md` |
 | 3 | Write `PLAN.md` | This file | `PLAN.md` |
 | 4 | Write `TODO.md`: atomic tasks | Ordered checklist that mirrors the phases below | `TODO.md` |
-| 5 | Use QA skills (`qa-super`, `qa-BiDi`, `qa-table`, `qa-code`, `qa-img`, …) | Write all 8 skills in `skills/` **before** any content; run them on every build | `skills/*/SKILL.md` |
+| 5 | Use QA skills (`qa-super`, `qa-BiDi`, `qa-table`, `qa-code`, `qa-img`, …) | Write all 12 skills in `skills/` (8 QA + 4 production) **before** any content; run them on every build | `skills/*/SKILL.md` |
 | 6 | Give the agent precise prompts covering all requirements | Each phase has a logged prompt; agents get PRD section IDs and acceptance criteria | `prompts/PROMPTS_LOG.md` |
 | 7 | Run, check, fix **through a skill or the CLS, never by hand** | Detector → Fixer loop (§4) + incident procedure (§6) | Clean QA reports |
 | 8 | Save all working files (`.tex`, `.cls`, `.md`, `.pdf`) | Commit + push after every task (`CLAUDE.md`) | Git history, `build/main.pdf` |
@@ -180,15 +180,15 @@ At least one production round in P6 runs **three agents at the same time**, each
 
 | Agent | Task in the parallel round | Prompt file |
 |---|---|---|
-| Writer | Draft the next chapter in `chapters/` | `prompts/agents/writer-chNN.md` |
-| Researcher | Verify online the sources that chapter needs; update `refs.bib` + `VERIFICATION.md` | `prompts/agents/researcher-chNN.md` |
-| QA red team | Run the detectors on the previously merged chapter and report findings (no fixes) | `prompts/agents/redteam-chNN.md` |
+| Writer | Draft the next chapter in `chapters/` | `prompts/agents/roundN-writer.md` |
+| Researcher | Verify online the sources that chapter needs; update `refs.bib` + `VERIFICATION.md` | `prompts/agents/roundN-researcher.md` |
+| QA red team | Run the detectors on the previously merged chapter (round 1: on the data, figures and plan, since no chapter existed yet) and report findings (no fixes) | `prompts/agents/roundN-redteam.md` |
 
 Procedure:
 1. Save each agent's prompt **verbatim** in `prompts/agents/` before launch, and log the round in `PROMPTS_LOG.md`.
 2. If cross-session mode is used, run a ping/pong mesh check first (L04 guide §11.7) and screenshot the result.
 3. Launch all three. Take **screenshots while they run** showing the three running at the same time (terminal panes or the agent list with status), saved as `screenshots/parallel-<date>-*.png`.
-4. Save each agent's final report in `prompts/agents/*-report.md`. The Leader merges the results; the work goes through the normal Detector → Fixer loop.
+4. Save each agent's final report in `prompts/agents/roundN-<role>-report.md`; the Leader answers the red team in `prompts/agents/roundN-redteam-response.md`. The Leader merges the results; the work goes through the normal Detector → Fixer loop.
 5. The README "Agent Team" section links the prompts, reports and screenshots (AC-19, AC-20).
 
 Agents in a parallel round work on **different files** (chapter / `.bib` / QA report), so they never edit the same file at once.

@@ -28,6 +28,20 @@ and the **detection gap** closed so it can't recur.
 - **Fix:** `scripts/figstyle.py` `he()` returns logical-order text with a leading RLM (U+200F); one line per text object; G1 counts moved into the bars.
 - **Detection gap closed:** `qa.py img` now runs the BiDi scan on every `figures/*.pdf` in **logical** extraction order (matplotlib PDFs extract in reading order, LuaTeX PDFs in visual order); it flagged 23 reversed words on the bad figures and 0 after the fix. Two regression tests added to `tests/qa/run_tests.py`; the `python-graphs` skill now forbids `get_display()`.
 
+## INC-003 – The committee's "every value recomputed" missed the age chi-square
+- **Date / found by:** 2026-11-24, QA red team round 1 (QA-15)
+- **Symptom:** PRD §9 claimed full recomputation, but the printed age χ²(2, N = 1392) = 1.02 had never been checked; it does not reproduce (2.95 / 0.96 / 0.55).
+- **Root cause:** recomputation covered the tables' cells and the gender test only; test statistics quoted in the *text* of the paper were not inventoried.
+- **Fix:** issue D7 (PRD §9, ch. 4); `recompute_table2.py` computes all age variants.
+- **Detection gap closed:** the Researcher skill must inventory every statistic printed in the source text as well as the tables; AC-15 now checks every Dn of PRD §9 in ch. 4 automatically.
+
+## INC-004 – QA detectors that could pass while the defect was present
+- **Date / found by:** 2026-11-24, QA red team round 1 (QA-22 … QA-33)
+- **Symptom:** "unverified" counted as verified; any word in any figure masked book-wide; AC-14 vacuous; reversed words without final letters invisible; scene lines estimated from characters.
+- **Root cause:** detectors were tested only for *firing on a planted defect*, not for *false passes* (negative cases that must still be reported).
+- **Fix:** each gap fixed in `scripts/qa.py`; register `data/quoted_in_book.json`; `\prevgraf` scene measurement in the `.cls`.
+- **Detection gap closed:** 5 new regression tests target false passes (24 tests in total); every future detector gets a "must fire" **and** a "must not be masked" test.
+
 ---
 
 ## Style-sample findings (Step 09) – found by page-render inspection, all fixed in `smartcross.cls`
@@ -64,6 +78,8 @@ They're recorded because each one becomes a regression check in `qa-BiDi` / `qa-
 
 | DS-20 | T1 TikZ diagram mirrored and shifted off the page inside `ltrblock` | `\pardir TLT` alone is overridden: babel resets the paragraph direction from the language | `ltrblock` now builds its content in an explicit `\hbox dir TLT` (lrbox), centred |
 | DS-21 | `qa-BiDi` flagged the Hebrew of embedded graphs in the book PDF (false positive) | matplotlib text keeps logical extraction order inside the LuaTeX PDF | The book scan skips words from `figures/*.pdf`; `qa-img` scans those in logical mode |
+
+| DS-22 | Chapter 4 rendered as "Chapter 01" (red lamp, red tab) in the partial book | the chapter counter follows the order of `\input`s; chapters 1–3 not yet written | `\inputchapter{N}{file}` sets the counter, so number, phase, lamp and tab are fixed per file |
 
 Build-time errors met while writing v0.2 (not visual defects): `\pdfstrcmp` doesn't exist in LuaTeX; `\@seccntformat` is
 expanded inside `\protected@edef`; `\@fptop`/`\@fpsep`/`\@fpbot` are skip registers in LaTeX 2025+ (use `\setlength`);

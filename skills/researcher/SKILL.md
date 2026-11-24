@@ -21,3 +21,8 @@ Key claims **in your own words**, with page numbers; what the source shows and w
 Every number transcribed into `data/*.csv` is checked against a **rendered image** of the source page
 (`osascript -l JavaScript scripts/render_pages.js <abs.pdf> <abs-prefix> 2`), never against extracted text alone.
 Each CSV starts with comment lines: source key, table, page, date checked.
+Values are stored **exactly as printed** (a printed "–" stays empty; inferred values go in a note column, QA-16/17).
+
+## Inventory of printed statistics (INC-003)
+Besides the tables, list **every test statistic printed in the text** (χ², t, F, p, OR, CI, percentages) with its page,
+and recompute each one from the transcribed data. A statistic that cannot be reproduced becomes a data issue (PRD §9).

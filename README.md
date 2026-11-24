@@ -1,6 +1,6 @@
 # Crossing at a Red Light – Smart Pedestrian Crossing: A Preparatory Report
 
-**חוצים באדום – מעבר חציה חכם: דוח הכנה**
+**חוצים באדום – מעבר חצייה חכם: דוח הכנה**
 
 ![Project status: in progress](https://img.shields.io/badge/Project%20status-in%20progress-yellow)
 

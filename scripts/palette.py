@@ -7,3 +7,5 @@ SIGNAL_AMBER = '#F2A900'
 SIGNAL_GREEN = '#00843D'
 STRIPE_WHITE = '#F4F4F2'
 HAIRLINE = '#C9CDD2'
+SIGNAL_AMBER_DARK = '#9A6B00'   # amber for lines/text on white (>= 4.5:1)
+WHITE = '#FFFFFF'
