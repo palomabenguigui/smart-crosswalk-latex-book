@@ -1,21 +1,137 @@
 {
   "_doc": "Register of computed numbers quoted in the book (AC-14). 'shown' must appear as a \\num/\\pct argument; it must equal 'source' (a path in data/recomputed.json) to 'decimals'.",
   "numbers": [
-    {"shown": "13.5",  "source": "table1.crossed_red_pct_of_red_arrivals", "decimals": 1, "chapter": "ch04"},
-    {"shown": "5.5",   "source": "table1.crossed_red_pct_of_all", "decimals": 1, "chapter": "ch04"},
-    {"shown": "40.4",  "source": "table1.arrived_red_pct", "decimals": 1, "chapter": "ch04"},
-    {"shown": "8.5",   "source": "table1.by_gender_red_arrivals.female.rate_pct", "decimals": 1, "chapter": "ch04"},
-    {"shown": "20.6",  "source": "table1.by_gender_red_arrivals.male.rate_pct", "decimals": 1, "chapter": "ch04"},
-    {"shown": "61.8",  "source": "table1.female_pct_green_green_recomputed", "decimals": 1, "chapter": "ch04"},
-    {"shown": "0.63",  "source": "table2.waiting.exp_b_recomputed", "decimals": 2, "chapter": "ch04"},
-    {"shown": "0.97",  "source": "table2.traffic.exp_b_recomputed", "decimals": 2, "chapter": "ch04"},
-    {"shown": "3.71",  "source": "table2.gender.exp_b_recomputed", "decimals": 2, "chapter": "ch04"},
-    {"shown": "37.5",  "source": "issues.odds_reduction_pct_per_person.waiting_recomputed", "decimals": 1, "chapter": "ch04"},
-    {"shown": "29",    "source": "issues.odds_reduction_pct_per_person.waiting_printed", "decimals": 0, "chapter": "ch04"},
-    {"shown": "2.95",  "source": "table1.age_chi2_variants.phase_3x3.0", "decimals": 2, "chapter": "ch04"},
-    {"shown": "0.96",  "source": "table1.age_chi2_variants.crossed_vs_not.0", "decimals": 2, "chapter": "ch04"},
-    {"shown": "0.55",  "source": "table1.age_chi2_variants.red_arrivals_only.0", "decimals": 2, "chapter": "ch04"},
-    {"shown": "0.82",  "source": "table1.age_chi2_variants.expected_60plus_crossers", "decimals": 2, "chapter": "ch04"},
-    {"shown": "0.63",  "source": "table2.joining.exp_b_recomputed", "decimals": 2, "chapter": "ch04"}
+    {
+      "shown": "13.5",
+      "source": "table1.crossed_red_pct_of_red_arrivals",
+      "decimals": 1,
+      "chapter": "ch04"
+    },
+    {
+      "shown": "5.5",
+      "source": "table1.crossed_red_pct_of_all",
+      "decimals": 1,
+      "chapter": "ch04"
+    },
+    {
+      "shown": "40.4",
+      "source": "table1.arrived_red_pct",
+      "decimals": 1,
+      "chapter": "ch04"
+    },
+    {
+      "shown": "8.5",
+      "source": "table1.by_gender_red_arrivals.female.rate_pct",
+      "decimals": 1,
+      "chapter": "ch04"
+    },
+    {
+      "shown": "20.6",
+      "source": "table1.by_gender_red_arrivals.male.rate_pct",
+      "decimals": 1,
+      "chapter": "ch04"
+    },
+    {
+      "shown": "61.8",
+      "source": "table1.female_pct_green_green_recomputed",
+      "decimals": 1,
+      "chapter": "ch04"
+    },
+    {
+      "shown": "0.63",
+      "source": "table2.waiting.exp_b_recomputed",
+      "decimals": 2,
+      "chapter": "ch04"
+    },
+    {
+      "shown": "0.97",
+      "source": "table2.traffic.exp_b_recomputed",
+      "decimals": 2,
+      "chapter": "ch04"
+    },
+    {
+      "shown": "3.71",
+      "source": "table2.gender.exp_b_recomputed",
+      "decimals": 2,
+      "chapter": "ch04"
+    },
+    {
+      "shown": "37.5",
+      "source": "issues.odds_reduction_pct_per_person.waiting_recomputed",
+      "decimals": 1,
+      "chapter": "ch04"
+    },
+    {
+      "shown": "29",
+      "source": "issues.odds_reduction_pct_per_person.waiting_printed",
+      "decimals": 0,
+      "chapter": "ch04"
+    },
+    {
+      "shown": "2.95",
+      "source": "table1.age_chi2_variants.phase_3x3.0",
+      "decimals": 2,
+      "chapter": "ch04"
+    },
+    {
+      "shown": "0.96",
+      "source": "table1.age_chi2_variants.crossed_vs_not.0",
+      "decimals": 2,
+      "chapter": "ch04"
+    },
+    {
+      "shown": "0.55",
+      "source": "table1.age_chi2_variants.red_arrivals_only.0",
+      "decimals": 2,
+      "chapter": "ch04"
+    },
+    {
+      "shown": "0.82",
+      "source": "table1.age_chi2_variants.expected_60plus_crossers",
+      "decimals": 2,
+      "chapter": "ch04"
+    },
+    {
+      "shown": "0.63",
+      "source": "table2.joining.exp_b_recomputed",
+      "decimals": 2,
+      "chapter": "ch04"
+    },
+    {
+      "shown": "98",
+      "source": "context.israel_pedestrian_deaths_derived",
+      "decimals": 0,
+      "chapter": "ch01"
+    },
+    {
+      "shown": "1.98",
+      "source": "table2.gender.ci_recomputed.0",
+      "decimals": 2,
+      "chapter": "ch04"
+    },
+    {
+      "shown": "6.94",
+      "source": "table2.gender.ci_recomputed.1",
+      "decimals": 2,
+      "chapter": "ch04"
+    },
+    {
+      "shown": "0.50",
+      "source": "table2.waiting.ci_recomputed.0",
+      "decimals": 2,
+      "chapter": "ch04"
+    },
+    {
+      "shown": "0.92",
+      "source": "table2.traffic.ci_recomputed.0",
+      "decimals": 2,
+      "chapter": "ch04"
+    },
+    {
+      "shown": "1.03",
+      "source": "table2.traffic.ci_recomputed.1",
+      "decimals": 2,
+      "chapter": "ch04"
+    }
   ]
 }

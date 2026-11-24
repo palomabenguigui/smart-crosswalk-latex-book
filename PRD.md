@@ -80,7 +80,7 @@ onwards merges these bars into a single specification. Where experts disagreed, 
 - Vector output (PDF), the book's Hebrew font inside the graphs, and no overlapping labels.
 
 ### 3.4 Road-safety researcher
-- The flagship paper is analysed critically, not summarised. Reproduce its key statistics, flag its internal inconsistencies (§9) and state its limitations: one site, one morning hour, estimated ages, groups not identified, observations not independent.
+- The flagship paper is analysed critically, not summarised. Reproduce its key statistics, flag its internal inconsistencies (§9) and state its limitations: one site, eight sessions in the same morning hour, estimated ages, groups not identified, observations not independent.
 - Do not over-claim: the study is observational and correlational, and it does not show that countdown signals or campaigns *cause* compliance. Any claim about their effect must come from other, cited, peer-reviewed studies.
 - Use Israeli context data only with a citation.
 
@@ -334,6 +334,10 @@ regression. The coefficient is meaningless, and H2 cannot be tested from this mo
 - The paper prints χ²(2, N = 1392) = 1.02 for age and drops age from the model on that basis.
 - From Table 1: age × light phase (3×3) gives 2.95 with 4 df; crossed-on-red vs not × age gives 0.96 (df 2); red-phase arrivals only (N = 563) give 0.55 (df 2). None reproduces 1.02 with df 2 and N 1392.
 - The 60+ group expects fewer than one red-light crosser (0.82), so the test is not valid there. The decision to drop age is probably right in direction but rests on a calculation that cannot be reproduced. Computed by `scripts/recompute_table2.py` (`age_chi2_variants`).
+
+**Further candidates D8–D10** (round-2 Researcher inventory, `data/rosenbloom2009_text_stats.csv`): inconsistencies in
+statistics printed in the paper's *text* (e.g. the traffic figures of §2.2, p. 390). Recorded in the data inventory; **not discussed in the
+book** (scope decision, Step 16 – finish efficiently).
 
 ## 10. Out of scope
 

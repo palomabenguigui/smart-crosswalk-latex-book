@@ -83,6 +83,9 @@ out['issues'] = {
                                     'waiting_printed': r2(100 * (1 - float(T['waiting']['exp_b_printed']))),
                                     'joining_recomputed': r2(100 * (1 - math.exp(T['joining']['b']))),
                                     'joining_printed': r2(100 * (1 - float(T['joining']['exp_b_printed'])))}}
+# context numbers derived by the authors from a cited source (who2023israel: 364 road deaths in 2021, pedestrians ≈ 27%)
+out['context'] = {'israel_road_deaths_2021': 364, 'israel_pedestrian_share_pct': 27,
+                  'israel_pedestrian_deaths_derived': r2(364 * 0.27)}
 (ROOT / 'data' / 'recomputed.json').write_text(json.dumps(out, ensure_ascii=False, indent=2), encoding='utf-8')
 print(json.dumps(out['issues'], ensure_ascii=False, indent=1))
 print('table1:', {k: v for k, v in out['table1'].items() if k != 'by_gender_red_arrivals'}, out['table1']['by_gender_red_arrivals'])

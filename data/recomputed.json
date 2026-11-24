@@ -192,5 +192,10 @@
       "joining_printed": 33.0
     }
   },
-  "quoted_in_book": {}
+  "quoted_in_book": {},
+  "context": {
+    "israel_road_deaths_2021": 364,
+    "israel_pedestrian_share_pct": 27,
+    "israel_pedestrian_deaths_derived": 98.28
+  }
 }

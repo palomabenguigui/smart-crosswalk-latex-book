@@ -19,8 +19,8 @@ def make():
         ax.plot(list(seg), [printed ** k for k in seg], color=ASPHALT_LIGHT, linewidth=1.3, linestyle=(0, (5, 3)),
                 marker='o', ms=4, mfc=WHITE, label=he(f'לפי הערך שפורסם: {printed:.2f} לכל ממתין') if style == '-' else None)
     ax.axvspan(3.5, 5.2, color=ASPHALT_LIGHT, alpha=0.08, linewidth=0)
-    ax.text(4.35, 0.93, he('המחשה: מחוץ לטווח'), ha='center', va='top', fontsize=7, color=ASPHALT_LIGHT)
-    ax.text(4.35, 0.85, he('שדווח במאמר'), ha='center', va='top', fontsize=7, color=ASPHALT_LIGHT)
+    ax.text(4.35, 0.93, he('המחשה בלבד:'), ha='center', va='top', fontsize=7, color=ASPHALT_LIGHT)
+    ax.text(4.35, 0.85, he('טווח הממתינים לא דווח'), ha='center', va='top', fontsize=7, color=ASPHALT_LIGHT)
     ax.set_xlabel(he('מספר האנשים שכבר ממתינים על המדרכה בעת ההגעה'))
     ax.set_ylabel(he('סיכויי חצייה יחסיים (מגיע יחיד = 1)'))
     ax.set_ylim(0, 1.05); ax.set_xlim(-0.2, 5.2); ax.set_xticks(K)

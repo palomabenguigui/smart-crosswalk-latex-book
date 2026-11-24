@@ -401,7 +401,6 @@
   \newtcolorbox{sc@scenebox}{enhanced,colback=AsphaltDeep,colupper=StripeWhite,boxrule=0pt,arc=1.6mm,
     left=5mm,right=18mm,top=5mm,bottom=5mm,fontupper=\sffamily\fontsize{10.5}{15}\selectfont,parbox=false,
     before skip=2pt,after skip=14pt,before upper={\pardir TRT\textdir TRT},
-    after upper={\par\typeout{SCENE-LINES:\thechapter:\the\prevgraf}},
     overlay={
       \begin{scope}\clip ($(frame.south west)+(2.5mm,0)$) rectangle ($(frame.north east)+(-2.5mm,0)$);
         \foreach \i in {0,...,60}{%
@@ -417,7 +416,8 @@
 \newenvironment{trapbox}[1][מלכודת]{\sc@ltrpar\begin{sc@trapbox}{#1}}{\end{sc@trapbox}\par}
 \newenvironment{definitionbox}[1][הגדרה]{\sc@ltrpar\begin{sc@definitionbox}{#1}}{\end{sc@definitionbox}\par}
 \newenvironment{projectbox}[1][בפרויקט הנוכחי]{\sc@ltrpar\begin{sc@projectbox}{#1}}{\end{sc@projectbox}\par}
-\newenvironment{scenebox}{\sc@ltrpar\begin{sc@scenebox}}{\end{sc@scenebox}\par}
+\newenvironment{scenebox}{\sc@ltrpar\begin{sc@scenebox}}%
+  {\end{sc@scenebox}\par}% scene length: character heuristic in qa.py (\prevgraf is not set under babel's Lua line breaking)
 
 %% ================================================================ PULL QUOTE
 
@@ -612,6 +612,15 @@
 \def\sc@citeopt[#1]{\@ifnextchar[{\sc@citetwo[#1]}{\sc@citeone[#1]}}
 \def\sc@citeone[#1]#2{\sc@citebox{\sc@origcite[#1]{#2}}}
 \def\sc@citetwo[#1][#2]#3{\sc@citebox{\sc@origcite[#1][#2]{#3}}}
+%% The standard hanging-indent list is mirrored in this RTL document (the list was shifted 8 mm into the margin,
+%% round-2 red team R2-04). Bibliography items: no left margin, label inside a fixed first-line indent.
+\defbibenvironment{bibliography}
+  {\list{\printtext[labelnumberwidth]{\printfield{labelprefix}\printfield{labelnumber}}}
+     {\setlength{\leftmargin}{0pt}\setlength{\labelwidth}{2.2em}\setlength{\labelsep}{0.6em}%
+      \setlength{\itemindent}{2.8em}\setlength{\itemsep}{\bibitemsep}\setlength{\parsep}{\bibparsep}}%
+   \renewcommand*{\makelabel}[1]{##1\hss}}
+  {\endlist}
+  {\item}
 \newcommand\printreferences{%
   \chapter*{מקורות}\addcontentsline{toc}{chapter}{מקורות}\markboth{מקורות}{}%
   \begin{otherlanguage}{english}\setquotestyle{english}\raggedright\printbibliography[heading=none]\end{otherlanguage}}

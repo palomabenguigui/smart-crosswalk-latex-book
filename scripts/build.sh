@@ -31,6 +31,7 @@ run "${LTX[@]}"
 run biber --input-directory build --output-directory build "$JOB"
 run "${LTX[@]}"
 run "${LTX[@]}"
+if grep -q "Rerun to get" "build/$JOB.log"; then run "${LTX[@]}"; fi   # labels moved (long books): one more pass
 
 # --- log summary (AC-03)
 LOG="build/$JOB.log"

@@ -295,15 +295,16 @@ def check_code(a):
             return cur
         args = {}
         for f in chapter_files():
-            for m in re.finditer(r'\\(?:num|pct)\{([^}]*)\}', strip_comments(read(f))):
-                args.setdefault(m.group(1).replace(',', ''), []).append(str(f))
+            src = strip_comments(read(f))
+            vals = re.findall(r'\\(?:num|pct)\{([^}]*)\}', src) + [v for pair in re.findall(r'\\range\{([^}]*)\}\{([^}]*)\}', src) for v in pair]
+            for v in vals: args.setdefault(v.replace(',', ''), []).append(f.stem)
         for item in reg.get('numbers', []):
             try: val = lookup(item['source'])
             except Exception: report('qa-code', 'major', '-', str(q), item['source'], 'AC-14 source path not in recomputed.json'); continue
             shown = item['shown']
             if abs(float(shown) - float(val)) > 0.5 * 10 ** (-item.get('decimals', 2)):
                 report('qa-code', 'major', '-', str(q), f"{shown} vs {val}", f"AC-14 rounding of {item['source']}")
-            if shown.replace(',', '') not in args:
+            if not any(item.get('chapter', '') in ch for ch in args.get(shown.replace(',', ''), [])):
                 report('qa-code', 'major', '-', item.get('chapter', 'chapters/'), shown, f"AC-14 registered number not in \\num/\\pct ({item['source']})")
 
 # --------------------------------------------------------------------------- content (qa-super only)
