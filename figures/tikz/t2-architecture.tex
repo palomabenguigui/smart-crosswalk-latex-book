@@ -1,0 +1,44 @@
+% T2 – system architecture: curb sensing -> controller (adaptive red within safe limits) -> signal heads (clearance-only countdown);
+% campaign display + privacy-preserving data layer. LTR coordinates; flow runs right-to-left (Hebrew reading order).
+\begin{tikzpicture}[x=1mm,y=1mm,
+  lab/.style={rtl,font=\sffamily\fontsize{7.5}{9.5}\selectfont,text=Asphalt,align=center,inner sep=1pt,text width=33mm},
+  ttl/.style={rtl,font=\sffamily\bfseries\fontsize{8}{10}\selectfont,align=center,inner sep=1pt,text width=33mm},
+  box/.style={draw=Asphalt,line width=.7pt,rounded corners=1.2mm,fill=Paper,minimum width=36mm,minimum height=26mm},
+  flow/.style={-latex,line width=1pt,Asphalt},
+  dflow/.style={-latex,line width=.8pt,SignalAmberDark,dash pattern=on 2pt off 1.4pt}]
+  % row 1 (right to left): sensing, controller, signal heads
+  \node[box] (s) at (117,58) {};
+  \node[box,fill=Asphalt,draw=AsphaltDeep] (c) at (69,58) {};
+  \node[box] (h) at (21,58) {};
+  \node at (s) [yshift=7mm] {\fontsize{11}{11}\selectfont\picto[Asphalt]{sensor}};
+  \node[ttl,text=Asphalt] at (s) [yshift=0.5mm] {חישה בשפת המדרכה};
+  \node[lab] at (s) [yshift=-7mm] {ספירת ממתינים, זמן המתנה, הולך רגל בודד};
+  \node at (c) [yshift=7mm] {\fontsize{11}{11}\selectfont\picto[SignalAmber]{signal}};
+  \node[ttl,text=StripeWhite] at (c) [yshift=0.5mm] {בקר אדום אדפטיבי};
+  \node[lab,text=StripeWhite] at (c) [yshift=-7mm] {קיצור או הארכת האדום בתוך גבולות בטיחות קבועים};
+  \node at (h) [yshift=7mm] {\fontsize{11}{11}\selectfont\picto[SignalGreen]{walker}};
+  \node[ttl,text=Asphalt] at (h) [yshift=0.5mm] {ראשי רמזור};
+  \node[lab] at (h) [yshift=-7mm] {ספירה לאחור בזמן הפינוי בלבד};
+  % row 2: data layer (under sensing), campaign display (under heads)
+  \node[box,minimum height=22mm] (d) at (117,18) {};
+  \node[box,minimum height=22mm] (k) at (21,18) {};
+  \node at (d) [yshift=6mm] {\fontsize{10}{10}\selectfont\picto[AsphaltLight]{info}};
+  \node[ttl] at (d) [yshift=0mm] {שכבת נתונים};
+  \node[lab] at (d) [yshift=-6mm] {ספירות בלבד, ללא שמירת תמונות};
+  \node at (k) [yshift=6mm] {\fontsize{10}{10}\selectfont\picto[SignalRed]{pedestrian}};
+  \node[ttl] at (k) [yshift=0mm] {קמפיין ושלט מודעות};
+  \node[lab] at (k) [yshift=-6mm] {מסר חברתי על החצייה באדום};
+  % safe-limit note (middle bottom)
+  \node[rtl,draw=SignalAmberDark,dash pattern=on 2pt off 1.4pt,fill=SignalAmber!18,rounded corners=1.2mm,text=Asphalt,
+        font=\sffamily\fontsize{7.5}{9.5}\selectfont,align=center,text width=32mm,inner sep=2mm] (g) at (69,18) {גבולות בטיחות: מינימום ירוק, זמן פינוי מלא וזמן מחזור מרבי};
+  % flows
+  \draw[flow] (s.west) -- (c.east);
+  \draw[flow] (c.west) -- (h.east);
+  \draw[dflow] (s.south) -- (d.north);
+  \draw[dflow] (c.south) -- (g.north);
+  \draw[dflow] (g.west) -- (k.east);
+  \draw[dflow] (c.south west) -- ++(0,-3) -| (k.north);
+  % legend
+  \draw[flow] (130,-1.5) -- ++(8,0); \node[rtl,anchor=east,font=\sffamily\fontsize{7}{8}\selectfont,text=Asphalt,inner sep=1pt] at (128,-1.5) {זרימת בקרה};
+  \draw[dflow] (100,-1.5) -- ++(8,0); \node[rtl,anchor=east,font=\sffamily\fontsize{7}{8}\selectfont,text=Asphalt,inner sep=1pt] at (98,-1.5) {נתונים ומסרים};
+\end{tikzpicture}

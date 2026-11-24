@@ -1,0 +1,31 @@
+% T4 – social-control loop: others waiting -> visible norm -> lower odds of crossing on red; lone pedestrian -> weaker control,
+% longer perceived wait -> higher odds. The system acts on both (shorter red for a lone pedestrian; campaign).
+\begin{tikzpicture}[x=1mm,y=1mm,
+  lab/.style={rtl,font=\sffamily\fontsize{7.5}{9.5}\selectfont,text=Asphalt,align=center,inner sep=1pt,text width=34mm},
+  nd/.style={draw=Asphalt,line width=.7pt,rounded corners=1.2mm,fill=Paper,minimum width=38mm,minimum height=13mm},
+  ar/.style={-latex,line width=1pt,Asphalt},
+  ard/.style={-latex,line width=1pt,SignalRed,dash pattern=on 3pt off 1.5pt}]
+  % upper track: group (flagship finding, solid/low)
+  \node[nd] (a) at (113,56) {}; \node[lab] at (a) {מספר ממתינים גדל על המדרכה};
+  \node[nd] (b) at (69,56) {}; \node[lab] at (b) {נורמה גלויה ובקרה חברתית};
+  \node[nd,fill=Concrete] (c) at (25,56) {}; \node[lab] at (c) {סיכויים נמוכים יותר לחצות באדום};
+  \draw[ar] (a) -- (b); \draw[ar] (b) -- (c);
+  \node[rtl,anchor=south west,font=\sffamily\bfseries\fontsize{7.5}{9}\selectfont,text=AsphaltLight,inner sep=1pt] at (3,67) {ממצא מרכזי במקור};
+  \node at (132,67) {\fontsize{9}{9}\selectfont\picto[Asphalt]{pedestrian}\picto[Asphalt]{pedestrian}\picto[Asphalt]{pedestrian}};
+  % lower track: lone pedestrian (dashed red + hatched end = higher odds)
+  \node[nd] (d) at (113,26) {}; \node[lab] at (d) {הולך רגל בודד};
+  \node[nd] (e) at (69,26) {}; \node[lab] at (e) {בקרה חברתית חלשה וזמן המתנה נתפס כארוך};
+  \node[nd,pattern=north east lines,pattern color=SignalRed!55,draw=SignalRed] (f) at (25,26) {};
+  \node[lab,fill=Paper,inner sep=1.5pt,text width=30mm] at (f) {סיכויים גבוהים יותר לחצות באדום};
+  \draw[ard] (d) -- (e); \draw[ard] (e) -- (f);
+  \node at (132,36) {\fontsize{9}{9}\selectfont\picto[SignalRed]{pedestrian}};
+  % system actions
+  \node[rtl,draw=SignalAmberDark,fill=SignalAmber!18,rounded corners=1.2mm,text=Asphalt,font=\sffamily\fontsize{7.5}{9.5}\selectfont,
+        align=center,text width=36mm,inner sep=2mm] (s1) at (69,-2) {אדום קצר יותר להולך רגל בודד};
+  \node[rtl,draw=SignalAmberDark,fill=SignalAmber!18,rounded corners=1.2mm,text=Asphalt,font=\sffamily\fontsize{7.5}{9.5}\selectfont,
+        align=center,text width=40mm,inner sep=2mm] (s2) at (113,-2) {קמפיין שמציג את הנורמה};
+  \draw[-latex,line width=.9pt,SignalAmberDark] (s1.north) -- (e.south);
+  \draw[-latex,line width=.9pt,SignalAmberDark] (s2.north) -- (d.south);
+  \draw[-latex,line width=.9pt,SignalAmberDark] (s2.west) -- (91.5,-2) -- (91.5,42) -- (84,42) -- (84,49.5);
+  \node[rtl,anchor=east,font=\sffamily\bfseries\fontsize{7.5}{9}\selectfont,text=SignalAmberDark,inner sep=1pt] at (36,-2) {המערכת פועלת על שני המסלולים};
+\end{tikzpicture}
