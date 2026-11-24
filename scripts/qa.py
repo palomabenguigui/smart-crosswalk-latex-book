@@ -18,7 +18,7 @@ os.chdir(ROOT)
 FINDINGS: list[tuple] = []
 HEB = '\u0590-\u05FF'
 FINALS = 'ךםןףץ'
-CLS_TARGET = '1.4'                      # PLAN: target .cls version (qa-cls-version)
+CLS_TARGET = '1.5'                      # PLAN: target .cls version (qa-cls-version)
 
 def report(skill, sev, page, loc, text, rule):
     text = text.replace('\n', ' ').strip()
@@ -105,7 +105,7 @@ def check_infra(a):
         body = sum(1 for l in labels if l.isdigit())
         active = [n for n, f in re.findall(r'^\\inputchapter\{(\d+)\}\{([^}]+)\}', read('main.tex'), re.M) if Path(f + '.tex').exists()]
         sev = 'major' if len(active) == 10 else 'minor'          # gate: binding only when all 10 chapters are in
-        if not 28 <= n <= 32: report('qa-infra', sev, '-', a.pdf, f'{n} pages ({len(active)}/10 chapters)', 'AC-01 (28–32)')
+        if not 40 <= n <= 46: report('qa-infra', sev, '-', a.pdf, f'{n} pages ({len(active)}/10 chapters)', 'AC-01 (40–46)')
         if body < 25: report('qa-infra', sev, '-', a.pdf, f'{body} body pages ({len(active)}/10 chapters)', 'AC-02 (>= 25)')
 
 # --------------------------------------------------------------------------- qa-typeset
@@ -133,7 +133,7 @@ def check_typeset(a):
         report('qa-typeset', 'major', '-', a.log, 'rerun requested', 'AC-03 build passes')
 
 # --------------------------------------------------------------------------- qa-BiDi
-SAFE_CMDS = r'en|num|pct|range|unit|cite|ref|eqref|label|enlabel|picto|includegraphics|authorphoto|input|begin|end|ChapterIcon|stattile|headrow|thead|SetLamp|setcounter|sidenote|texttt'
+SAFE_CMDS = r'en|num|pct|range|unit|cite|ref|eqref|label|enlabel|picto|includegraphics|authorphoto|input|inputfigure|includefigure|addcontentsline|begin|end|ChapterIcon|stattile|headrow|thead|SetLamp|setcounter|sidenote|texttt'
 def strip_safe(s):
     """Remove constructs where Latin/digits are legitimate; what remains must be Hebrew + punctuation."""
     s = strip_comments(s)

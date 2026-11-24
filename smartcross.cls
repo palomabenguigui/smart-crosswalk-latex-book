@@ -7,8 +7,8 @@
 %% Tested toolchain: TeX Live 2026 (LuaHBTeX 1.24.0, babel v26.4, biber 2.21).
 %% Compile from the REPOSITORY ROOT (fonts are loaded by relative path from fonts/).
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{smartcross}[2026/11/24 v1.4 Smart Crosswalk report class (shirloma)]
-\def\SmartCrossVersion{1.4}
+\ProvidesClass{smartcross}[2026/11/25 v1.5 Smart Crosswalk report class (shirloma)]
+\def\SmartCrossVersion{1.5}
 
 %% ---------------------------------------------------------------- engine guard (qa-cls-version)
 \ifdefined\directlua\else
@@ -336,7 +336,7 @@
   \sc@ltr{\begin{tikzpicture}[x=1mm,y=1mm]
     \useasboundingbox (0,0) rectangle (\headwidth,7mm);
     
-      \node[anchor=south west,inner sep=0pt,text=Asphalt,font=\sffamily\bfseries\fontsize{14}{14}\selectfont] (n) at (0,0.6) {\thepage};
+      \node[anchor=south west,inner sep=0pt,text=Asphalt,font=\sffamily\bfseries\fontsize{14}{14}\selectfont] (n) at (0,0.6) {\foreignlanguage{hebrew}{\thepage}};
       \begin{scope}\clip ($(n.south east)+(3,0.3)$) rectangle ++(20,3);
         \fill[Asphalt] ($(n.south east)+(3,0.3)$) rectangle ++(20,3);
         \foreach \i in {0,...,6}{\fill[StripeWhite] ($(n.south east)+(4+\i*3,0.9)$) rectangle ++(1.5,1.8);}
@@ -355,8 +355,10 @@
 
 %% ---------------------------------------------------------------- front / main matter
 \newcommand\inputfront[1]{\IfFileExists{#1.tex}{\input{#1}}{}}
+%% Hebrew-letter page numbers, independent of the current language (a page shipped during the English abstract printed "1")
+\newcommand\sc@hebletter[1]{\ifcase#1\or א\or ב\or ג\or ד\or ה\or ו\or ז\or ח\or ט\or י\or יא\or יב\or יג\or יד\or טו\or טז\else\number#1\fi}
 \newcommand\FrontMatter{\clearpage\pagenumbering{roman}%
-  \renewcommand\thepage{\localecounter{letters}{page}}}
+  \renewcommand\thepage{\sc@hebletter{\value{page}}}}
 \newcommand\MainMatter{\clearpage\pagenumbering{arabic}}
 
 %% ---------------------------------------------------------------- table of contents
@@ -497,11 +499,12 @@
 \renewcommand\arraystretch{1.32}
 
   \setlength\heavyrulewidth{0.9pt}\setlength\lightrulewidth{0.4pt}\arrayrulecolor{Asphalt}
-  \newcommand\thead[1]{{\sffamily\bfseries\color{Asphalt}#1}}
+  \newcommand\thead[1]{\leavevmode{\sffamily\bfseries\color{Asphalt}#1}}% \leavevmode: no line drop in p/X columns
   \newcommand\headrow{}
   \AtBeginEnvironment{tabular}{\small}
 
 \AtBeginEnvironment{tabularx}{\small}
+\renewcommand\tabularxcolumn[1]{>{\raggedright\arraybackslash}p{#1}}% narrow X columns ragged (RTL start side), no word gaps
 
 %% ---------------------------------------------------------------- floats (DS-16)
 \setlength\@fptop{0pt}\setlength\@fpsep{14pt}\setlength\@fpbot{0pt plus 1fil}% skip registers in LaTeX 2025+

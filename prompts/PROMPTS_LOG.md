@@ -238,3 +238,20 @@ Log this prompt, commit and push.
 ```
 
 ---
+
+## Step 17 – Merge the final round, final PDF, README
+**Date/time:** 2026-11-25 00:31
+
+```text
+The final round is done (reports in prompts/agents/final-*-report.md). My agent screenshots are in screenshots/agents/.
+
+Decisions:
+1. Page count: accept the current length. Change the PRD target to 40–46 pages (the brief only sets a minimum of 25). Do NOT cut content.
+2. Team targets approved as written (25% reduction, 90% counting accuracy, 30% max red shortening), clearly labelled as the team's own targets.
+3. Fix the three visible .cls defects from the Writer's report (table header alignment in wrapping columns, ragged-right in narrow columns, abstract page numbering in Hebrew letters).
+4. Add \inputfigure, \includefigure and \addcontentsline to SAFE_CMDS in qa.py so the 30 false majors disappear. Cite lenne2007 and pele2019 where relevant or remove them from the bibliography.
+
+Then merge, run QA, fix blockers and majors only, build the final PDF, update the README with all screenshots (note that the agents ran on different models by task: Writer on the main model, Visuals and QA red team on Sonnet), commit and push. Only stop if something truly needs my decision.
+```
+
+---

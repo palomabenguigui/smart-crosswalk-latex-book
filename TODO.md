@@ -1,5 +1,7 @@
 # TODO – ordered checklist
 
+> **Status (Step 17, 2026-11-25): COMPLETE.** Final PDF `build/main.pdf` – 45 pages, QA 0 blocker / 0 major. All 10 chapters, front matter, 10 figures, 8 tables written in three parallel rounds; README with screenshots.
+
 Mirrors the phases in [`PLAN.md`](PLAN.md). Tick items only when their exit gate passes. Each item = one logged prompt + one commit.
 
 ## P0 – Planning
