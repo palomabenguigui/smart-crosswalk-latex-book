@@ -203,3 +203,12 @@ Log this prompt, commit and push after each step.
 ```
 
 ---
+
+## Step 14 – Merge parallel round 1, QA, prepare round 2
+**Date/time:** 2026-11-24 14:46
+
+```text
+The three agents finished round 1 (reports in prompts/agents/round1-*-report.md). Merge their results, run the QA skills, fix via the owning agents or the .cls, log the round, commit and push. Then prepare round 2.
+```
+
+---
