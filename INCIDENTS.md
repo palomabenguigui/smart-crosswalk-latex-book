@@ -42,6 +42,27 @@ and the **detection gap** closed so it can't recur.
 - **Fix:** each gap fixed in `scripts/qa.py`; register `data/quoted_in_book.json`; `\prevgraf` scene measurement in the `.cls`.
 - **Detection gap closed:** 5 new regression tests target false passes (24 tests in total); every future detector gets a "must fire" **and** a "must not be masked" test.
 
+## INC-005 – Skills documented stale targets
+- **Date / found by:** 2026-11-25, the students (human review of the repository)
+- **Symptom:** `skills/qa-cls-version` said the class target is v1.0 and `skills/qa-infra` said 28–32 pages, while the code used v1.5 and 40–46 pages (PRD AC-01).
+- **Root cause:** version bumps and the Step 17 page-range change were made in the code (`CLS_TARGET`, `qa.py`, PRD) but not in the skills. Not detected because no check linked skill text to the code.
+- **Fix:** the skills now refer to `CLS_TARGET` and AC-01 instead of repeating numbers.
+- **Detection gap closed:** `qa.py infra` fails when a version or page range in `skills/*/SKILL.md` contradicts `CLS_TARGET` or PRD AC-01; regression test in `tests/qa/run_tests.py`.
+
+## INC-006 – The final red-team pass was interim and never repeated on the full book
+- **Date / found by:** 2026-11-25, the students (human review of the repository)
+- **Symptom:** the only red-team pass covered 16 pages (ch. 1 and 4). Chapters 2, 3 and 5–10 of the 45-page book were checked only by the Leader, who had also fixed them – this breaks PLAN §4 ("a fixer never marks its own work as verified").
+- **Root cause:** the Step 16 "finish efficiently" decision allowed the merge without a re-run gate.
+- **Fix:** the full-book red-team round is scheduled after Step 18 (TODO P8).
+- **Detection gap closed:** exit gate in PLAN §4 and `skills/qa-super/SKILL.md` – a final round cannot be merged unless a red-team report exists whose inspected page count equals the built PDF's; `qa.py infra --redteam <report>` and a regression test enforce it.
+
+## INC-007 – The cover had no author names
+- **Date / found by:** 2026-11-25, the students (human review of the repository)
+- **Symptom:** the cover showed only "קבוצת shirloma"; red-team finding 10 (`final-redteam-report.md`) named this and was left open with no owner.
+- **Root cause:** minor findings had no status tracking, so nobody owned it.
+- **Fix:** `\Authors{פלומה בנגיגי, שירה דביר}` in `main.tex`; the `.cls` (v1.6) prints the authors and keeps the group code line "קבוצה: shirloma".
+- **Detection gap closed:** every finding must get a status in a Fixer report (`skills/fixer/SKILL.md`, PLAN §4).
+
 ---
 
 ## Style-sample findings (Step 09) – found by page-render inspection, all fixed in `smartcross.cls`

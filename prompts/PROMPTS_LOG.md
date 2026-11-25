@@ -255,3 +255,35 @@ Then merge, run QA, fix blockers and majors only, build the final PDF, update th
 ```
 
 ---
+
+---
+
+## Step 18 – Process cleanup before the last red-team round
+**Date/time:** 2026-11-25 19:35
+
+```text
+Step 18 – Process cleanup before the last red-team round. Log this prompt first (rule 1). An external review of the repository against the assignment brief found the gaps below. Fix them in sources only, never by hand in the output. Don't change chapter content: this round is about the process, not the text.
+
+1. Stale documentation – make the docs match the code:
+   - skills/qa-cls-version/SKILL.md says the target is v1.0, while smartcross.cls and CLS_TARGET are v1.5. Make the skill refer to CLS_TARGET in scripts/qa.py instead of hard-coding a version.
+   - skills/qa-infra/SKILL.md says 28–32 pages, while PRD AC-01 and qa.py say 40–46. Make the skill refer to AC-01 instead of repeating the number.
+   - TODO.md has 29 unchecked items although the README says "complete". Mark each item done or obsolete with a one-line reason (e.g. "superseded by the Step 15 pivot"). Nothing may stay open without a reason.
+   - Add a check to qa-infra (scripts/qa.py + a regression test in tests/qa/) that fails when a version or page range written in skills/*.md contradicts PRD.md or qa.py.
+
+2. Fixer agent. Create skills/fixer/SKILL.md: the Fixer role in the Detector → Fixer loop (PLAN §4).
+   - Input: a Detector report in the mandatory format.
+   - Rules: fix only sources (chapters, .cls, scripts, data, skills), never build/. A defect repeated in several places is fixed once in the .cls or the script. Give every finding a status: FIXED / REJECTED (reason) / DEFERRED (reason). The Fixer never marks its own work as verified; the Detector re-checks.
+   - Output: prompts/agents/<round>-fixer-report.md with the columns: finding id | file:line | change | status | reason | candidate incident.
+   - Update PLAN §4, the README Agent Team table and the Skills table so that the Fixer is a separate agent with its own skill.
+
+3. Incidents found by us, the students (human review). Add them to INCIDENTS.md, each with: found by "the students (human review of the repository)", symptom, root cause, fix, and the detection gap closed:
+   - INC-005: skills documented stale targets (v1.0, 28–32 pages) while the code used v1.5 and 40–46. Why it happened: version bumps changed the code but not the skills. Why it was not detected: no check linked skill text to the code. Gap closed: the qa-infra check from point 1.
+   - INC-006: the final red-team pass was interim (16 pages, only ch. 1 and 4) and was never repeated on the full 45-page book. Chapters 2, 3 and 5–10 were checked only by the Leader, who had also fixed them, which breaks PLAN §4 ("a fixer never marks its own work as verified"). Why: the Step 16 "finish efficiently" decision merged without a re-run gate. Gap closed: add an exit gate to PLAN §4 and to skills/qa-super/SKILL.md – a final round can't be merged unless a red-team report exists whose inspected page count equals the page count of the built PDF.
+   - INC-007: the cover has no author names. Red-team finding 10 (final-redteam-report.md) was left open with no owner. Why: minor findings had no status tracking. Gap closed: every finding must get a status in a Fixer report.
+
+4. Cover: replace "קבוצת shirloma" with the authors' names: פלומה בנגיגי, שירה דביר. Keep the group code. Do it through the main.tex metadata and the .cls, not by editing the cover by hand.
+
+5. For every visual page check, delegate the rendering and inspection to a subagent (Task tool) running on Sonnet: it renders the pages, looks at them, and returns only a text report in the mandatory format (page, file:line, exact text, rule). Do not load page images into your own context. Here, check only the cover. Save the subagent's prompt and report in prompts/agents/.
+
+Then build, run qa.py super (0 blocker, 0 major), commit and push.
+```

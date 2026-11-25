@@ -51,6 +51,7 @@ The book was produced by a **Leader** (the main Claude Code session) and special
 | Leader (main session) | Plans (PRD/PLAN/TODO), designs the `.cls`, merges each round, runs QA, fixes, commits | Claude Opus 5.5 |
 | **Writer** | Hebrew chapters in the defined voice (street-scene opener, then formal third person); paraphrase + cite | main model (Opus 5.5) |
 | **Researcher / Visuals** | Finds and verifies sources online, transcribes data; Python graphs and TikZ diagrams | Sonnet 5.5 |
+| **Fixer** | Own skill ([`skills/fixer`](skills/fixer/SKILL.md)): takes a Detector report, changes sources only, gives every finding a status (FIXED / REJECTED / DEFERRED) in `<round>-fixer-report.md`; never verifies its own work | Main model |
 | **QA red team** | Detector only: finds what a reader would see (layout, BiDi, numbers, contradictions, close translation) | Sonnet 5.5 |
 
 The agents ran on different models according to their task. The Writer used the main model because the Hebrew prose needs it;
@@ -69,7 +70,7 @@ All agent prompts, reports and the Leader's responses are in [`prompts/agents/`]
 
 | QA skills (Detectors) | Production skills |
 |---|---|
-| `qa-super` (orchestrator), `qa-BiDi`, `qa-table`, `qa-code`, `qa-img`, `qa-typeset`, `qa-infra`, `qa-cls-version` | `writer`, `researcher`, `python-graphs`, `tikz-illustrations` |
+| `qa-super` (orchestrator), `qa-BiDi`, `qa-table`, `qa-code`, `qa-img`, `qa-typeset`, `qa-infra`, `qa-cls-version` | `writer`, `researcher`, `python-graphs`, `tikz-illustrations`, **`fixer`** (the Fixer of the Detector → Fixer loop) |
 
 The checks are implemented in [`scripts/qa.py`](scripts/qa.py), with regression fixtures in [`tests/qa/`](tests/qa/).
 **Fixes never touch the output.** Every fix goes into a source (a chapter, the `.cls`, a script or a skill), and recurring defects are fixed in the `.cls`.
@@ -80,7 +81,7 @@ The initial brief claimed that some Table 2 coefficients in the flagship paper w
 **rendered** page and found that the minus signs were printed correctly. PDF text extraction had turned them into `/C0`, so the claim was an
 artefact of text extraction. The brief was corrected, the real inconsistencies (D1–D7) were recomputed, and a rule was added: every transcribed number
 is checked against a rendered image of the source page.
-The full incident log ([`INCIDENTS.md`](INCIDENTS.md)) has 5 incidents and 22 design-inspection findings, including:
+The full incident log ([`INCIDENTS.md`](INCIDENTS.md)) has 8 incidents (INC-000…INC-007) and 22 design-inspection findings, including:
 - the Hebrew fonts lack digits (INC-001);
 - matplotlib reversed Hebrew twice (INC-002);
 - QA checks that could pass while the defect was present (INC-004).
@@ -92,7 +93,7 @@ The full incident log ([`INCIDENTS.md`](INCIDENTS.md)) has 5 incidents and 22 de
 ├── CLAUDE.md                # standing rules for every session (incl. 1a: parallel agents)
 ├── README.md  PRD.md  PLAN.md  TODO.md  INCIDENTS.md
 ├── main.tex                 # master file: cover, front matter, \inputchapter{1..10}, references
-├── smartcross.cls           # the document class – ALL formatting (v1.5)
+├── smartcross.cls           # the document class – ALL formatting (v1.6)
 ├── hebrew.lbx               # biblatex Hebrew module (English bibliography strings)
 ├── chapters/                # ch01 … ch10, front-abstract, front-abbreviations
 ├── figures/                 # Python graphs (PDF), figures/tikz/*.tex, authors' photo

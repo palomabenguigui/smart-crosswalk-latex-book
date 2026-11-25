@@ -1,13 +1,13 @@
 ---
 name: qa-cls-version
-description: Checks the document class – version matches PLAN (v1.0), engine guard for TeX Live 2026, Hebrew font fallbacks, babel/biblatex settings from the incident log – and that chapter files contain no formatting commands. Run first in every QA pass.
+description: Checks the document class – version matches `CLS_TARGET` in `scripts/qa.py`, engine guard for TeX Live 2026, Hebrew font fallbacks, babel/biblatex settings from the incident log – and that chapter files contain no formatting commands. Run first in every QA pass.
 ---
 # qa-cls-version (Detector)
 
 Run: `.venv/bin/python scripts/qa.py cls-version`
 
 ## Checks
-- `\ProvidesClass{smartcross}[… v1.0 …]` equals the target in `scripts/qa.py` (`CLS_TARGET`) and PLAN.
+- `\ProvidesClass{smartcross}[… vX.Y …]` equals `CLS_TARGET` in `scripts/qa.py` (the single source of truth; this skill never repeats the number).
 - The `.cls` contains: the engine guard (`\luatexversion<124` → error), the luaotfload fallbacks `schebrm…` (INC-001),
   `layout=tabular` without `layout=counters` (DS-03), `autolang=none` (DS-05).
 - Chapter files (`chapters/*.tex`) define **no formatting**: no `\newcommand`, `\def`, `\definecolor`, `\usepackage`,

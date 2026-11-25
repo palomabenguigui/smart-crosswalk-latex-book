@@ -1,6 +1,6 @@
 # TODO – ordered checklist
 
-> **Status (Step 17, 2026-11-25): COMPLETE.** Final PDF `build/main.pdf` – 45 pages, QA 0 blocker / 0 major. All 10 chapters, front matter, 10 figures, 8 tables written in three parallel rounds; README with screenshots.
+> **Status (Step 18, 2026-11-25): build complete; two items stay open, each with an owner (red-team re-run on the full book; release tag).** Final PDF `build/main.pdf` – 45 pages, QA 0 blocker / 0 major. All 10 chapters, front matter, 10 figures, 8 tables written in three parallel rounds; README with screenshots.
 
 Mirrors the phases in [`PLAN.md`](PLAN.md). Tick items only when their exit gate passes. Each item = one logged prompt + one commit.
 
@@ -67,13 +67,13 @@ Mirrors the phases in [`PLAN.md`](PLAN.md). Tick items only when their exit gate
 - [x] G1 red-light crossing rate by gender (Table 1) → `figures/g1-crossing-by-gender.pdf`
 - [x] G2 odds-ratio forest plot: reported vs recomputed (Table 2) → `figures/g2-odds-ratios.pdf`
 - [x] G3 relative odds vs number of people waiting (reported vs recomputed) → `figures/g3-relative-odds.pdf`
-- [ ] G4 risk heat-map → **after** the ch. 9 risk register exists (writing round)
+- [x] G4 risk heat-map → **after** the ch. 9 risk register exists (writing round) — DONE in the final round (Step 17)
 - [x] T1 crosswalk plan view: waiting zone, sensing zone, countdown heads, awareness display, controller → `figures/tikz/t1-crosswalk-zones.tex`; all figures checked in `samples/figures-test.tex` (clean log, 0 BiDi findings)
-- [ ] T2 system architecture: curb sensing → adaptive-red logic (safe limits) → heads with clearance-only countdown → campaign/data layer (round 3)
-- [ ] T3 WBS tree → with ch. 8 (writing round)
-- [ ] T4 social-control feedback loop → with ch. 4 theory section (writing round)
-- [ ] Positioning graph for ch. 5 → after the Researcher's market sources (writing round)
-- [ ] `qa-img` + `qa-code` clean
+- [x] T2 system architecture: curb sensing → adaptive-red logic (safe limits) → heads with clearance-only countdown → campaign/data layer (round 3) — DONE in the final round (Step 17)
+- [x] T3 WBS tree → with ch. 8 (writing round) — DONE in the final round (Step 17)
+- [x] T4 social-control feedback loop → with ch. 4 theory section (writing round) — DONE in the final round (Step 17)
+- [x] Positioning graph for ch. 5 → after the Researcher's market sources (writing round) — DONE in the final round as T5 (Step 17)
+- [x] `qa-img` + `qa-code` clean — DONE: `qa.py super` 0 blocker / 0 major at Step 17
 
 ## P6 – Writing (one chapter per task, Detector → Fixer loop after each)
 Every chapter opens with a `scenebox` street scene (≤ 4 lines), then formal third person (PRD §12).
@@ -81,33 +81,33 @@ Every chapter opens with a `scenebox` street scene (≤ 4 lines), then formal th
 - [x] Round 1 merged: all 38 findings + 10 points closed or answered (`round1-redteam-response.md`), INC-003/004, DS-22, `.cls` v1.1, PRD v1.3
 - [x] **Decision (user, Step 15):** final concept = **adaptive red** (curb sensing, lone pedestrian, shorter red within safe limits) + **clearance-only countdown** (MUTCD §4I.04) + campaign; red-phase countdown = rejected Alternative 1, campaign only = Alternative 3; the pivot is told explicitly (PRD v1.4 §1, §13)
 - [x] Cover art and T1 updated to the clearance countdown (green walker + digits), T1 controller = adaptive red; `.cls` v1.2
-- [ ] **Parallel round 2** (prompts updated for the pivot): Writer – ch. 4 thematic review + literature matrix + Table 2 + knowledge gap aligned with the final concept, ch. 1 with the pivot; Researcher – statistics inventory, evidence per component (adaptive red, safe limits, clearance countdown, rejected A1), ch. 2/3/5 sources; red team – verify round-1 fixes, translation check, ch. 4 audit incl. consistency with PRD §1 v1.4
-- [ ] Round 3 (after round 2 merge): ch. 2, 3 (safe limits for adaptive red as requirements), 6 (A1 red countdown / **A2 chosen** / A3 campaign-only matrix), 7 (T2 architecture with adaptive-red logic)
-- [ ] Ch. 1 מבוא ורקע (2 pp)
-- [ ] Ch. 2 הגדרת הבעיה, שאלת המחקר והיעדים (2 pp)
-- [ ] Ch. 3 מפרט הדרישות (2 pp)
-- [~] Ch. 4 סקירת ספרות ומאמר הדגל: flagship sections + `cautionbox` D1–D7 merged (round 1); thematic review → round 2 (6.5 pp)
-- [ ] Ch. 5 חקר שוק ומוצרים קיימים (3 pp)
-- [ ] Ch. 6 חלופות תכן ומטריצת החלטה (3 pp)
-- [ ] Ch. 7 ארכיטקטורת המערכת וחדשנות (2 pp)
-- [ ] Ch. 8 תוכנית עבודה: WBS, RACI, גאנט (3 pp)
-- [ ] Ch. 9 ניתוח סיכונים ותוכנית הפחתה (2 pp)
-- [ ] Ch. 10 סיכום (1 p)
-- [ ] Front matter: Hebrew abstract + keywords, English abstract, abbreviations list
+- [x] **Parallel round 2** (prompts updated for the pivot): Writer – ch. 4 thematic review + literature matrix + Table 2 + knowledge gap aligned with the final concept, ch. 1 with the pivot; Researcher – statistics inventory, evidence per component (adaptive red, safe limits, clearance countdown, rejected A1), ch. 2/3/5 sources; red team – verify round-1 fixes, translation check, ch. 4 audit incl. consistency with PRD §1 v1.4 — OBSOLETE: superseded by the Step 16 decision to run ONE final parallel round; its content shipped in Step 17
+- [x] Round 3 (after round 2 merge): ch. 2, 3 (safe limits for adaptive red as requirements), 6 (A1 red countdown / **A2 chosen** / A3 campaign-only matrix), 7 (T2 architecture with adaptive-red logic) — OBSOLETE: superseded by the Step 16 decision to run ONE final parallel round; its content shipped in Step 17
+- [x] Ch. 1 מבוא ורקע (2 pp) — DONE in Step 17 (final round, merged)
+- [x] Ch. 2 הגדרת הבעיה, שאלת המחקר והיעדים (2 pp) — DONE in Step 17 (final round, merged)
+- [x] Ch. 3 מפרט הדרישות (2 pp) — DONE in Step 17 (final round, merged)
+- [x] Ch. 4 סקירת ספרות ומאמר הדגל: flagship sections + `cautionbox` D1–D7 merged (round 1); thematic review → round 2 (6.5 pp) — DONE: thematic review merged in round 2 (Step 16)
+- [x] Ch. 5 חקר שוק ומוצרים קיימים (3 pp) — DONE in Step 17 (final round, merged)
+- [x] Ch. 6 חלופות תכן ומטריצת החלטה (3 pp) — DONE in Step 17 (final round, merged)
+- [x] Ch. 7 ארכיטקטורת המערכת וחדשנות (2 pp) — DONE in Step 17 (final round, merged)
+- [x] Ch. 8 תוכנית עבודה: WBS, RACI, גאנט (3 pp) — DONE in Step 17 (final round, merged)
+- [x] Ch. 9 ניתוח סיכונים ותוכנית הפחתה (2 pp) — DONE in Step 17 (final round, merged)
+- [x] Ch. 10 סיכום (1 p) — DONE in Step 17 (final round, merged)
+- [x] Front matter: Hebrew abstract + keywords, English abstract, abbreviations list — DONE in Step 17 (final round, merged)
 
 ## P7 – Integration and full QA
-- [ ] Full build via `scripts/build.sh`
-- [ ] `qa-super` full run; loop until 0 blocker / 0 major
-- [ ] Check AC-01 to AC-15 and record results in a table in `README.md`
-- [ ] Page-by-page visual check at readable zoom (booklet §19.5); screenshots saved
+- [x] Full build via `scripts/build.sh` — DONE in Step 17 (45-page PDF, QA 0 blocker / 0 major); visual checks are now delegated to a Sonnet subagent (Step 18)
+- [x] `qa-super` full run; loop until 0 blocker / 0 major — DONE in Step 17 (45-page PDF, QA 0 blocker / 0 major); visual checks are now delegated to a Sonnet subagent (Step 18)
+- [x] Check AC-01 to AC-15 and record results in a table in `README.md` — DONE in Step 17 (45-page PDF, QA 0 blocker / 0 major); visual checks are now delegated to a Sonnet subagent (Step 18)
+- [x] Page-by-page visual check at readable zoom (booklet §19.5); screenshots saved — DONE in Step 17 (45-page PDF, QA 0 blocker / 0 major); visual checks are now delegated to a Sonnet subagent (Step 18)
 
 ## P8 – Red team
-- [ ] Fresh session (another model if possible): Prompt 9, 10 weakest points with page + sentence
-- [ ] Resolve or answer each point in writing; rebuild; re-run `qa-super`
+- [x] Fresh session (another model if possible): Prompt 9, 10 weakest points with page + sentence — DONE as an interim pass only (16 pages, ch. 1 + 4); INC-006 reopened it → repeated on the full book after Step 18
+- [ ] Resolve or answer each point in writing; rebuild; re-run `qa-super` — OPEN, owner: Fixer + Leader, after the full-book red-team round that follows Step 18 (INC-006)
 
 ## P9 – Release
-- [ ] Screenshots into `screenshots/`: ≥ 3 book pages (cover, chapter opener, content page), every Python graph, every TikZ illustration, agents in action (AC-19)
-- [ ] README: overview, agent team (with parallel-run evidence), structure, build, screenshots, skills list, credits, final status badge
-- [ ] README: INC-000 as a real red-team example (wrong claim → checked against the rendered page → corrected → new detection rule)
-- [ ] Final `build/main.pdf` committed; clean-clone build test (AC-18)
-- [ ] Tag `v1.0` and push
+- [x] Screenshots into `screenshots/`: ≥ 3 book pages (cover, chapter opener, content page), every Python graph, every TikZ illustration, agents in action (AC-19) — DONE in Step 17
+- [x] README: overview, agent team (with parallel-run evidence), structure, build, screenshots, skills list, credits, final status badge — DONE in Step 17
+- [x] README: INC-000 as a real red-team example (wrong claim → checked against the rendered page → corrected → new detection rule) — DONE in Step 17
+- [x] Final `build/main.pdf` committed — DONE in Step 17. The clean-clone build test (AC-18) is DEFERRED to the release tag (owner: Leader)
+- [ ] Tag `v1.0` and push — OPEN, owner: Leader, after the final red-team round passes the PLAN §4 exit gate

@@ -18,7 +18,7 @@ os.chdir(ROOT)
 FINDINGS: list[tuple] = []
 HEB = '\u0590-\u05FF'
 FINALS = 'ךםןףץ'
-CLS_TARGET = '1.5'                      # PLAN: target .cls version (qa-cls-version)
+CLS_TARGET = '1.6'                      # PLAN: target .cls version (qa-cls-version)
 
 def report(skill, sev, page, loc, text, rule):
     text = text.replace('\n', ' ').strip()
@@ -67,6 +67,33 @@ def check_cls_version(a):
             report('qa-cls-version', sev, '-', f'{f}:{lineno(s, m.start())}', m.group(0), 'PLAN §5 / AC-13: formatting only in the .cls')
 
 # --------------------------------------------------------------------------- qa-infra
+def prd_page_range():
+    m = re.search(r'\| AC-01 \|[^|]*\|\s*(\d+)[–-](\d+)', read('PRD.md'))
+    return (int(m.group(1)), int(m.group(2))) if m else None
+
+def check_skill_consistency(skills_dir='skills', cls_target=None, page_range=None):
+    """INC-005: versions (vX.Y) and page ranges (N–M pages) written in skills/*/SKILL.md must agree with
+    CLS_TARGET (qa.py) and the AC-01 range (PRD.md). Skills should refer to them instead of repeating numbers."""
+    cls_target = cls_target or CLS_TARGET
+    page_range = page_range or prd_page_range()
+    for f in sorted(Path(skills_dir).glob('*/SKILL.md')):
+        for i, line in enumerate(read(f).split('\n'), 1):
+            for m in re.finditer(r'\bv(\d+\.\d+)\b', line):
+                if re.search(r'smartcross|cls|class', line, re.I) and m.group(1) != cls_target:
+                    report('qa-infra', 'major', '-', f'{f}:{i}', m.group(0), f'INC-005: skill version != CLS_TARGET v{cls_target}')
+            for m in re.finditer(r'(\d+)\s*[–-]\s*(\d+)\s*(?:pages|עמודים)', line):
+                if page_range and (int(m.group(1)), int(m.group(2))) != page_range:
+                    report('qa-infra', 'major', '-', f'{f}:{i}', m.group(0), f'INC-005: skill page range != PRD AC-01 {page_range[0]}–{page_range[1]}')
+
+def check_redteam_gate(pdf, report_path):
+    """INC-006: a final round is mergeable only if a red-team report inspected every page of the built PDF."""
+    r, _ = pdf_pages(pdf)
+    if r is None: return
+    n = len(r.pages)
+    m = re.search(r'PDF:\s*\**\s*(\d+)\s*pages', read(report_path))
+    if not m: report('qa-infra', 'major', '-', report_path, 'no "PDF: N pages" line', 'INC-006 / PLAN §4 exit gate')
+    elif int(m.group(1)) != n: report('qa-infra', 'blocker', '-', report_path, f'red team inspected {m.group(1)} pages, PDF has {n}', 'INC-006 / PLAN §4 exit gate')
+
 def check_infra(a):
     texbin = '/Library/TeX/texbin'
     env = dict(os.environ, PATH=f'{texbin}:{os.environ.get("PATH", "")}')
@@ -94,6 +121,8 @@ def check_infra(a):
     for t in tracked:
         if t.endswith('.pdf') or t.endswith('preparation-report-book.md'):
             report('qa-infra', 'blocker', '-', t, 'copyrighted reference tracked in git', 'copyright')
+    check_skill_consistency()
+    if getattr(a, 'redteam', None): check_redteam_gate(a.pdf, a.redteam)
     # README images (AC-19)
     readme = read('README.md')
     for m in re.finditer(r'!\[[^\]]*\]\(([^)\s]+)\)', readme):
@@ -372,6 +401,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('family', choices=[n for n, _ in ORDER] + ['super'])
     ap.add_argument('--pdf', default='build/main.pdf'); ap.add_argument('--log', default=None)
+    ap.add_argument('--redteam', default=None, help='final-round gate: red-team report whose inspected page count must equal the PDF')
     ap.add_argument('--chapters', default='chapters', help='folder of chapter .tex files (tests use a fixture folder)')
     a = ap.parse_args()
     global CHAPTERS; CHAPTERS = a.chapters

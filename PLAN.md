@@ -83,13 +83,19 @@ A skill that says only "checked" or "OK" without counts and page numbers has fai
    TRIAGE (Leader): repeats across the document? ── yes ──► fix in .cls / skill    │
           │                                       no ───► fix in the one sentence  │
           ▼                                               (via the Writer agent)   │
-   FIXER (owning agent) changes SOURCE only, logs the incident id ────────────────┘
+   FIXER (own agent + skills/fixer/SKILL.md) changes SOURCE only, gives every     │
+          finding a status (FIXED / REJECTED / DEFERRED), logs the incident id ──────┘
+          │  report: prompts/agents/<round>-fixer-report.md
+          ▼
+   DETECTOR RE-CHECKS (the fixer never verifies its own work)
           │
           ▼
    Loop until 0 blocker + 0 major findings, or 3 rounds → escalate to the user
 ```
 
-- Detectors and Fixers are **separate agents**. A detector never fixes, and a fixer never marks its own work as verified.
+- Detectors and Fixers are **separate agents**; the Fixer has its own skill, [`skills/fixer/SKILL.md`](skills/fixer/SKILL.md). A detector never fixes, and a fixer never marks its own work as verified.
+- **Every finding gets a status** in the Fixer report – `FIXED` / `REJECTED (reason)` / `DEFERRED (reason, owner)`. No finding, minor ones included, may stay open without one (INC-007).
+- **Exit gate for a final round (INC-006):** a final round cannot be merged unless a red-team report exists whose *inspected page count equals the page count of the built PDF*, and every finding in it has a status in a Fixer report. A partial or interim pass does not open the gate. The Leader does not verify fixes the Leader made; the Detector re-checks (`qa.py infra --redteam <report>` checks the page count).
 - Order of detection follows the booklet: template (`qa-cls-version`) → infrastructure → typesetting → BiDi → tables → images → code → content (`qa-super`).
 - Before/after evidence (finding text and page, re-run result) is saved in `build/qa/` (ignored) and summarised in the commit message.
 

@@ -48,6 +48,26 @@ row = '| `x` | doi | 2026 | ✓ | ✓ | ✓ | ✓ | ✓ | **unverified** | |'
 cells = [c.strip().strip('*').strip().lower() for c in row.split('|')]
 expect('QA-22 "unverified" is not "verified"', 'verified' not in cells)
 
+# INC-005: skill text must agree with CLS_TARGET and PRD AC-01
+import tempfile
+with tempfile.TemporaryDirectory() as d:
+    (Path(d) / 'bad').mkdir(); (Path(d) / 'bad/SKILL.md').write_text('target class v0.9\nbuild must be 28–32 pages\n')
+    (Path(d) / 'ok').mkdir(); (Path(d) / 'ok/SKILL.md').write_text(f'class v{qa.CLS_TARGET}\n{qa.prd_page_range()[0]}–{qa.prd_page_range()[1]} pages\n')
+    qa.FINDINGS.clear(); qa.check_skill_consistency(d)
+    hits = [f[3] for f in qa.FINDINGS]
+    expect('INC-005 stale version and page range in a skill are reported', sum('bad' in h for h in hits) == 2)
+    expect('INC-005 matching skill text is clean', not any('/ok/' in h for h in hits))
+qa.FINDINGS.clear(); qa.check_skill_consistency()
+expect('INC-005 the real skills/*.md agree with the code', not qa.FINDINGS)
+# INC-006: red-team report must cover the built page count
+with tempfile.TemporaryDirectory() as d:
+    rp = Path(d) / 'r.md'; rp.write_text('PDF: **3 pages**\n')
+    npages = len(qa.pdf_pages('build/style-final.pdf')[0].pages)
+    qa.FINDINGS.clear(); qa.check_redteam_gate('build/style-final.pdf', str(rp))
+    expect('INC-006 gate fires on page-count mismatch', npages == 3 or any('inspected' in f[4] for f in qa.FINDINGS))
+    rp.write_text(f'PDF: **{npages} pages**\n'); qa.FINDINGS.clear(); qa.check_redteam_gate('build/style-final.pdf', str(rp))
+    expect('INC-006 gate silent when counts match', not qa.FINDINGS)
+
 # 3. the real final sample must be clean
 r = subprocess.run([PY, 'scripts/qa.py', 'super', '--pdf', 'build/style-final.pdf'], cwd=ROOT, capture_output=True, text=True)
 bad = [l for l in r.stdout.splitlines() if ('[blocker]' in l or '[major]' in l) and not l.startswith('[qa-code]')]

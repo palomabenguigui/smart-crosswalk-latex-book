@@ -7,7 +7,7 @@
 %% Tested toolchain: TeX Live 2026 (LuaHBTeX 1.24.0, babel v26.4, biber 2.21).
 %% Compile from the REPOSITORY ROOT (fonts are loaded by relative path from fonts/).
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{smartcross}[2026/11/25 v1.5 Smart Crosswalk report class (shirloma)]
+\ProvidesClass{smartcross}[2026/11/25 v1.6 Smart Crosswalk report class (shirloma)]
 \def\SmartCrossVersion{1.5}
 
 %% ---------------------------------------------------------------- engine guard (qa-cls-version)
@@ -604,13 +604,15 @@
       \begin{scope}\clip (20,35) rectangle (190,37.6);
         \fill[Asphalt] (20,35) rectangle (190,37.6);
         \foreach \i in {0,...,40}{\fill[StripeWhite] (21+\i*4.4,35.5) rectangle ++(2.2,1.6);}\end{scope}
-      \foreach \x/\lab/\val in {190/מוסד/\sc@institution, 125/מרצה/\sc@lecturer, 62/קבוצה/\sc@authors}{
+      \foreach \x/\lab/\val in {190/מוסד/\sc@institution, 125/מרצה/\sc@lecturer, 62/מחברים/\sc@authors}{
         \node[rtl,anchor=north east,inner sep=0pt,text=SignalAmber,font=\sffamily\bfseries\fontsize{7.5}{9}\selectfont] at (\x,29) {\lab};
         \node[rtl,anchor=north east,inner sep=0pt,text=StripeWhite!85,text width=58mm,align=flush right,
           font=\sffamily\fontsize{9}{12}\selectfont] at (\x,24) {\val};}
+      \node[rtl,anchor=north east,inner sep=0pt,text=StripeWhite!85,text width=58mm,align=flush right,
+          font=\sffamily\fontsize{9}{12}\selectfont] at (62,19) {קבוצה: \en{\sc@group}};
       \node[rtl,anchor=north east,inner sep=0pt,text=StripeWhite!60,text width=58mm,align=flush right,
-          font=\sffamily\fontsize{8}{11}\selectfont] at (190,14.5) {\sc@course};
-      \node[rtl,anchor=north east,inner sep=0pt,text=StripeWhite!60,font=\sffamily\fontsize{8}{11}\selectfont] at (62,14.5) {\sc@docdate};
+          font=\sffamily\fontsize{8}{11}\selectfont] at (190,10.5) {\sc@course};
+      \node[rtl,anchor=north east,inner sep=0pt,text=StripeWhite!60,font=\sffamily\fontsize{8}{11}\selectfont] at (62,10.5) {\sc@docdate};
     
     \end{scope}
   \end{tikzpicture}}
