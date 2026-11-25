@@ -13,6 +13,7 @@ and the **detection gap** closed so it can't recur.
 - **Fix:** PRD §9 corrected; the real inconsistencies (D1–D6) were recomputed and documented.
 - **Detection gap closed:** the Researcher skill must check every transcribed number against a *rendered image* of the source page; `data/*.csv` records the page of each value (`data/README.md`).
 - **Showcase:** presented in the README as a real red-team example.
+- **Fix commit:** 9dacd01 (Step 06). **Screenshot:** none – the defect was found and fixed in the same session without a screenshot of the broken state; the fixed result is in `screenshots/`.
 
 ## INC-001 – Noto Hebrew fonts have no digits, Latin letters or punctuation
 - **Date / found by:** 2026-11-23, font + BiDi smoke test (Step 08)
@@ -20,6 +21,7 @@ and the **detection gap** closed so it can't recur.
 - **Root cause:** Noto Serif Hebrew / Noto Sans Hebrew cover only the Hebrew block; the build exited 0, so only the log revealed it.
 - **Fix:** luaotfload fallback chains (`schebrm`, `schebrmbf`, `schebsf`, `schebsfbf`) from the Hebrew fonts to Noto Serif / Noto Sans, defined in `smartcross.cls`; `\setmathrm` set to Noto Serif.
 - **Detection gap closed:** `scripts/build.sh` counts `Missing character` lines and `qa-typeset` must fail on any non-zero count (AC-03).
+- **Fix commit:** 667c2a2 (Step 08). **Screenshot:** none – the defect was found and fixed in the same session without a screenshot of the broken state; the fixed result is in `screenshots/`.
 
 ## INC-002 – Hebrew reversed in every Python graph
 - **Date / found by:** 2026-11-24, Leader, visual inspection of the rendered figures G1–G3 (P5, Step 13)
@@ -27,6 +29,7 @@ and the **detection gap** closed so it can't recur.
 - **Root cause:** the `python-graphs` skill prescribed `python-bidi`'s `get_display()` (the classic workaround), but matplotlib 3.11 already applies the bidi algorithm itself → the text was reversed twice. Also, without an RTL base direction, numbers sat on the wrong side, and in multi-line labels the RTL mark only affects the first line.
 - **Fix:** `scripts/figstyle.py` `he()` returns logical-order text with a leading RLM (U+200F); one line per text object; G1 counts moved into the bars.
 - **Detection gap closed:** `qa.py img` now runs the BiDi scan on every `figures/*.pdf` in **logical** extraction order (matplotlib PDFs extract in reading order, LuaTeX PDFs in visual order); it flagged 23 reversed words on the bad figures and 0 after the fix. Two regression tests added to `tests/qa/run_tests.py`; the `python-graphs` skill now forbids `get_display()`.
+- **Fix commit:** e944a44 (Step 13.6). **Screenshot:** none – the defect was found and fixed in the same session without a screenshot of the broken state; the fixed result is in `screenshots/`.
 
 ## INC-003 – The committee's "every value recomputed" missed the age chi-square
 - **Date / found by:** 2026-11-24, QA red team round 1 (QA-15)
@@ -34,6 +37,7 @@ and the **detection gap** closed so it can't recur.
 - **Root cause:** recomputation covered the tables' cells and the gender test only; test statistics quoted in the *text* of the paper were not inventoried.
 - **Fix:** issue D7 (PRD §9, ch. 4); `recompute_table2.py` computes all age variants.
 - **Detection gap closed:** the Researcher skill must inventory every statistic printed in the source text as well as the tables; AC-15 now checks every Dn of PRD §9 in ch. 4 automatically.
+- **Fix commit:** 68f2501 (Step 14). **Screenshot:** none – the defect was found and fixed in the same session without a screenshot of the broken state; the fixed result is in `screenshots/`.
 
 ## INC-004 – QA detectors that could pass while the defect was present
 - **Date / found by:** 2026-11-24, QA red team round 1 (QA-22 … QA-33)
@@ -41,6 +45,7 @@ and the **detection gap** closed so it can't recur.
 - **Root cause:** detectors were tested only for *firing on a planted defect*, not for *false passes* (negative cases that must still be reported).
 - **Fix:** each gap fixed in `scripts/qa.py`; register `data/quoted_in_book.json`; `\prevgraf` scene measurement in the `.cls`.
 - **Detection gap closed:** 5 new regression tests target false passes (24 tests in total); every future detector gets a "must fire" **and** a "must not be masked" test.
+- **Fix commit:** 68f2501 (Step 14). **Screenshot:** none – the defect was found and fixed in the same session without a screenshot of the broken state; the fixed result is in `screenshots/`.
 
 ## INC-005 – Skills documented stale targets
 - **Date / found by:** 2026-11-25, the students (human review of the repository)
@@ -48,6 +53,7 @@ and the **detection gap** closed so it can't recur.
 - **Root cause:** version bumps and the Step 17 page-range change were made in the code (`CLS_TARGET`, `qa.py`, PRD) but not in the skills. Not detected because no check linked skill text to the code.
 - **Fix:** the skills now refer to `CLS_TARGET` and AC-01 instead of repeating numbers.
 - **Detection gap closed:** `qa.py infra` fails when a version or page range in `skills/*/SKILL.md` contradicts `CLS_TARGET` or PRD AC-01; regression test in `tests/qa/run_tests.py`.
+- **Fix commit:** 20c7cda (Step 18). **Screenshot:** none – the defect was found and fixed in the same session without a screenshot of the broken state; the fixed result is in `screenshots/`.
 
 ## INC-006 – The final red-team pass was interim and never repeated on the full book
 - **Date / found by:** 2026-11-25, the students (human review of the repository)
@@ -55,6 +61,7 @@ and the **detection gap** closed so it can't recur.
 - **Root cause:** the Step 16 "finish efficiently" decision allowed the merge without a re-run gate.
 - **Fix:** the full-book red-team round is scheduled after Step 18 (TODO P8).
 - **Detection gap closed:** exit gate in PLAN §4 and `skills/qa-super/SKILL.md` – a final round cannot be merged unless a red-team report exists whose inspected page count equals the built PDF's; `qa.py infra --redteam <report>` and a regression test enforce it.
+- **Fix commit:** 20c7cda (Step 18). **Screenshot:** none – the defect was found and fixed in the same session without a screenshot of the broken state; the fixed result is in `screenshots/`.
 
 ## INC-007 – The cover had no author names
 - **Date / found by:** 2026-11-25, the students (human review of the repository)
@@ -62,6 +69,15 @@ and the **detection gap** closed so it can't recur.
 - **Root cause:** minor findings had no status tracking, so nobody owned it.
 - **Fix:** `\Authors{פלומה בנגיגי, שירה דביר}` in `main.tex`; the `.cls` (v1.6) prints the authors and keeps the group code line "קבוצה: shirloma".
 - **Detection gap closed:** every finding must get a status in a Fixer report (`skills/fixer/SKILL.md`, PLAN §4).
+- **Fix commit:** 20c7cda (Step 18). **Screenshot:** none – the defect was found and fixed in the same session without a screenshot of the broken state; the fixed result is in `screenshots/`.
+
+## INC-008 – A gate was documented but not coded; README/PLAN claims drifted from the repository
+- **Date / found by:** 2026-11-25, QA red team of round final2 (RT-01, RT-03, RT-05, RT-06), confirmed by the Fixer
+- **Symptom:** PLAN §4, `skills/qa-super/SKILL.md` and INC-006/INC-007 said the final round cannot be merged unless every red-team finding has a status in a Fixer report, "checked by `qa.py infra --redteam`". The script only compared page counts. In the same way the README and PLAN stated "9 front matter + 36 body" pages, "12 skills (8 QA + 4 production)" and `.cls` v1.0, while the repository had 10 + 35, 13 skills (8 + 5) and v1.7.
+- **Root cause:** documentation drift (INC-005 class). A rule was written into the documents when the gate was designed, but the code was never changed to enforce it; and the INC-005 check covered `skills/*/SKILL.md` only, not README/PLAN/PRD.
+- **Fix:** `check_fixer_statuses` in `scripts/qa.py` (every `RT-nn` / `R2-nn` / `QA-nn` finding needs a FIXED / REJECTED / DEFERRED row in the Fixer report; a missing report is a blocker) and `check_doc_claims` (README/PLAN page split, skill counts and `.cls` version against the PDF, `skills/` and `CLS_TARGET`); stale numbers corrected in README, PLAN and PRD.
+- **Detection gap closed:** the RT-01 check and its regression tests in `tests/qa/run_tests.py` (3 for the Fixer statuses, 2 for doc claims). Rule from now on: a gate described in a document must have a test that fails when the gate is open.
+- **Fix commit:** the Step 19 commit (tag `v1.0-submission`). **Screenshot:** none – the defect was found and fixed in the same session without a screenshot of the broken state; the fixed result is in `screenshots/`.
 
 ---
 

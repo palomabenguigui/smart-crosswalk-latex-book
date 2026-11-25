@@ -5,13 +5,15 @@
 ![Project status: complete](https://img.shields.io/badge/Project%20status-complete-brightgreen)
 ![Pages](https://img.shields.io/badge/PDF-45%20pages-2E3338)
 ![Build](https://img.shields.io/badge/LuaLaTeX%20%2B%20biber-0%20errors%20%C2%B7%200%20warnings-00843D)
+![QA](https://img.shields.io/badge/QA%20super-0%20blocker%20%C2%B7%200%20major-00843D)
+![Tests](https://img.shields.io/badge/QA%20regression%20tests-41%20passing-00843D)
 
 | | |
 |---|---|
 | **Course** | Generative AI: LLMs, Agents and Multi-Agent Systems – Dr. Yoram Segal, Bar-Ilan University |
 | **Assignment** | 02 – Hebrew PDF book in LaTeX, produced by a team of AI agents |
 | **Group code** | `shirloma` |
-| **Final PDF** | [`build/main.pdf`](build/main.pdf) – 45 pages (9 front matter + 36 body), Hebrew RTL |
+| **Final PDF** | [`build/main.pdf`](build/main.pdf) – 45 pages (10 front matter + 35 body), Hebrew RTL |
 
 ---
 
@@ -44,7 +46,7 @@ the coefficients; a self-contradictory traffic-volume row; an age χ² that cann
 ## Agent Team
 
 The book was produced by a **Leader** (the main Claude Code session) and specialised agents. They ran **in parallel in separate Terminal sessions**
-(PLAN §11) over three rounds.
+(PLAN §11) over four rounds.
 
 | Agent | Role | Model |
 |---|---|---|
@@ -53,6 +55,7 @@ The book was produced by a **Leader** (the main Claude Code session) and special
 | **Researcher / Visuals** | Finds and verifies sources online, transcribes data; Python graphs and TikZ diagrams | Sonnet 5.5 |
 | **Fixer** | Own skill ([`skills/fixer`](skills/fixer/SKILL.md)): takes a Detector report, changes sources only, gives every finding a status (FIXED / REJECTED / DEFERRED) in `<round>-fixer-report.md`; never verifies its own work | Main model |
 | **QA red team** | Detector only: finds what a reader would see (layout, BiDi, numbers, contradictions, close translation) | Sonnet 5.5 |
+| **Detector re-check** | A fresh Sonnet subagent re-inspects only the findings the Fixer marked FIXED and returns a text report; a finding is closed only when it confirms it (the Leader and the Fixer never verify their own fixes) | Sonnet 5.5 |
 
 The agents ran on different models according to their task. The Writer used the main model because the Hebrew prose needs it;
 Visuals and the QA red team used Sonnet. The rules for parallel agents are in `CLAUDE.md` rule 1a: they don't edit the prompt log, they don't commit,
@@ -62,7 +65,8 @@ and each writes only its assigned files plus a report.
 |---|---|---|---|
 | 1 | ch. 4 – flagship paper | 15 verified sources | 38 findings + 10 weakest points of the plan |
 | 2 | ch. 1 + ch. 4 thematic review, literature matrix, Table 2 | 13 sources, statistics inventory, evidence per component | 37 findings on ch. 4 |
-| Final | ch. 2, 3, 5–10, abstracts, abbreviations, plan + risk data | T2–T5, G4 | reader-visible defects (interim pass) |
+| Final | ch. 2, 3, 5–10, abstracts, abbreviations, plan + risk data | T2–T5, G4 | reader-visible defects (interim pass, 16 pages) |
+| final2 | – | – | all 45 pages: 17 findings (RT-01…RT-17) → Fixer (status for every finding) → Detector re-check (two passes) |
 
 All agent prompts, reports and the Leader's responses are in [`prompts/agents/`](prompts/agents/). The QA skills and the production skills are in [`skills/`](skills/).
 
@@ -72,7 +76,7 @@ All agent prompts, reports and the Leader's responses are in [`prompts/agents/`]
 |---|---|
 | `qa-super` (orchestrator), `qa-BiDi`, `qa-table`, `qa-code`, `qa-img`, `qa-typeset`, `qa-infra`, `qa-cls-version` | `writer`, `researcher`, `python-graphs`, `tikz-illustrations`, **`fixer`** (the Fixer of the Detector → Fixer loop) |
 
-The checks are implemented in [`scripts/qa.py`](scripts/qa.py), with regression fixtures in [`tests/qa/`](tests/qa/).
+The checks are implemented in [`scripts/qa.py`](scripts/qa.py), with regression fixtures and 41 regression tests in [`tests/qa/`](tests/qa/) (`tests/qa/run_tests.py`).
 **Fixes never touch the output.** Every fix goes into a source (a chapter, the `.cls`, a script or a skill), and recurring defects are fixed in the `.cls`.
 
 ### A real red-team example: INC-000
@@ -81,7 +85,7 @@ The initial brief claimed that some Table 2 coefficients in the flagship paper w
 **rendered** page and found that the minus signs were printed correctly. PDF text extraction had turned them into `/C0`, so the claim was an
 artefact of text extraction. The brief was corrected, the real inconsistencies (D1–D7) were recomputed, and a rule was added: every transcribed number
 is checked against a rendered image of the source page.
-The full incident log ([`INCIDENTS.md`](INCIDENTS.md)) has 8 incidents (INC-000…INC-007) and 22 design-inspection findings, including:
+The full incident log ([`INCIDENTS.md`](INCIDENTS.md)) has 9 incidents (INC-000…INC-008) and 22 design-inspection findings, including:
 - the Hebrew fonts lack digits (INC-001);
 - matplotlib reversed Hebrew twice (INC-002);
 - QA checks that could pass while the defect was present (INC-004).
@@ -93,7 +97,7 @@ The full incident log ([`INCIDENTS.md`](INCIDENTS.md)) has 8 incidents (INC-000�
 ├── CLAUDE.md                # standing rules for every session (incl. 1a: parallel agents)
 ├── README.md  PRD.md  PLAN.md  TODO.md  INCIDENTS.md
 ├── main.tex                 # master file: cover, front matter, \inputchapter{1..10}, references
-├── smartcross.cls           # the document class – ALL formatting (v1.6)
+├── smartcross.cls           # the document class – ALL formatting (v1.7)
 ├── hebrew.lbx               # biblatex Hebrew module (English bibliography strings)
 ├── chapters/                # ch01 … ch10, front-abstract, front-abbreviations
 ├── figures/                 # Python graphs (PDF), figures/tikz/*.tex, authors' photo
@@ -101,7 +105,7 @@ The full incident log ([`INCIDENTS.md`](INCIDENTS.md)) has 8 incidents (INC-000�
 ├── scripts/                 # build.sh, qa.py, render_pages.js, figure scripts, recompute_table2.py
 ├── fonts/                   # bundled OFL Noto fonts + licences
 ├── references/              # refs.bib, VERIFICATION.md, notes/ (copyrighted PDFs kept local only)
-├── skills/                  # 8 QA skills + 4 production skills (SKILL.md each)
+├── skills/                  # 8 QA skills + 5 production skills (SKILL.md each)
 ├── prompts/                 # PROMPTS_LOG.md (every prompt, verbatim) + agents/ (round prompts and reports)
 ├── samples/                 # design samples
 ├── screenshots/             # book pages, figures, design history, agents at work
@@ -130,7 +134,7 @@ scripts/build.sh                      # figures → lualatex → biber → luala
 
 | | | |
 |---|---|---|
-| ![Cover](screenshots/book/01-cover.png) | ![Abstract](screenshots/book/02-abstract.png) | ![Contents](screenshots/book/03-contents.png) |
+| ![Cover](screenshots/book/13-cover-v1.0.png) | ![Abstract](screenshots/book/02-abstract.png) | ![Contents](screenshots/book/03-contents.png) |
 | Cover – aerial view of the crosswalk, clearance countdown | Hebrew abstract | Table of contents |
 | ![Chapter 1](screenshots/book/04-ch01-opener.png) | ![Chapter 2](screenshots/book/05-ch02-problem-figures.png) | ![Literature matrix](screenshots/book/06-ch04-literature-matrix.png) |
 | Chapter opener (red phase) | Problem chapter: SMART goals, T1 | Chapter 4: literature matrix |
@@ -166,6 +170,7 @@ scripts/build.sh                      # figures → lualatex → biber → luala
 | ![Round 1](screenshots/agents/round1-parallel-agents-5.png) | ![Round 2](screenshots/agents/round2-parallel-agents.png) |
 | **Final round – QA red team (Sonnet) while the Writer works** | |
 | ![Final round](screenshots/agents/final-round-parallel-agents.png) | |
+| *Round final2 ran in separate terminal sessions; its prompts and reports are in `prompts/agents/final2-*.md`.* | |
 
 ### Design history
 

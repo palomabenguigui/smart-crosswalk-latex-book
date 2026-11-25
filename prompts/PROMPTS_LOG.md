@@ -287,3 +287,32 @@ Step 18 – Process cleanup before the last red-team round. Log this prompt firs
 
 Then build, run qa.py super (0 blocker, 0 major), commit and push.
 ```
+
+## Step 19 – Merge round final2 (red team + Fixer), Detector re-check, release
+**Date/time:** 2026-11-25 20:27
+
+```text
+Step 19 – Merge round final2 (red team + Fixer). Log this prompt first (rule 1). The parallel agents' prompts and reports are in prompts/agents/final2-redteam*.md and final2-fixer*.md.
+
+1. Leader response. Write prompts/agents/final2-redteam-response.md: for each RT finding and each old finding (final-redteam #1–#10), whether you agree and its final status. Also write the missing prompts/agents/final-redteam-response.md for the interim pass (RT-02), stating that it was superseded by round final2.
+
+2. Deferred items: do the parts of RT-07 and RT-02 deferred to the Leader. For RT-16 (float whitespace), fix it if the page count stays within AC-01; otherwise reject it with the reason.
+
+3. Re-verification by the Detector. Run a Sonnet subagent (Task tool) as Detector, only on the findings marked FIXED in final2-fixer-report.md. It returns a text report only (no page images in your context). Append its result to final2-redteam-report.md under "Re-check". A finding is closed only when the Detector confirms it. If it reopens a finding, fix it and re-check once more.
+
+4. Incidents: add INC-008 as proposed in the Fixer report (a gate documented but not coded; documentation drift), with the detection gap closed by the RT-01 check and its tests.
+
+5. Build build/main.pdf with scripts/build.sh. qa.py super must give 0 blocker and 0 major, qa.py infra --redteam prompts/agents/final2-redteam-report.md must pass, and tests/qa/run_tests.py must have 0 failing.
+
+6. README:
+   - the Agent Team table, with the Fixer and the Detector re-check;
+   - the rounds table, with round final2 (red team on all 45 pages → Fixer → Detector re-check);
+   - the incident count, the test count, the skill count, the page split and the badges;
+   - a new screenshot of the cover;
+   - my screenshots in screenshots/agents/final2-*.png, if they exist.
+   Every number in the README must match the repository; the RT-01 check enforces it.
+
+7. TODO.md: close the red-team re-run item. For the release: run the AC-18 clean-clone build (git clone . /tmp/x && cd /tmp/x && scripts/build.sh); if it passes, tag the commit v1.0-submission.
+
+Commit and push. Stop only for decisions that need me.
+```

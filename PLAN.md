@@ -1,7 +1,7 @@
 # PLAN – How the book is produced
 
 Companion to [`PRD.md`](PRD.md) (what to build) and [`TODO.md`](TODO.md) (ordered checklist).
-**Version:** 1.2 (2026-11-23) · **Target `.cls` version:** `smartcross` v1.0 (tracked by `qa-cls-version`) · **Toolchain:** TeX Live 2026 (MacTeX), LuaHBTeX 1.24.0, biber 2.21 · v1.1 adds §10 Writing style, §11 Parallel-agent run, online source verification · v1.2 switches MiKTeX → TeX Live 2026 and splits P1 into P1a/P1b
+**Version:** 1.3 (2026-11-25) · **Target `.cls` version:** `smartcross` v1.7 (`CLS_TARGET` in `scripts/qa.py`, tracked by `qa-cls-version`) · **Toolchain:** TeX Live 2026 (MacTeX), LuaHBTeX 1.24.0, biber 2.21 · v1.1 adds §10 Writing style, §11 Parallel-agent run, online source verification · v1.2 switches MiKTeX → TeX Live 2026 and splits P1 into P1a/P1b
 
 ---
 
@@ -13,7 +13,7 @@ Companion to [`PRD.md`](PRD.md) (what to build) and [`TODO.md`](TODO.md) (ordere
 | 2 | Write `PRD.md` | Expert committee → merged requirements | `PRD.md` |
 | 3 | Write `PLAN.md` | This file | `PLAN.md` |
 | 4 | Write `TODO.md`: atomic tasks | Ordered checklist that mirrors the phases below | `TODO.md` |
-| 5 | Use QA skills (`qa-super`, `qa-BiDi`, `qa-table`, `qa-code`, `qa-img`, …) | Write all 12 skills in `skills/` (8 QA + 4 production) **before** any content; run them on every build | `skills/*/SKILL.md` |
+| 5 | Use QA skills (`qa-super`, `qa-BiDi`, `qa-table`, `qa-code`, `qa-img`, …) | Write all 13 skills in `skills/` (8 QA + 5 production, incl. `fixer`) **before** any content; run them on every build | `skills/*/SKILL.md` |
 | 6 | Give the agent precise prompts covering all requirements | Each phase has a logged prompt; agents get PRD section IDs and acceptance criteria | `prompts/PROMPTS_LOG.md` |
 | 7 | Run, check, fix **through a skill or the CLS, never by hand** | Detector → Fixer loop (§4) + incident procedure (§6) | Clean QA reports |
 | 8 | Save all working files (`.tex`, `.cls`, `.md`, `.pdf`) | Commit + push after every task (`CLAUDE.md`) | Git history, `build/main.pdf` |

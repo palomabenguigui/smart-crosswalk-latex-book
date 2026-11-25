@@ -40,6 +40,10 @@ Project: **Assignment 02 – Hebrew PDF book in LaTeX, produced by a team of AI 
 | `skills/` | Agent skills / role definitions |
 | `prompts/` | Prompt engineering log (`PROMPTS_LOG.md`) and agent prompts |
 | `screenshots/` | Screenshots of the agent workflow |
+| `data/` | Transcribed source tables, recomputed values, number register, WBS and risk data |
+| `fonts/` | Bundled OFL Noto fonts and their licences |
+| `tests/` | QA regression tests (`tests/qa/run_tests.py`) |
+| `samples/` | Style-sample documents used to test the class |
 | `build/` | Build output; the final PDF is tracked in git |
 
 ## Build

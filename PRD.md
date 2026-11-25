@@ -108,8 +108,8 @@ onwards merges these bars into a single specification. Where experts disagreed, 
 ## 4. Chapter structure and page allocation
 
 **Target: 40–46 physical pages** (minimum 25, per the brief; raised from 28–32 by the user in Step 17 – full chapters, 10 chapter openers and the front matter need it).
-- Front matter uses Hebrew-letter page numbers (א׳–ה׳).
-- The reference list is Arabic-numbered and counts as body. Planned body = 26 chapter pages + 1–2 reference pages = **27–28 ≥ 25**; each chapter opener costs about ⅓ page and is included in its chapter's budget. `qa-infra` reports the running page count after every round, so a short chapter is caught early.
+- Front matter uses Hebrew-letter page numbers (א׳–ט׳ in the final book).
+- The reference list is Arabic-numbered and counts as body. Planned body = 26 chapter pages + 1–2 reference pages = **27–28 ≥ 25** (the final book has 31 chapter pages + 4 reference pages = 35); each chapter opener costs about ⅓ page and is included in its chapter's budget. `qa-infra` reports the running page count after every round, so a short chapter is caught early.
 - The body uses Arabic page numbers and must be **≥ 25 pages on its own**, so the minimum holds however pages are counted.
 - The allocation follows the booklet's page map (Table 1.1), scaled down. The literature review and design alternatives keep the largest share, as the booklet advises.
 

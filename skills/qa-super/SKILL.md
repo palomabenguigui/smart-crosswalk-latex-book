@@ -16,7 +16,7 @@ description: Orchestrates every QA family on the built book (template first), th
    and open each PNG. Apply the visual checklists of `qa-BiDi`, `qa-table` and `qa-img`.
 4. Merge script findings + visual findings into `build/qa/report-<date>.md` (ignored by git). Summarise the counts in the commit message.
 5. Exit gate: **0 blocker, 0 major**. Otherwise hand the report to the Leader for triage (PLAN §4).
-6. **Final-round merge gate (INC-006):** a final round cannot be merged unless a red-team report exists whose "inspected pages" count equals the page count of the built `build/main.pdf` (every page viewed, not a sample), and every finding in it has a status in a Fixer report (`skills/fixer/SKILL.md`). The Leader who fixed a defect never verifies it; the Detector re-checks. Checked by `qa.py infra` (`--redteam <report>`) at release.
+6. **Final-round merge gate (INC-006):** a final round cannot be merged unless a red-team report exists whose "inspected pages" count equals the page count of the built `build/main.pdf` (every page viewed, not a sample), and every finding in it has a status in a Fixer report (`skills/fixer/SKILL.md`). The Leader who fixed a defect never verifies it; the Detector re-checks. Checked by `qa.py infra` (`--redteam <report>`; the Fixer report defaults to `<round>-fixer-report.md` next to it, or `--fixer <file>`): every `RT-nn.` finding must have a row with FIXED / REJECTED / DEFERRED, or the gate reports it.
 
 ## Content checks done here (scripts/qa.py `content`)
 - Every `\label` of a figure/table is referenced in the text (AC-08).

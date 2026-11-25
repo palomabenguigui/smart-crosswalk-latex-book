@@ -7,7 +7,7 @@
 %% Tested toolchain: TeX Live 2026 (LuaHBTeX 1.24.0, babel v26.4, biber 2.21).
 %% Compile from the REPOSITORY ROOT (fonts are loaded by relative path from fonts/).
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{smartcross}[2026/11/25 v1.6 Smart Crosswalk report class (shirloma)]
+\ProvidesClass{smartcross}[2026/11/25 v1.7 Smart Crosswalk report class (shirloma)]
 \def\SmartCrossVersion{1.5}
 
 %% ---------------------------------------------------------------- engine guard (qa-cls-version)
@@ -360,6 +360,10 @@
 \newcommand\FrontMatter{\clearpage\pagenumbering{roman}%
   \renewcommand\thepage{\sc@hebletter{\value{page}}}}
 \newcommand\MainMatter{\clearpage\pagenumbering{arabic}}
+
+%% Equation call-out inside running text. \eqref prints "(3.1)", so "(משוואה~\eqref{..})" doubled the brackets (RT-13).
+%% \eqnum prints the bare number: write "(משוואה~\eqnum{eq:x})" or "משוואה~\eqref{eq:x}".
+\newcommand\eqnum[1]{\ref{#1}}
 
 %% ---------------------------------------------------------------- table of contents
 \renewcommand*\l@chapter[2]{%

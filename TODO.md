@@ -1,6 +1,6 @@
 # TODO – ordered checklist
 
-> **Status (Step 18, 2026-11-25): build complete; two items stay open, each with an owner (red-team re-run on the full book; release tag).** Final PDF `build/main.pdf` – 45 pages, QA 0 blocker / 0 major. All 10 chapters, front matter, 10 figures, 8 tables written in three parallel rounds; README with screenshots.
+> **Status (Step 19, 2026-11-25): all items closed.** Final PDF `build/main.pdf` – 45 pages, QA 0 blocker / 0 major, 41/41 regression tests. Round final2 (red team on all 45 pages → Fixer → Detector re-check) merged; release tag `v1.0-submission`.
 
 Mirrors the phases in [`PLAN.md`](PLAN.md). Tick items only when their exit gate passes. Each item = one logged prompt + one commit.
 
@@ -103,11 +103,11 @@ Every chapter opens with a `scenebox` street scene (≤ 4 lines), then formal th
 
 ## P8 – Red team
 - [x] Fresh session (another model if possible): Prompt 9, 10 weakest points with page + sentence — DONE as an interim pass only (16 pages, ch. 1 + 4); INC-006 reopened it → repeated on the full book after Step 18
-- [ ] Resolve or answer each point in writing; rebuild; re-run `qa-super` — OPEN, owner: Fixer + Leader, after the full-book red-team round that follows Step 18 (INC-006)
+- [x] Resolve or answer each point in writing; rebuild; re-run `qa-super` — DONE in Step 19: round final2 (45-page red team → Fixer → Detector re-check), `final2-redteam-response.md`, `qa.py super` 0 blocker / 0 major
 
 ## P9 – Release
 - [x] Screenshots into `screenshots/`: ≥ 3 book pages (cover, chapter opener, content page), every Python graph, every TikZ illustration, agents in action (AC-19) — DONE in Step 17
 - [x] README: overview, agent team (with parallel-run evidence), structure, build, screenshots, skills list, credits, final status badge — DONE in Step 17
 - [x] README: INC-000 as a real red-team example (wrong claim → checked against the rendered page → corrected → new detection rule) — DONE in Step 17
 - [x] Final `build/main.pdf` committed — DONE in Step 17. The clean-clone build test (AC-18) is DEFERRED to the release tag (owner: Leader)
-- [ ] Tag `v1.0` and push — OPEN, owner: Leader, after the final red-team round passes the PLAN §4 exit gate
+- [x] Tag `v1.0-submission` and push — DONE in Step 19 after the clean-clone build (AC-18) passed and the PLAN §4 exit gate passed

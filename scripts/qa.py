@@ -18,7 +18,7 @@ os.chdir(ROOT)
 FINDINGS: list[tuple] = []
 HEB = '\u0590-\u05FF'
 FINALS = 'ךםןףץ'
-CLS_TARGET = '1.6'                      # PLAN: target .cls version (qa-cls-version)
+CLS_TARGET = '1.7'                      # PLAN: target .cls version (qa-cls-version)
 
 def report(skill, sev, page, loc, text, rule):
     text = text.replace('\n', ' ').strip()
@@ -94,6 +94,48 @@ def check_redteam_gate(pdf, report_path):
     if not m: report('qa-infra', 'major', '-', report_path, 'no "PDF: N pages" line', 'INC-006 / PLAN §4 exit gate')
     elif int(m.group(1)) != n: report('qa-infra', 'blocker', '-', report_path, f'red team inspected {m.group(1)} pages, PDF has {n}', 'INC-006 / PLAN §4 exit gate')
 
+FIXER_STATUS = ('FIXED', 'REJECTED', 'DEFERRED')
+
+def check_fixer_statuses(redteam_path, fixer_path):
+    """INC-007 / INC-006 exit gate (RT-01): every finding id of a red-team report (lines `RT-nn.`, `R2-nn.`, `QA-nn.`) must
+    appear in a row of the Fixer report together with a status FIXED / REJECTED / DEFERRED."""
+    rt = read(redteam_path)
+    ids = re.findall(r'^((?:RT|R2|QA)-\d+)\.', rt, re.M)
+    if not ids:
+        report('qa-infra', 'major', '-', redteam_path, 'no finding ids (RT-nn.) found', 'INC-007 / PLAN §4 exit gate'); return
+    if not Path(fixer_path).exists():
+        report('qa-infra', 'blocker', '-', fixer_path, f'no Fixer report for {len(ids)} red-team findings', 'INC-007 / PLAN §4 exit gate'); return
+    rows = [l for l in read(fixer_path).splitlines() if l.lstrip().startswith('|')]
+    for i in ids:
+        ok = any(re.search(rf'(?<![\w-]){re.escape(i)}(?!\d)', l) and re.search(r'\b(' + '|'.join(FIXER_STATUS) + r')\b', l) for l in rows)
+        if not ok: report('qa-infra', 'major', '-', fixer_path, f'{i}: no row with a status (FIXED/REJECTED/DEFERRED)', 'INC-007 / PLAN §4: every finding needs a status')
+
+def check_doc_claims(pdf=None, readme='README.md', plan='PLAN.md', skills_dir='skills', cls_target=None, incidents='INCIDENTS.md'):
+    """RT-03/05/06: counts and versions that README/PLAN state must match the repository and the built PDF."""
+    cls_target = cls_target or CLS_TARGET
+    names = [p.parent.name for p in Path(skills_dir).glob('*/SKILL.md')]
+    qa_n = sum(n.startswith('qa-') for n in names); prod_n = len(names) - qa_n
+    for f in (readme, plan):
+        if not Path(f).exists(): continue
+        t = read(f)
+        for m in re.finditer(r'(\d+)\s+QA(?:\s+skills)?\s*\+\s*(\d+)\s+production', t):
+            if (int(m.group(1)), int(m.group(2))) != (qa_n, prod_n):
+                report('qa-infra', 'minor', '-', f'{f}:{lineno(t, m.start())}', m.group(0), f'doc claim != skills/ ({qa_n} QA + {prod_n} production)')
+        for m in re.finditer(r'\.cls[^\n|]{0,40}?`smartcross`\s+v(\d+\.\d+)', t):
+            if m.group(1) != cls_target:
+                report('qa-infra', 'minor', '-', f'{f}:{lineno(t, m.start())}', m.group(0), f'doc claim != CLS_TARGET v{cls_target}')
+    if Path(readme).exists() and Path(incidents).exists():   # INC-008: the README incident count must match INCIDENTS.md
+        t = read(readme); ids = re.findall(r'^## (INC-\d+)', read(incidents), re.M)
+        for m in re.finditer(r'(\d+)\s+incidents\s*\((INC-\d+)\S*\s*INC-(\d+)\)', t):
+            if (int(m.group(1)), m.group(3)) != (len(ids), ids[-1][4:] if ids else ''):
+                report('qa-infra', 'minor', '-', f'{readme}:{lineno(t, m.start())}', m.group(0), f'doc claim != INCIDENTS.md ({len(ids)} incidents, last {ids[-1] if ids else "-"})')
+    r, _ = pdf_pages(pdf) if pdf else (None, [])
+    if r is not None and Path(readme).exists():
+        t = read(readme); front = max((i + 1 for i, l in enumerate(r.page_labels) if not l.isdigit()), default=0); body = len(r.pages) - front   # cover + lettered pages = front matter
+        for m in re.finditer(r'(\d+)\s+pages\s*\((\d+)\s+front matter\s*\+\s*(\d+)\s+body\)', t):
+            if (int(m.group(1)), int(m.group(2)), int(m.group(3))) != (len(r.pages), front, body):
+                report('qa-infra', 'minor', '-', f'{readme}:{lineno(t, m.start())}', m.group(0), f'doc claim != PDF ({len(r.pages)} = {front} front + {body} body)')
+
 def check_infra(a):
     texbin = '/Library/TeX/texbin'
     env = dict(os.environ, PATH=f'{texbin}:{os.environ.get("PATH", "")}')
@@ -122,7 +164,10 @@ def check_infra(a):
         if t.endswith('.pdf') or t.endswith('preparation-report-book.md'):
             report('qa-infra', 'blocker', '-', t, 'copyrighted reference tracked in git', 'copyright')
     check_skill_consistency()
-    if getattr(a, 'redteam', None): check_redteam_gate(a.pdf, a.redteam)
+    if getattr(a, 'redteam', None):
+        check_redteam_gate(a.pdf, a.redteam)
+        check_fixer_statuses(a.redteam, getattr(a, 'fixer', None) or re.sub(r'redteam-report\.md$', 'fixer-report.md', a.redteam))
+    check_doc_claims(a.pdf if Path(a.pdf).name == 'main.pdf' else None)
     # README images (AC-19)
     readme = read('README.md')
     for m in re.finditer(r'!\[[^\]]*\]\(([^)\s]+)\)', readme):
@@ -162,7 +207,7 @@ def check_typeset(a):
         report('qa-typeset', 'major', '-', a.log, 'rerun requested', 'AC-03 build passes')
 
 # --------------------------------------------------------------------------- qa-BiDi
-SAFE_CMDS = r'en|num|pct|range|unit|cite|ref|eqref|label|enlabel|picto|includegraphics|authorphoto|input|inputfigure|includefigure|addcontentsline|begin|end|ChapterIcon|stattile|headrow|thead|SetLamp|setcounter|sidenote|texttt'
+SAFE_CMDS = r'en|num|pct|range|unit|cite|ref|eqref|eqnum|label|enlabel|picto|includegraphics|authorphoto|input|inputfigure|includefigure|addcontentsline|begin|end|ChapterIcon|stattile|headrow|thead|SetLamp|setcounter|sidenote|texttt'
 def strip_safe(s):
     """Remove constructs where Latin/digits are legitimate; what remains must be Hebrew + punctuation."""
     s = strip_comments(s)
@@ -202,6 +247,11 @@ def check_bidi(a):
             report('qa-BiDi', 'minor', '-', f'{f}:{lineno(raw, m.start())}', m.group(0), 'PRD §7 rule 12: maqaf after prefix letter')
         for m in re.finditer(r'(?<![' + HEB + r'])[והבלמשכ]{0,3}חציה(?![' + HEB + r'])', raw):
             report('qa-BiDi', 'minor', '-', f'{f}:{lineno(raw, m.start())}', m.group(0), 'PRD §3.1 glossary: "חצייה" (full spelling)')
+        for m in re.finditer(r'\\caption\{((?:[^{}]|\{[^{}]*\})*)\}', raw):   # RT-10: a citation in the caption is repeated in the LoF/LoT
+            if '\\cite' in m.group(1):
+                report('qa-BiDi', 'minor', '-', f'{f}:{lineno(raw, m.start())}', m.group(0)[:60], 'RT-10: caption with \\cite needs \\caption[short]{}')
+        for m in re.finditer(r'\(' + r'[^()\n]*?' + r'\\eqref\{', raw):   # RT-13: "(משוואה (3.1))" doubled brackets
+            report('qa-BiDi', 'minor', '-', f'{f}:{lineno(raw, m.start())}', m.group(0), 'RT-13: \\eqref inside brackets; use \\eqnum')
         for m in re.finditer(r'(?<![}\]a-zA-Z@*])\[\s*\d+\s*\]', raw):   # not an optional argument
             report('qa-BiDi', 'major', '-', f'{f}:{lineno(raw, m.start())}', m.group(0), 'PRD §7 rule 13: typed citation brackets')
     _, pages = pdf_pages(a.pdf)
@@ -402,6 +452,7 @@ def main():
     ap.add_argument('family', choices=[n for n, _ in ORDER] + ['super'])
     ap.add_argument('--pdf', default='build/main.pdf'); ap.add_argument('--log', default=None)
     ap.add_argument('--redteam', default=None, help='final-round gate: red-team report whose inspected page count must equal the PDF')
+    ap.add_argument('--fixer', default=None, help='Fixer report for --redteam (default: <round>-fixer-report.md next to it)')
     ap.add_argument('--chapters', default='chapters', help='folder of chapter .tex files (tests use a fixture folder)')
     a = ap.parse_args()
     global CHAPTERS; CHAPTERS = a.chapters
