@@ -20,6 +20,10 @@ echo "[build] biber:  $(biber --version)"
 
 # --- figures (Python), when the generator exists
 if [[ -f scripts/make_figures.py ]]; then
+  if [[ ! -x .venv/bin/python ]]; then   # clean clone (AC-18): the venv is not tracked
+    echo "[build] creating .venv from requirements.txt"
+    python3 -m venv .venv && .venv/bin/pip install -q -r requirements.txt
+  fi
   echo "[build] regenerating figures"
   .venv/bin/python scripts/make_figures.py
 fi
